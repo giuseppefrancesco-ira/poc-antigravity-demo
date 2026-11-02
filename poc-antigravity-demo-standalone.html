@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POC Antigravity · AI sui Messaggi (Fase 2) — Demo Figma 1:1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20261102_27" />
+</head>
+<body>
+
+  <!-- Main Stage -->
+  <main class="stage" id="mainStage">
+
+    <!-- =================================================================
+         DESKTOP VIEW (1:1 WITH FIGMA 308:4555 & 308:5101)
+         ================================================================= -->
+    <div class="figma-desktop">
+
+      <!-- 1. Barra laterale icone (64px, #121C4E) -->
+      <aside class="nav-rail">
+        <div class="nav-logo-box" title="Antigravity PMS">
+          <img src="logo-bot.png?v=20261102_10" alt="Antigravity Bot Logo" class="nav-logo-img" />
+        </div>
+
+        <button class="nav-item active" title="Messaggi" onclick="showToast('Sezione Messaggi attiva')">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </button>
+
+        <button class="nav-item" title="Knowledge Base & FAQ proposte dall'AI" onclick="openCreateKbModal()">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+        </button>
+
+        <button class="nav-item" title="Prenotazioni in arrivo (Vista Calendario Multi-struttura)" onclick="openArrivalsCalendarModal()">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </button>
+
+        <button class="nav-item" title="Calendario Arrivi e Programmazione invii" onclick="openArrivalsCalendarModal()">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/>
+            <path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h5"/>
+            <circle cx="18" cy="18" r="4"/><path d="M18 16.5v1.5l1 1"/>
+          </svg>
+        </button>
+
+        <button class="nav-item" title="Statistiche e giudizi AI" onclick="showToast('Statistiche e proposte di miglioramento AI')">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/>
+            <path d="M19 17V5a2 2 0 0 0-2-2H4"/>
+          </svg>
+        </button>
+
+        <button class="nav-item" title="Impostazioni" onclick="showToast('Impostazioni')">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+
+        <div class="nav-spacer"></div>
+
+        <button class="nav-item" title="Esci" onclick="showToast('Disconnessione operatore')">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </button>
+      </aside>
+
+      <!-- 2. Lista messaggi (338px, #FFFFFF) -->
+      <section class="col-lista">
+        <div class="header-lista">
+          <div class="titolo-azioni">
+            <h1 class="titolo-lista">Messaggi</h1>
+            <!-- Btn Scarica Messaggi (icona download) -->
+            <button class="btn-scarica-msg" title="Scarica messaggi" onclick="showToast('Scarico nuovi messaggi dai canali OTA completato')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </button>
+            <!-- Btn Nuovo -->
+            <button class="btn-nuovo-msg" title="Nuovo messaggio da ricerca prenotazione" onclick="openNewConvModal()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="ricerca-box">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" id="searchInputDesktop" placeholder="Cerca ospite, codice o testo..." oninput="renderConversationLists()" />
+          </div>
+
+          <!-- Cartelle Stato (Stacked vertically 1:1 with Figma) -->
+          <div class="cartelle-stato">
+            <button class="cartella-row in-corso" id="folderInCorso" onclick="setFolderFilter('incorso')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <span class="cartella-lbl">Soggiorno in corso</span>
+              <span class="cartella-pill-white">3</span>
+            </button>
+            <button class="cartella-row archiviate" id="folderArchiviate" onclick="setFolderFilter('archiviate')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+              </svg>
+              <span class="cartella-lbl">Archiviate / Gestite</span>
+              <span class="cartella-pill-orange">42</span>
+            </button>
+          </div>
+
+          <div class="riga-ordina" onclick="cycleSortOrder()" style="cursor:pointer;">
+            <span class="lbl-ordina">ORDINA PER</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/>
+            </svg>
+            <span class="val-ordina" id="sortLabelDesktop">Ultimo messaggio</span>
+          </div>
+        </div>
+
+        <!-- Elenco Conversazioni -->
+        <div class="elenco-conv" id="desktopConvList"></div>
+
+        <!-- Footer Lista -->
+        <div class="footer-lista" onclick="showToast('Filtro struttura: Casa Aurora (Tutte le unità)')" style="cursor:pointer;" title="Selettore struttura">
+          <span class="footer-struttura">Casa Aurora, Suite 14</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </div>
+      </section>
+
+      <!-- 3. Thread Conversazione (flex: 1, #F8FAFC) -->
+      <section class="col-thread">
+        <div class="intestazione-thread">
+          <div class="titolo-left" id="desktopThreadHeaderLeft">
+            <!-- Populated dynamically by app.js -->
+          </div>
+          <div class="controlli-right">
+            <button class="btn-top" onclick="triggerHubSync()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+              <span>Aggiorna dati</span>
+            </button>
+            <button class="btn-top lang" id="desktopLangBadge" onclick="showToast('Lingua rilevata automaticamente dall\'AI')">
+              <span style="font-size:11px;font-weight:700;color:#475569;" id="desktopLangCode">PL</span>
+              <span id="desktopLangName">Polacco</span>
+            </button>
+            <button class="btn-top icon-only" onclick="openStayDetailsModal()" title="Scheda Soggiorno & Aggancio PMS">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Area Messaggi -->
+        <div class="area-messaggi" id="desktopMessagesArea"></div>
+      </section>
+
+      <!-- 4. Pannello AI · Sider Destro (395px, #FFFFFF) -->
+      <aside class="col-sider-ai" id="desktopSiderAI">
+        <!-- Rendered dynamically for Frame A (Pre-Generazione) or Frame B (Bozza Attiva & Programmazione) -->
+      </aside>
+
+    </div>
+
+    <!-- =================================================================
+         MOBILE VIEW (390x844 EXACT FIGMA SCREENS: 308:4045, 312:7348, 308:4338)
+         ================================================================= -->
+    <div class="figma-mobile">
+
+      <!-- SCREEN 1: Inbox Mobile Fullscreen (308:4045) -->
+      <div class="mob-screen" id="mobScreenInbox">
+        <div class="header-lista" style="padding:14px 16px 12px 16px;">
+          <div class="titolo-azioni">
+            <h2 class="titolo-lista" style="font-size:18px;">Messaggi</h2>
+            <button class="btn-scarica-msg" title="Scarica messaggi" onclick="showToast('Scarico messaggi completato')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </button>
+            <button class="btn-nuovo-msg" title="Nuovo messaggio da ricerca prenotazione" onclick="openNewConvModal()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
+          <div class="ricerca-box" style="height:36px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" placeholder="Cerca ospite, codice o testo..." oninput="document.getElementById('searchInputDesktop').value=this.value;renderConversationLists();" />
+          </div>
+          <div class="cartelle-stato">
+            <button class="cartella-row in-corso" style="height:36px;" onclick="setFolderFilter('incorso')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <span class="cartella-lbl" style="font-size:12px;">Soggiorno in corso</span>
+              <span class="cartella-pill-white">3</span>
+            </button>
+            <button class="cartella-row archiviate" style="height:36px;" onclick="setFolderFilter('archiviate')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+              </svg>
+              <span class="cartella-lbl" style="font-size:12px;">Archiviate / Gestite</span>
+              <span class="cartella-pill-orange">42</span>
+            </button>
+          </div>
+        </div>
+        <div class="elenco-conv" id="mobileConvList"></div>
+        <div onclick="showToast('Filtro struttura: Casa Aurora (Tutte le unità)')" style="height:34px;padding:0 16px;background:#F4F6FA;border-top:1px solid #E7EAF0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;cursor:pointer;">
+          <span style="font-size:12px;font-weight:500;color:#0E1424;">Casa Aurora, Suite 14</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </div>
+        <!-- Bottom Bar Principale Inbox (Elementi del Sider Menu Desktop) -->
+        <nav class="mob-bottom-bar" style="padding:8px 10px;">
+          <div class="mob-tabs-row">
+            <button class="mob-tab active" onclick="showToast('Sezione Messaggi attiva')" style="font-size:10px;">
+              <div class="mob-tab-pill" style="width:42px;height:28px;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+              </div>
+              <span style="font-weight:600;">Messaggi</span>
+            </button>
+            <button class="mob-tab" onclick="openCreateKbModal()" style="font-size:10px;">
+              <div class="mob-tab-pill" style="width:42px;height:28px;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                </svg>
+              </div>
+              <span>KB</span>
+            </button>
+            <button class="mob-tab" onclick="openArrivalsCalendarModal()" style="font-size:10px;">
+              <div class="mob-tab-pill" style="width:42px;height:28px;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+              </div>
+              <span>Azioni</span>
+            </button>
+            <button class="mob-tab" onclick="openArrivalsCalendarModal()" style="font-size:10px;">
+              <div class="mob-tab-pill" style="width:42px;height:28px;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h5"/><circle cx="18" cy="18" r="4"/><path d="M18 16.5v1.5l1 1"/>
+                </svg>
+              </div>
+              <span>Orari</span>
+            </button>
+            <button class="mob-tab" onclick="showToast('Statistiche e Log AI')" style="font-size:10px;">
+              <div class="mob-tab-pill" style="width:42px;height:28px;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/>
+                </svg>
+              </div>
+              <span>Log</span>
+            </button>
+            <button class="mob-tab" onclick="showToast('Impostazioni')" style="font-size:10px;">
+              <div class="mob-tab-pill" style="width:42px;height:28px;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+              </div>
+              <span>Impost.</span>
+            </button>
+          </div>
+          <div class="home-indicator"></div>
+        </nav>
+      </div>
+
+      <!-- SCREEN 2: Container Mobile Chat (312:7348) -->
+      <div class="mob-screen active" id="mobScreenChat">
+        <div class="intestazione-thread" style="height:56px;padding:0 12px;gap:8px;">
+          <div class="titolo-left" style="gap:6px;flex:1;min-width:0;">
+            <button class="btn-top icon-only" style="width:32px;height:32px;min-width:32px !important;min-height:32px !important;background:#F8FAFC;flex-shrink:0;" onclick="setMobileTab('inbox')" title="Torna alla lista Messaggi">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+              </svg>
+            </button>
+            <div style="display:flex;flex-direction:column;min-width:0;">
+              <div style="display:flex;align-items:center;gap:5px;">
+                <span style="font-size:14px;font-weight:600;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="mobChatGuestName">Adam Nowak</span>
+                <span class="pill-header sent" style="height:18px;padding:0 6px;font-size:10px;flex-shrink:0;">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#15703D" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                  Positivo
+                </span>
+              </div>
+              <span style="font-size:11px;color:#64748B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="mobChatSubInfo">Suite 14 · Check-in · PL Polacco</span>
+            </div>
+          </div>
+          <div class="controlli-right" style="gap:5px;flex-shrink:0;">
+            <button class="btn-scarica-msg" style="width:32px;height:32px;min-width:32px !important;min-height:32px !important;" title="Scarica messaggi" onclick="triggerHubSync()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </button>
+            <button class="btn-top" style="height:32px;padding:0 8px;background:#F8FAFC;font-size:11px;white-space:nowrap;" onclick="showToast('Lingua rilevata automaticamente dall\'AI')">
+              <span id="mobLangBadgeLabel">PL Polacco</span>
+            </button>
+            <button class="btn-top icon-only" style="width:32px;height:32px;min-width:32px !important;min-height:32px !important;" title="Scheda Soggiorno & Aggancio PMS" onclick="openStayDetailsModal()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="area-messaggi" style="padding:12px 14px;" id="mobileMessagesArea"></div>
+      </div>
+
+      <!-- SCREEN 3: AI · Modifica risposta Mobile (308:4338) -->
+      <div class="mob-screen" id="mobScreenAI">
+        <div class="intestazione-thread" style="height:54px;padding:0 14px;">
+          <div class="titolo-left" style="gap:8px;">
+            <button class="btn-top icon-only" style="width:30px;height:30px;background:#F8FAFC;" onclick="setMobileTab('inbox')" title="Torna alla lista Messaggi">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+              </svg>
+            </button>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#0F172A;">Assistente AI & Copilot</div>
+              <div style="font-size:11px;color:#64748B;" id="mobAISubtitle">Adam Nowak · Suite 14</div>
+            </div>
+          </div>
+        </div>
+        <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column;" id="mobileSiderAI"></div>
+      </div>
+
+      <!-- Bottom Bar Conversazione Mobile (SOLO Chat e AI quando si accede a una conversazione) -->
+      <nav class="mob-bottom-bar" id="mobConvBottomBar">
+        <div class="mob-tabs-row">
+          <button class="mob-tab active" id="mobNavChat" onclick="setMobileTab('chat')">
+            <div class="mob-tab-pill">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <span>Chat</span>
+          </button>
+
+          <button class="mob-tab" id="mobNavAI" onclick="setMobileTab('ai')">
+            <div class="mob-tab-pill">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+              </svg>
+            </div>
+            <span>AI</span>
+          </button>
+        </div>
+        <div class="home-indicator"></div>
+      </nav>
+
+    </div>
+
+  </main>
+
+  <!-- Modal / Drawer Overlay (Scheda Soggiorno & Aggancio PMS / Nuova Conversazione) -->
+  <div class="modal-backdrop" id="modalBackdrop" onclick="if(event.target===this)closeModal()">
+    <div class="modal-card" id="modalContent"></div>
+  </div>
+
+  <div class="toast" id="toastBox"></div>
+
+  <script src="app.js?v=20261102_28"></script>
+</body>
+</html>
