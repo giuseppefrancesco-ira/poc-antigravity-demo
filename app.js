@@ -813,12 +813,6 @@ function renderSiderAI() {
       </div>
 
       <div class="gs-topbar-right">
-        <button type="button" class="gs-copilot-btn ${state.siderCopilotOpen ? 'active' : ''}" onclick="toggleSiderCopilot()" title="Mostra/Nascondi AI Copilot & Autonomia">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" fill="#FEF3C7"/>
-          </svg>
-          <span>AI Copilot</span>
-        </button>
         <button type="button" class="gs-close-btn" onclick="toggleDesktopSider(true)" title="Chiudi pannello laterale" aria-label="Chiudi">
           ${ICONS.close14}
         </button>
@@ -827,41 +821,6 @@ function renderSiderAI() {
 
     <!-- Scrollable Content -->
     <div class="gs-scroll-body">
-
-      ${state.siderCopilotOpen ? `
-        <!-- Pannello AI Copilot (Passaggio di Consegne & Autonomia) -->
-        <div class="gs-copilot-drawer">
-          <div class="gs-copilot-head">
-            <span class="gs-copilot-badge" style="display:inline-flex;align-items:center;gap:5px;">${ICONS.sparkles} <span>AI Copilot · Passaggio di Consegne</span></span>
-            <button type="button" class="bc-pop-close" onclick="toggleSiderCopilot()">${ICONS.close12}</button>
-          </div>
-          <div class="riga-motivo">${h.motivo}</div>
-          <div class="riga-contesto">
-            <span class="contesto-icon">${ICONS.check}</span>
-            <span>${h.fatto}</span>
-          </div>
-          <div class="pill-azione-suggerita" onclick="openDraftEditor()" title="Genera risposta suggerita nel composer">
-            <div class="pill-azione-left">
-              ${ICONS.zap}
-              <span>${h.azione}</span>
-            </div>
-            <span class="pill-azione-arrow">${ICONS.arrowRight}</span>
-          </div>
-          <div class="div-card"></div>
-          <div class="riga-autonomia">
-            <div class="autonomia-meta">
-              <span class="badge-autonomia-pct">AI 94%</span>
-              <span class="autonomia-sub">Escluso: Tariffa</span>
-            </div>
-            <div class="autonomia-toggle-wrap" onclick="toggleAutoSend()">
-              <span>Auto-invio</span>
-              <div class="switch-off ${state.autoSend ? 'on' : ''}">
-                <div class="switch-thumb"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ` : ''}
 
       <!-- 1. Card Principale Ospite & Contatti -->
       <div class="gs-card gs-guest-card">
@@ -943,16 +902,6 @@ function renderSiderAI() {
             <span class="gs-treatment-price">${m.price}</span>
           </div>
         </div>
-      </div>
-
-      <!-- 5. Card Note Turno & Handover -->
-      <div class="gs-card gs-handover-card">
-        <div class="gs-handover-head">
-          <span class="gs-handover-title" style="display:inline-flex;align-items:center;gap:6px;"><span style="color:#475569;display:inline-flex;">${ICONS.stickyNote14}</span> <span>Note Turno & Handover</span></span>
-          <button type="button" class="gs-add-note-link" style="display:inline-flex;align-items:center;gap:3px;" onclick="setComposerMode('note')" title="Aggiungi nota turno">${ICONS.plus12} <span>Nota</span></button>
-        </div>
-        <div class="gs-handover-body">${m.handoverNote}</div>
-        ${internalNotesList ? `<div class="gs-shift-notes-wrap">${internalNotesList}</div>` : ''}
       </div>
 
       <!-- 6. Informazioni PMS & Aggancio Prenotazione (Spostate nel sider a destra) -->
