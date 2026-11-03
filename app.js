@@ -2623,43 +2623,104 @@ function confirmBookingLinkChange(shouldClose = true) {
 }
 
 function openGenerateReviewModal() {
-  const modal = document.getElementById('modalBackdrop');
-  const content = document.getElementById('modalContent');
-  if (!modal || !content) return;
+  state.reviewModalSentiment = 'positiva';
+  state.reviewModalGeneratedText = '';
+  renderGenerateReviewModal();
+  document.getElementById('modalBackdrop')?.classList.add('open');
+}
+
+function selectReviewSentiment(sentiment) {
+  state.reviewModalSentiment = sentiment;
+  if (state.reviewModalGeneratedText) {
+    state.reviewModalGeneratedText = buildReviewTextBySentiment(sentiment);
+  }
+  renderGenerateReviewModal();
+}
+
+function buildReviewTextBySentiment(sentiment) {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
   const cleanName = conv.name.replace('↳ ', '').replace(/\s*\(.*?\)\s*/g, '').trim();
-  const reviewText = `Ospite esemplare! ${cleanName} ha lasciato l'alloggio (${conv.stay.room}) in condizioni perfette, rispettando tutte le regole della casa e comunicando sempre con grande cortesia. Consigliatissimo a tutta la community!`;
+  const firstName = cleanName.split(' ')[0] || 'Ospite';
+  const room = conv.stay?.room || 'Suite 14';
 
-  content.className = 'modal-card';
+  if (sentiment === 'neutrale') {
+    return `${firstName} ha soggiornato presso ${room} rispettando gli orari di check-in e check-out. Comunicazione essenziale durante il soggiorno e appartamento riconsegnato in ordine.`;
+  }
+  if (sentiment === 'negativa') {
+    return `Il soggiorno di ${firstName} presso ${room} ha presentato alcune criticità nella comunicazione e nel rispetto delle regole condominiali. L'alloggio ha richiesto un intervento di pulizia supplementare al check-out.`;
+  }
+  return `${firstName} è stato un ospite esemplare durante il suo soggiorno nella ${room}! Comunicazione sempre cordiale e puntuale nei messaggi, grande cura dell'appartamento e pieno rispetto delle regole della casa. Consigliatissimo a tutta la community di ${conv.channel || 'Airbnb'}!`;
+}
+
+function generateGuestReviewText() {
+  const sentiment = state.reviewModalSentiment || 'positiva';
+  state.reviewModalGeneratedText = buildReviewTextBySentiment(sentiment);
+  renderGenerateReviewModal();
+  showToast('Recensione in terza persona generata con AI');
+}
+
+function copyGeneratedGuestReview() {
+  const ta = document.getElementById('aiGuestReviewText');
+  const txt = ta ? ta.value : (state.reviewModalGeneratedText || '');
+  navigator.clipboard?.writeText(txt);
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  showToast(`Recensione copiata negli appunti per ${conv.channel || 'Airbnb'}!`);
+}
+
+function renderGenerateReviewModal() {
+  const content = document.getElementById('modalContent');
+  if (!content) return;
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const cleanName = conv.name.replace('↳ ', '').replace(/\s*\(.*?\)\s*/g, '').trim();
+  const firstName = cleanName.split(' ')[0] || 'Smets';
+  const channelName = conv.channel || 'Airbnb';
+  const curSent = state.reviewModalSentiment || 'positiva';
+  const genText = state.reviewModalGeneratedText || '';
+
+  const starOutlineBlue = `<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#2E54E8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+  const sparklesBtnIcon = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg>`;
+
+  content.className = 'modal-card review-guest-modal';
   content.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #E2E8F0;padding-bottom:10px;">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#FACC15" stroke="#EAB308" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        <div>
-          <div style="font-size:15px;font-weight:700;color:#0F172A;">Genera recensione ospite con AI</div>
-          <div style="font-size:12px;color:#64748B;">${cleanName} · ${conv.stay.room} (${conv.channel})</div>
+    <button type="button" class="rev-modal-close" onclick="closeModal()" aria-label="Chiudi">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+
+    <div class="rev-modal-header">
+      <span class="rev-modal-star">${starOutlineBlue}</span>
+      <h3 class="rev-modal-title">Recensione per ${firstName}</h3>
+    </div>
+
+    <p class="rev-modal-desc">
+      Scritta sui messaggi di questo soggiorno, in terza persona, da copiare su ${channelName}.
+    </p>
+
+    <div class="rev-modal-section">
+      <span class="rev-modal-label">Com'e' andata</span>
+      <div class="rev-sentiment-grid">
+        <button type="button" class="rev-sent-btn ${curSent === 'positiva' ? 'active' : ''}" onclick="selectReviewSentiment('positiva')">Positiva</button>
+        <button type="button" class="rev-sent-btn ${curSent === 'neutrale' ? 'active' : ''}" onclick="selectReviewSentiment('neutrale')">Neutrale</button>
+        <button type="button" class="rev-sent-btn ${curSent === 'negativa' ? 'active' : ''}" onclick="selectReviewSentiment('negativa')">Negativa</button>
+      </div>
+    </div>
+
+    <button type="button" class="rev-generate-btn" onclick="generateGuestReviewText()">
+      ${sparklesBtnIcon}
+      <span>${genText ? 'Rigenera recensione' : 'Genera recensione'}</span>
+    </button>
+
+    ${genText ? `
+      <div class="rev-generated-box">
+        <textarea id="aiGuestReviewText" class="rev-generated-textarea" rows="4">${genText}</textarea>
+        <div class="rev-generated-actions">
+          <button type="button" class="rev-copy-btn" onclick="copyGeneratedGuestReview()">
+            ${ICONS.copy}
+            <span>Copia per ${channelName}</span>
+          </button>
         </div>
       </div>
-      <button type="button" class="faq-close-btn" onclick="closeModal()" aria-label="Chiudi">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:10px;padding:6px 0;">
-      <div style="display:flex;align-items:center;gap:4px;font-size:12.5px;font-weight:600;color:#0F172A;">
-        <span>Valutazione suggerita:</span>
-        <span style="color:#EAB308;letter-spacing:1px;">★★★★★</span>
-        <span style="font-size:11.5px;color:#16A34A;font-weight:700;margin-left:4px;">5.0 / 5</span>
-      </div>
-      <textarea id="aiGuestReviewText" style="width:100%;min-height:92px;padding:10px 12px;border:1px solid #CBD5E1;border-radius:10px;font-family:inherit;font-size:13px;line-height:1.45;color:#1E293B;resize:vertical;">${reviewText}</textarea>
-    </div>
-
-    <div style="display:flex;justify-content:flex-end;gap:8px;">
-      <button type="button" class="btn-correggi-aggancio" style="height:36px;padding:0 14px;" onclick="navigator.clipboard?.writeText(document.getElementById('aiGuestReviewText')?.value||'');showToast('Recensione copiata negli appunti')">Copia testo</button>
-      <button type="button" class="gs-pms-save-btn" style="width:auto;height:36px;padding:0 16px;margin:0;" onclick="closeModal();showToast('Recensione 5★ inviata su ' + '${conv.channel}')">Pubblica recensione</button>
-    </div>
+    ` : ''}
   `;
-  modal.classList.add('open');
 }
 
 function archiveCurrentConversation() {
