@@ -5899,26 +5899,9 @@ function renderThread() {
     </div>
   `).join('');
 
-  const formatSysEvent = (txt) => txt
-    .replace(/(#[A-Z0-9-]+|Nuki \([0-9]+\)|"[^"]+"|Polacco \(PL\)|Priorità [A-Za-z]+|Recensione Ospite AI)/g, '<strong>$1</strong>');
-
-  const sysEvent1Html = conv.systemEvent ? `
-    <div class="evento-sistema-row" title="Azione eseguita automaticamente dal sistema (distinta dai messaggi)">
-      <span><strong>Sistema</strong> · ${formatSysEvent(conv.systemEvent)}</span>
-    </div>
-  ` : '';
-
-  const sysEvent2Html = conv.systemEvent2 ? `
-    <div class="evento-sistema-row" title="Azione eseguita automaticamente dal sistema (distinta dai messaggi)">
-      <span><strong>Sistema</strong> · ${formatSysEvent(conv.systemEvent2)}</span>
-    </div>
-  ` : '';
-
   const needsTranslation = conv.langCode !== 'IT';
 
   const messagesHtml = `
-    ${sysEvent1Html}
-
     <!-- Blocco Msg 1 Host (312:7429) -->
     <div class="blocco-msg host">
       <div class="meta-row">
@@ -6014,8 +5997,6 @@ function renderThread() {
         </button>
       </div>
     </div>
-
-    ${sysEvent2Html}
 
     <!-- Blocco Msg 3 Programmato (312:7464) -->
     <div class="blocco-msg host">
@@ -7545,7 +7526,6 @@ function sendReplyNow() {
     return;
   }
   conv.dagestire = false;
-  conv.systemEvent2 = `Risposta inviata su ${state.outboundChannel} e tradotta in ${conv.langName} · adesso`;
   renderThread();
   showToast(`Risposta inviata in ${conv.langName} su ${state.outboundChannel}!`);
   closeDraftEditor();
