@@ -4276,6 +4276,13 @@ button, input, textarea {
   flex-wrap: wrap;
 }
 
+.bc-tools-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .bc-icon-btn {
   width: 32px;
   height: 32px;

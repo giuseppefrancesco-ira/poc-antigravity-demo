@@ -801,25 +801,12 @@ function renderBottomComposer() {
   let html = '';
 
   if (!state.composerExpanded) {
-    // COLLAPSED MODE (1:1 with screenshot 2)
+    // COLLAPSED MODE (selettore canale e lingua a sinistra di Invia)
     html = `
       <div class="bc-collapsed">
         <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
           ${ICONS.paperclip16}
         </button>
-
-        <div class="bc-channel-pill" title="Cambia canale di invio">
-          ${channelBadge}
-          <span class="bc-channel-name">${channelLabel}</span>
-          <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
-          <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
-            <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>Whatsapp</option>
-            <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
-            <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
-            <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
-            <option value="Nota interna" ${state.outboundChannel === 'Nota interna' ? 'selected' : ''}>Nota interna</option>
-          </select>
-        </div>
 
         <input
           type="text"
@@ -838,6 +825,36 @@ function renderBottomComposer() {
           ${ICONS.expandDiag}
           <span>Espandi</span>
         </button>
+
+        <!-- Channel Pill (left of Invia) -->
+        <div class="bc-channel-pill" title="Cambia canale di invio">
+          ${channelBadge}
+          <span class="bc-channel-name">${channelLabel}</span>
+          <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
+          <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
+            <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>Whatsapp</option>
+            <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
+            <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
+            <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
+            <option value="Nota interna" ${state.outboundChannel === 'Nota interna' ? 'selected' : ''}>Nota interna</option>
+          </select>
+        </div>
+
+        <!-- Language Pill (left of Invia) -->
+        <div class="bc-lang-pill" title="Lingua di traduzione automatica in uscita">
+          <span class="bc-lang-code">${conv.langCode}</span>
+          <span class="bc-lang-name">${conv.langName}</span>
+          <span class="bc-lang-on">(ON)</span>
+          <span class="bc-chevron-blue">${ICONS.chevronDown}</span>
+          <select class="bc-select-overlay" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
+            <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>DE Tedesco (ON)</option>
+            <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>PL Polacco (ON)</option>
+            <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>EN Inglese (ON)</option>
+            <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>ES Spagnolo (ON)</option>
+            <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>FR Francese (ON)</option>
+            <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>IT Italiano (ON)</option>
+          </select>
+        </div>
 
         <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()">
           ${ICONS.sendHoriz}
@@ -969,36 +986,6 @@ function renderBottomComposer() {
             </span>
 
             ${!isNoteMode ? `
-              <!-- Language Pill -->
-              <div class="bc-lang-pill" title="Lingua di traduzione automatica in uscita">
-                <span class="bc-lang-code">${conv.langCode}</span>
-                <span class="bc-lang-name">${conv.langName}</span>
-                <span class="bc-lang-on">(ON)</span>
-                <span class="bc-chevron-blue">${ICONS.chevronDown}</span>
-                <select class="bc-select-overlay" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
-                  <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>DE Tedesco (ON)</option>
-                  <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>PL Polacco (ON)</option>
-                  <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>EN Inglese (ON)</option>
-                  <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>ES Spagnolo (ON)</option>
-                  <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>FR Francese (ON)</option>
-                  <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>IT Italiano (ON)</option>
-                </select>
-              </div>
-
-              <!-- Channel Pill -->
-              <div class="bc-channel-pill" title="Canale di invio">
-                ${channelBadge}
-                <span class="bc-channel-name">${channelLabel}</span>
-                <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
-                <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
-                  <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>Whatsapp</option>
-                  <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
-                  <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
-                  <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
-                  <option value="Nota interna" ${state.outboundChannel === 'Nota interna' ? 'selected' : ''}>Nota interna (Solo staff)</option>
-                </select>
-              </div>
-
               <!-- Template Pill (Upper Composer) -->
               <button type="button" class="bc-top-pill template ${state.bcTemplateOpen ? 'active' : ''}" onclick="toggleBcPopover('template')" title="Messaggi pronti / Template">
                 ${ICONS.docTemplate14}
@@ -1180,6 +1167,36 @@ function renderBottomComposer() {
                 <span>Salva nota</span>
               </button>
             ` : `
+              <!-- Channel Pill (in basso a sinistra di Invia) -->
+              <div class="bc-channel-pill" title="Canale di invio">
+                ${channelBadge}
+                <span class="bc-channel-name">${channelLabel}</span>
+                <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
+                <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
+                  <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>Whatsapp</option>
+                  <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
+                  <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
+                  <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
+                  <option value="Nota interna" ${state.outboundChannel === 'Nota interna' ? 'selected' : ''}>Nota interna (Solo staff)</option>
+                </select>
+              </div>
+
+              <!-- Language Pill (in basso a sinistra di Invia) -->
+              <div class="bc-lang-pill" title="Lingua di traduzione automatica in uscita">
+                <span class="bc-lang-code">${conv.langCode}</span>
+                <span class="bc-lang-name">${conv.langName}</span>
+                <span class="bc-lang-on">(ON)</span>
+                <span class="bc-chevron-blue">${ICONS.chevronDown}</span>
+                <select class="bc-select-overlay" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
+                  <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>DE Tedesco (ON)</option>
+                  <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>PL Polacco (ON)</option>
+                  <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>EN Inglese (ON)</option>
+                  <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>ES Spagnolo (ON)</option>
+                  <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>FR Francese (ON)</option>
+                  <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>IT Italiano (ON)</option>
+                </select>
+              </div>
+
               <button type="button" class="bc-send-btn expanded ${hasText ? 'ready' : ''}" onclick="sendReplyNow()">
                 ${ICONS.sendHoriz}
                 <span>Invia</span>
