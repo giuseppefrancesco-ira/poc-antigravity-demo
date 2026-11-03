@@ -401,8 +401,8 @@ function renderConversationLists() {
     }
 
     return `
-      <div class="conv-item ${isSel ? 'selected' : ''}" onclick="selectConversation('${c.id}')">
-        ${isSel ? '<div class="barra-accento"></div>' : ''}
+      <div class="conv-item ${isSel ? 'selected' : ''} ${c.dagestire ? 'da-gestire' : ''}" onclick="selectConversation('${c.id}')">
+        ${c.dagestire ? '<div class="barra-accento gialla"></div>' : (isSel ? '<div class="barra-accento"></div>' : '')}
         <div class="conv-body">
           <div class="conv-top">
             <span class="conv-nome">${c.name}</span>
@@ -411,10 +411,10 @@ function renderConversationLists() {
           <div class="conv-badges">
             ${c.dateBadge ? `<span class="pill date">${ICONS.calendar} ${c.dateBadge}</span>` : ''}
             ${c.checkin ? `<span class="pill checkin">${ICONS.calendar} In corso</span>` : ''}
-            ${c.dagestire ? `<span class="pill dagestire">Da gestire</span>` : ''}
             ${c.positivo ? `<span class="pill checkin">${ICONS.smile} Positivo</span>` : ''}
           </div>
           <div class="conv-prev">${prevHtml}</div>
+          ${c.dagestire ? `<div class="conv-attesa-row"><span class="pill-attesa-risposta">IN ATTESA DI RISPOSTA</span></div>` : ''}
         </div>
       </div>
     `;

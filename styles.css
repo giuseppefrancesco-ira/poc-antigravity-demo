@@ -463,6 +463,31 @@ button, input, textarea {
   flex-shrink: 0;
 }
 
+.barra-accento.gialla {
+  background: #FBBF24;
+}
+
+.conv-attesa-row {
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.pill-attesa-risposta {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 5px;
+  background: #FBBF24;
+  color: #1E1B18;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .conv-body {
   flex: 1;
   padding: 12px 14px;
