@@ -1147,8 +1147,14 @@ function renderBottomComposer() {
     `;
   }
 
-  if (deskComp) deskComp.innerHTML = html;
-  if (mobComp) mobComp.innerHTML = html;
+  if (deskComp) {
+    deskComp.classList.toggle('is-expanded', !!state.composerExpanded);
+    deskComp.innerHTML = html;
+  }
+  if (mobComp) {
+    mobComp.classList.toggle('is-expanded', !!state.composerExpanded);
+    mobComp.innerHTML = html;
+  }
 }
 
 function autoResizeTextarea(el) {

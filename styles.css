@@ -639,6 +639,7 @@ button, input, textarea {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  position: relative;
 }
 
 .intestazione-thread {
@@ -2212,6 +2213,7 @@ button, input, textarea {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  position: relative;
 }
 
 .mob-screen.active {
@@ -3971,10 +3973,29 @@ button, input, textarea {
   flex-shrink: 0;
   position: relative;
   z-index: 20;
+  transition: height 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bottom-composer-wrap.is-expanded {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(100% - 104px);
+  display: flex;
+  flex-direction: column;
+  background: rgba(248, 250, 252, 0.97);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 -14px 34px rgba(15, 23, 42, 0.09);
+  z-index: 30;
 }
 
 .bottom-composer-wrap.mobile {
   padding: 10px 12px 12px 12px;
+}
+
+.bottom-composer-wrap.mobile.is-expanded {
+  height: calc(100% - 96px);
 }
 
 /* --- EXPANDED CARD --- */
@@ -3982,10 +4003,13 @@ button, input, textarea {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
   display: flex;
   flex-direction: column;
   position: relative;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
 }
 
 .bc-header {
@@ -4185,10 +4209,12 @@ button, input, textarea {
 
 /* --- MIDDLE BODY --- */
 .bc-body {
-  padding: 12px 18px;
+  padding: 14px 18px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1;
+  min-height: 0;
 }
 
 .bc-textarea-wrap {
@@ -4197,20 +4223,23 @@ button, input, textarea {
   align-items: flex-start;
   gap: 10px;
   width: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 .bc-textarea {
   flex: 1;
   width: 100%;
-  min-height: 54px;
-  max-height: 150px;
+  height: 100%;
+  min-height: 120px;
+  max-height: none;
   border: none;
   outline: none;
   resize: none;
   background: transparent;
   font-family: 'Inter', sans-serif;
-  font-size: 13.5px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.55;
   color: #0F172A;
   padding: 0 4px 0 0;
 }
@@ -4518,19 +4547,19 @@ button, input, textarea {
   color: #FFFFFF;
 }
 
-/* --- FLOATING POPOVERS ABOVE COMPOSER --- */
+/* --- FLOATING POPOVERS ABOVE COMPOSER TOOLBAR --- */
 .bc-floating-popover {
   position: absolute;
-  bottom: calc(100% + 8px);
+  bottom: 58px;
   left: 14px;
   width: 310px;
   max-width: calc(100vw - 40px);
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 14px;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
   padding: 10px;
-  z-index: 40;
+  z-index: 50;
   display: flex;
   flex-direction: column;
   gap: 6px;
