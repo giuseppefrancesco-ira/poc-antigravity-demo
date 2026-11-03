@@ -5850,6 +5850,365 @@ button, input, textarea {
   background: #1D4ED8;
 }
 
+/* =========================================================
+   MOBILE-FIRST DESIGN, SPACING & COMPOSER ARCHITECTURE
+   ========================================================= */
+.bc-collapsed-input-row,
+.bc-collapsed-controls-row {
+  display: contents;
+}
+
+/* Mobile Chat Header */
+.mob-chat-header {
+  height: 58px;
+  padding: 0 12px;
+  gap: 8px;
+}
+
+.mob-hdr-btn {
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+  border-radius: 9px;
+  background: #F8FAFC;
+  flex-shrink: 0;
+}
+
+.mob-chat-title-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.mob-chat-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.mob-chat-guest-name {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #0F172A;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mob-chat-sent-pill {
+  height: 19px;
+  padding: 0 6px;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.mob-chat-subinfo {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748B;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mob-sub-ch {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.mob-sub-ch .bc-ch-circle {
+  width: 15px;
+  height: 15px;
+}
+
+.mob-sub-ch .bc-ch-circle svg {
+  width: 9px;
+  height: 9px;
+}
+
+.mob-chat-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.mob-lang-btn {
+  height: 34px;
+  padding: 0 9px;
+  border-radius: 9px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  font-size: 11.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.mob-lang-badge-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  line-height: 1;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+/* Mobile Messages Area & Bubbles (Mobile-First Proportions) */
+.figma-mobile .area-messaggi {
+  padding: 14px 12px 18px 12px;
+  gap: 18px;
+}
+
+.figma-mobile .blocco-msg {
+  gap: 6px;
+}
+
+.figma-mobile .meta-row {
+  gap: 5px;
+  padding: 0 2px;
+}
+
+.figma-mobile .bolla-blu-host,
+.figma-mobile .bolla-bianca-ospite,
+.figma-mobile .bolla-programmata {
+  width: 100%;
+  max-width: 93%;
+  padding: 12px 14px;
+  gap: 9px;
+  font-size: 13.5px;
+  line-height: 1.48;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.figma-mobile .bolla-blu-host {
+  border-radius: 15px 4px 15px 15px;
+}
+
+.figma-mobile .bolla-bianca-ospite {
+  border-radius: 4px 15px 15px 15px;
+}
+
+.figma-mobile .bolla-programmata {
+  border-radius: 15px 4px 15px 15px;
+}
+
+.figma-mobile .card-allegato-host {
+  width: 100%;
+  max-width: 93%;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 11px;
+}
+
+/* Single-line crisp translation header inside mobile bubbles */
+.figma-mobile .bubble-trad-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  flex-wrap: nowrap;
+  padding-bottom: 8px;
+  font-size: 11px;
+}
+
+.figma-mobile .bubble-trad-bar-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  min-width: 0;
+}
+
+.figma-mobile .bubble-trad-bar-left span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.figma-mobile .bubble-trad-bar-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.figma-mobile .bubble-trad-toggle-btn {
+  font-size: 11px;
+  white-space: nowrap;
+  gap: 3px;
+}
+
+.figma-mobile .bubble-trad-box {
+  padding: 8px 11px;
+  border-radius: 9px;
+}
+
+.figma-mobile .bubble-trad-box-txt {
+  font-size: 12px;
+  line-height: 1.42;
+}
+
+.figma-mobile .msg-bottom-actions {
+  gap: 6px;
+  margin-top: 1px;
+}
+
+/* Mobile-First 2-Row Composer (Zero Overflow, Thumb-Friendly) */
+.bottom-composer-wrap.mobile {
+  padding: 8px 10px 10px 10px;
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed {
+  height: auto;
+  border-radius: 16px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed-input-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed-input {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  font-size: 13.5px;
+  padding: 0 4px;
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding-top: 6px;
+  border-top: 1px solid #F1F5F9;
+}
+
+.bottom-composer-wrap.mobile .bc-expand-btn {
+  height: 28px;
+  padding: 0 9px;
+  font-size: 11.5px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 999px;
+}
+
+.bottom-composer-wrap.mobile .bc-channel-pill {
+  height: 28px;
+  padding: 0 8px 0 4px;
+  gap: 5px;
+}
+
+.bottom-composer-wrap.mobile .bc-channel-name,
+.bottom-composer-wrap.mobile .bc-lang-name {
+  font-size: 11.5px;
+}
+
+.bottom-composer-wrap.mobile .bc-lang-pill {
+  height: 28px;
+  padding: 0 8px;
+  gap: 5px;
+}
+
+.bottom-composer-wrap.mobile .bc-send-btn.collapsed {
+  margin-left: auto;
+  height: 30px;
+  padding: 0 13px;
+  font-size: 12px;
+}
+
+/* Mobile Expanded Composer */
+.bottom-composer-wrap.mobile .bc-expanded {
+  border-radius: 16px;
+}
+
+.bottom-composer-wrap.mobile .bc-header {
+  padding: 8px 10px;
+  gap: 6px;
+}
+
+.bottom-composer-wrap.mobile .bc-top-pill {
+  height: 26px;
+  padding: 0 9px;
+  font-size: 11.5px;
+}
+
+.bottom-composer-wrap.mobile .bc-body {
+  padding: 10px 12px;
+  gap: 8px;
+}
+
+.bottom-composer-wrap.mobile .bc-textarea {
+  min-height: 76px;
+  font-size: 13.5px;
+}
+
+.bottom-composer-wrap.mobile .bc-footer {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 8px 10px;
+  gap: 7px;
+}
+
+.bottom-composer-wrap.mobile .bc-tools-left {
+  width: 100%;
+  justify-content: flex-start;
+  gap: 4px;
+}
+
+.bottom-composer-wrap.mobile .bc-tools-right {
+  width: 100%;
+  justify-content: flex-start;
+  gap: 6px;
+  padding-top: 6px;
+  border-top: 1px solid #F1F5F9;
+}
+
+.bottom-composer-wrap.mobile .bc-send-btn.expanded {
+  margin-left: auto;
+  height: 30px;
+  padding: 0 14px;
+  font-size: 12px;
+}
+
+/* Mobile Guest Details & PMS Sider */
+.figma-mobile .gs-panel {
+  padding: 12px;
+  gap: 12px;
+}
+
+.figma-mobile .gs-card,
+.figma-mobile .gs-note-card {
+  padding: 13px;
+  border-radius: 14px;
+}
+
+
 
 
 
@@ -6141,41 +6500,41 @@ button, input, textarea {
 
       <!-- SCREEN 2: Container Mobile Chat (312:7348) -->
       <div class="mob-screen active" id="mobScreenChat">
-        <div class="intestazione-thread" style="height:56px;padding:0 12px;gap:8px;">
-          <div class="titolo-left" style="gap:6px;flex:1;min-width:0;">
-            <button class="btn-top icon-only" style="width:32px;height:32px;min-width:32px !important;min-height:32px !important;background:#F8FAFC;flex-shrink:0;" onclick="setMobileTab('inbox')" title="Torna alla lista Messaggi">
+        <div class="intestazione-thread mob-chat-header">
+          <div class="titolo-left" style="gap:8px;flex:1;min-width:0;">
+            <button class="btn-top icon-only mob-hdr-btn" onclick="setMobileTab('inbox')" title="Torna alla lista Messaggi">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
               </svg>
             </button>
-            <div style="display:flex;flex-direction:column;min-width:0;">
-              <div style="display:flex;align-items:center;gap:5px;">
-                <span style="font-size:14px;font-weight:600;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="mobChatGuestName">Adam Nowak</span>
-                <span class="pill-header sent" style="height:18px;padding:0 6px;font-size:10px;flex-shrink:0;">
+            <div class="mob-chat-title-col">
+              <div class="mob-chat-name-row">
+                <span class="mob-chat-guest-name" id="mobChatGuestName">Adam Nowak</span>
+                <span class="pill-header sent mob-chat-sent-pill">
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#15703D" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
                   Positivo
                 </span>
               </div>
-              <span style="font-size:11px;color:#64748B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="mobChatSubInfo">Suite 14 · Check-in · PL Polacco</span>
+              <div class="mob-chat-subinfo" id="mobChatSubInfo">Suite 14 · In soggiorno</div>
             </div>
           </div>
-          <div class="controlli-right" style="gap:5px;flex-shrink:0;">
-            <button class="btn-scarica-msg" style="width:32px;height:32px;min-width:32px !important;min-height:32px !important;" title="Scarica messaggi" onclick="triggerHubSync()">
+          <div class="controlli-right mob-chat-controls">
+            <button class="btn-scarica-msg mob-hdr-btn" title="Scarica messaggi" onclick="triggerHubSync()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
               </svg>
             </button>
-            <button class="btn-top" style="height:32px;padding:0 8px;background:#F8FAFC;font-size:11px;white-space:nowrap;" onclick="showToast('Lingua rilevata automaticamente dall\'AI')">
-              <span id="mobLangBadgeLabel">PL Polacco</span>
+            <button class="btn-top mob-lang-btn" onclick="showToast('Lingua rilevata automaticamente dall\'AI')">
+              <span id="mobLangBadgeLabel" class="mob-lang-badge-inner">PL Polacco</span>
             </button>
-            <button class="btn-top icon-only" style="width:32px;height:32px;min-width:32px !important;min-height:32px !important;" title="Scheda Soggiorno & Aggancio PMS" onclick="openStayDetailsModal()">
+            <button class="btn-top icon-only mob-hdr-btn" title="Scheda Soggiorno & Aggancio PMS" onclick="openStayDetailsModal()">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
               </svg>
             </button>
           </div>
         </div>
-        <div class="area-messaggi" style="padding:12px 14px;" id="mobileMessagesArea"></div>
+        <div class="area-messaggi" id="mobileMessagesArea"></div>
         <div class="bottom-composer-wrap mobile" id="mobileBottomComposer"></div>
       </div>
 
@@ -6711,8 +7070,8 @@ function renderThread() {
   const mobLang = document.getElementById('mobLangBadgeLabel');
   const mobAISub = document.getElementById('mobAISubtitle');
   if (mobName) mobName.textContent = conv.name.replace('↳ ', '');
-  if (mobSub) mobSub.textContent = `${conv.stay.room} · ${conv.channel} · ${conv.langName}`;
-  if (mobLang) mobLang.innerHTML = `${getLangFlagSvg(conv.langCode)} <span>${conv.langName}</span>`;
+  if (mobSub) mobSub.innerHTML = `<span class="mob-sub-ch">${getChannelBadgeHtml(conv.channel)}</span><span>${conv.stay.room} · In soggiorno</span>`;
+  if (mobLang) mobLang.innerHTML = `${getLangFlagSvg(conv.langCode)}<span>${conv.langName}</span>`;
   if (mobAISub) mobAISub.textContent = `${conv.name.replace('↳ ', '')} · ${conv.stay.room}`;
 
   // Waveform bars (16 bars: 8 #2E54E8, 8 #CBD5E1, exact heights from Figma 312:6984)
@@ -7351,63 +7710,67 @@ function renderBottomComposer() {
   let html = '';
 
   if (!state.composerExpanded) {
-    // COLLAPSED MODE (selettore canale e lingua a sinistra di Invia)
+    // COLLAPSED MODE (selettore canale e lingua a sinistra di Invia; 2 righe mobile-first su schermi mobile)
     html = `
       <div class="bc-collapsed">
-        <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
-          ${ICONS.paperclip16}
-        </button>
+        <div class="bc-collapsed-input-row">
+          <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
+            ${ICONS.paperclip16}
+          </button>
 
-        <input
-          type="text"
-          class="bc-collapsed-input"
-          placeholder="Scrivi un messaggio o chiedi all'AI..."
-          value="${draftVal.replace(/"/g, '&quot;').replace(/\n/g, ' ')}"
-          oninput="handleComposerInput(this.value)"
-          onkeydown="if(event.key==='Enter')sendReplyNow()"
-        />
+          <input
+            type="text"
+            class="bc-collapsed-input"
+            placeholder="Scrivi un messaggio..."
+            value="${draftVal.replace(/"/g, '&quot;').replace(/\n/g, ' ')}"
+            oninput="handleComposerInput(this.value)"
+            onkeydown="if(event.key==='Enter')sendReplyNow()"
+          />
 
-        <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
-          ${ICONS.mic16}
-        </button>
-
-        <button type="button" class="bc-expand-btn" onclick="toggleComposerExpand(true)" title="Espandi composer">
-          ${ICONS.expandDiag}
-          <span>Espandi</span>
-        </button>
-
-        <!-- Channel Pill (left of Invia) -->
-        <div class="bc-channel-pill" title="Cambia canale di invio">
-          ${channelBadge}
-          <span class="bc-channel-name">${channelLabel}</span>
-          <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
-          <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
-            <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>Whatsapp</option>
-            <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
-            <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
-            <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
-          </select>
+          <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
+            ${ICONS.mic16}
+          </button>
         </div>
 
-        <!-- Language Pill (left of Invia) -->
-        <div class="bc-lang-pill" title="Lingua di traduzione automatica in uscita">
-          <span class="bc-lang-flag">${getLangFlagSvg(conv.langCode)}</span>
-          <span class="bc-lang-name">${conv.langName}</span>
-          <span class="bc-chevron-blue">${ICONS.chevronDown}</span>
-          <select class="bc-select-overlay" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
-            <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
-            <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
-            <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
-            <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
-            <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
-            <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
-          </select>
-        </div>
+        <div class="bc-collapsed-controls-row">
+          <button type="button" class="bc-expand-btn" onclick="toggleComposerExpand(true)" title="Espandi composer">
+            ${ICONS.expandDiag}
+            <span>Espandi</span>
+          </button>
 
-        <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()">
-          ${ICONS.sendHoriz}
-          <span>Invia</span>
-        </button>
+          <!-- Channel Pill (left of Invia) -->
+          <div class="bc-channel-pill" title="Cambia canale di invio">
+            ${channelBadge}
+            <span class="bc-channel-name">${channelLabel}</span>
+            <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
+            <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
+              <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>Whatsapp</option>
+              <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
+              <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
+              <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
+            </select>
+          </div>
+
+          <!-- Language Pill (left of Invia) -->
+          <div class="bc-lang-pill" title="Lingua di traduzione automatica in uscita">
+            <span class="bc-lang-flag">${getLangFlagSvg(conv.langCode)}</span>
+            <span class="bc-lang-name">${conv.langName}</span>
+            <span class="bc-chevron-blue">${ICONS.chevronDown}</span>
+            <select class="bc-select-overlay" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
+              <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
+              <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
+              <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
+              <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
+              <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
+              <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
+            </select>
+          </div>
+
+          <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()">
+            ${ICONS.sendHoriz}
+            <span>Invia</span>
+          </button>
+        </div>
       </div>
     `;
   } else {

@@ -476,8 +476,8 @@ function renderThread() {
   const mobLang = document.getElementById('mobLangBadgeLabel');
   const mobAISub = document.getElementById('mobAISubtitle');
   if (mobName) mobName.textContent = conv.name.replace('↳ ', '');
-  if (mobSub) mobSub.textContent = `${conv.stay.room} · ${conv.channel} · ${conv.langName}`;
-  if (mobLang) mobLang.innerHTML = `${getLangFlagSvg(conv.langCode)} <span>${conv.langName}</span>`;
+  if (mobSub) mobSub.innerHTML = `<span class="mob-sub-ch">${getChannelBadgeHtml(conv.channel)}</span><span>${conv.stay.room} · In soggiorno</span>`;
+  if (mobLang) mobLang.innerHTML = `${getLangFlagSvg(conv.langCode)}<span>${conv.langName}</span>`;
   if (mobAISub) mobAISub.textContent = `${conv.name.replace('↳ ', '')} · ${conv.stay.room}`;
 
   // Waveform bars (16 bars: 8 #2E54E8, 8 #CBD5E1, exact heights from Figma 312:6984)
@@ -1116,63 +1116,67 @@ function renderBottomComposer() {
   let html = '';
 
   if (!state.composerExpanded) {
-    // COLLAPSED MODE (selettore canale e lingua a sinistra di Invia)
+    // COLLAPSED MODE (selettore canale e lingua a sinistra di Invia; 2 righe mobile-first su schermi mobile)
     html = `
       <div class="bc-collapsed">
-        <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
-          ${ICONS.paperclip16}
-        </button>
+        <div class="bc-collapsed-input-row">
+          <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
+            ${ICONS.paperclip16}
+          </button>
 
-        <input
-          type="text"
-          class="bc-collapsed-input"
-          placeholder="Scrivi un messaggio o chiedi all'AI..."
-          value="${draftVal.replace(/"/g, '&quot;').replace(/\n/g, ' ')}"
-          oninput="handleComposerInput(this.value)"
-          onkeydown="if(event.key==='Enter')sendReplyNow()"
-        />
+          <input
+            type="text"
+            class="bc-collapsed-input"
+            placeholder="Scrivi un messaggio..."
+            value="${draftVal.replace(/"/g, '&quot;').replace(/\n/g, ' ')}"
+            oninput="handleComposerInput(this.value)"
+            onkeydown="if(event.key==='Enter')sendReplyNow()"
+          />
 
-        <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
-          ${ICONS.mic16}
-        </button>
-
-        <button type="button" class="bc-expand-btn" onclick="toggleComposerExpand(true)" title="Espandi composer">
-          ${ICONS.expandDiag}
-          <span>Espandi</span>
-        </button>
-
-        <!-- Channel Pill (left of Invia) -->
-        <div class="bc-channel-pill" title="Cambia canale di invio">
-          ${channelBadge}
-          <span class="bc-channel-name">${channelLabel}</span>
-          <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
-          <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
-            <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>Whatsapp</option>
-            <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
-            <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
-            <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
-          </select>
+          <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
+            ${ICONS.mic16}
+          </button>
         </div>
 
-        <!-- Language Pill (left of Invia) -->
-        <div class="bc-lang-pill" title="Lingua di traduzione automatica in uscita">
-          <span class="bc-lang-flag">${getLangFlagSvg(conv.langCode)}</span>
-          <span class="bc-lang-name">${conv.langName}</span>
-          <span class="bc-chevron-blue">${ICONS.chevronDown}</span>
-          <select class="bc-select-overlay" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
-            <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
-            <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
-            <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
-            <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
-            <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
-            <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
-          </select>
-        </div>
+        <div class="bc-collapsed-controls-row">
+          <button type="button" class="bc-expand-btn" onclick="toggleComposerExpand(true)" title="Espandi composer">
+            ${ICONS.expandDiag}
+            <span>Espandi</span>
+          </button>
 
-        <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()">
-          ${ICONS.sendHoriz}
-          <span>Invia</span>
-        </button>
+          <!-- Channel Pill (left of Invia) -->
+          <div class="bc-channel-pill" title="Cambia canale di invio">
+            ${channelBadge}
+            <span class="bc-channel-name">${channelLabel}</span>
+            <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
+            <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
+              <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>Whatsapp</option>
+              <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
+              <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
+              <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
+            </select>
+          </div>
+
+          <!-- Language Pill (left of Invia) -->
+          <div class="bc-lang-pill" title="Lingua di traduzione automatica in uscita">
+            <span class="bc-lang-flag">${getLangFlagSvg(conv.langCode)}</span>
+            <span class="bc-lang-name">${conv.langName}</span>
+            <span class="bc-chevron-blue">${ICONS.chevronDown}</span>
+            <select class="bc-select-overlay" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
+              <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
+              <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
+              <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
+              <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
+              <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
+              <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
+            </select>
+          </div>
+
+          <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()">
+            ${ICONS.sendHoriz}
+            <span>Invia</span>
+          </button>
+        </div>
       </div>
     `;
   } else {
