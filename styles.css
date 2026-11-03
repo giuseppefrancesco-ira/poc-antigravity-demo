@@ -4624,3 +4624,288 @@ button, input, textarea {
   gap: 8px;
 }
 
+/* =========================================================
+   MODALE MESSAGGI PRONTI (1:1 LAYOUT + SISTEMA DESIGN)
+   ========================================================= */
+.modal-card.mp-modal {
+  max-width: 580px;
+  width: 100%;
+  max-height: 88vh;
+  padding: 0;
+  border-radius: 16px;
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.20);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+}
+
+.mp-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 22px 14px 22px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.mp-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.mp-icon-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #EEF2FF;
+  border: 1px solid #C7D2FE;
+  color: #2457E6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mp-header-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mp-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.25;
+}
+
+.mp-subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  color: #64748B;
+  line-height: 1.35;
+}
+
+.mp-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #64748B;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.mp-close-btn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+.mp-controls-section {
+  padding: 14px 22px 14px 22px;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #FFFFFF;
+}
+
+.mp-search-box {
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #94A3B8;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.mp-search-box:focus-within {
+  border-color: #93C5FD;
+  background: #FFFFFF;
+  color: #2457E6;
+}
+
+.mp-search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #0F172A;
+}
+
+.mp-search-box input::placeholder {
+  color: #94A3B8;
+}
+
+.mp-cat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.mp-cat-row::-webkit-scrollbar {
+  display: none;
+}
+
+.mp-cat-pill {
+  height: 30px;
+  padding: 0 13px;
+  border-radius: 999px;
+  border: 1px solid #E2E8F0;
+  background: #F1F5F9;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mp-cat-pill:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.mp-cat-pill.active {
+  background: #2457E6;
+  border-color: #2457E6;
+  color: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(36, 87, 230, 0.22);
+}
+
+.mp-cards-list {
+  padding: 16px 22px;
+  overflow-y: auto;
+  max-height: 410px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #FFFFFF;
+}
+
+.mp-item-card {
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mp-item-card:hover {
+  border-color: #93C5FD;
+  background: #F8FAFF;
+  box-shadow: 0 3px 10px rgba(36, 87, 230, 0.06);
+}
+
+.mp-item-card.featured {
+  border-color: #60A5FA;
+  background: #F8FAFF;
+}
+
+.mp-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mp-item-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0F172A;
+  transition: color 0.15s;
+}
+
+.mp-item-card:hover .mp-item-title,
+.mp-item-card.featured .mp-item-title {
+  color: #2457E6;
+}
+
+.mp-item-badge {
+  height: 22px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.mp-item-summary {
+  font-size: 12.5px;
+  font-weight: 400;
+  color: #64748B;
+  line-height: 1.4;
+}
+
+.mp-empty-state {
+  padding: 28px 16px;
+  text-align: center;
+  color: #64748B;
+  font-size: 13px;
+}
+
+.mp-modal-footer {
+  padding: 12px 22px;
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.mp-footer-note {
+  font-size: 11.5px;
+  color: #64748B;
+  line-height: 1.35;
+}
+
+.mp-btn-cancel {
+  height: 36px;
+  padding: 0 18px;
+  border-radius: 8px;
+  border: 1px solid #CBD5E1;
+  background: #FFFFFF;
+  color: #0F172A;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.mp-btn-cancel:hover {
+  background: #F1F5F9;
+}
+
+

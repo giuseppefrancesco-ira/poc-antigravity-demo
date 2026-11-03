@@ -58,6 +58,8 @@ const state = {
   bcTagsOpen: false,
   bcToneOpen: false,
   bcMoreOpen: false,
+  mpSearchQuery: '',
+  mpActiveCategory: 'Tutti',
   draftOpen: false,      // false = vuoto iniziale, true = bozza attiva
   promptMode: false,     // true = vista "Scrivi prompt / Istruzione" attiva
   promptGenerating: false,
@@ -956,11 +958,10 @@ function renderBottomComposer() {
             </span>
 
             ${!isNoteMode ? `
-              <!-- Template Pill (Upper Composer) -->
-              <button type="button" class="bc-top-pill template ${state.bcTemplateOpen ? 'active' : ''}" onclick="toggleBcPopover('template')" title="Messaggi pronti / Template">
+              <!-- Messaggi Pronti Pill (Upper Composer -> apre Modale) -->
+              <button type="button" class="bc-top-pill template" onclick="openCannedRepliesModal()" title="Apri Messaggi Pronti">
                 ${ICONS.docTemplate14}
-                <span>Template</span>
-                <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
+                <span>Messaggi pronti</span>
               </button>
 
               <!-- Tag Disponibili Pill (Upper Composer) -->
@@ -986,38 +987,7 @@ function renderBottomComposer() {
           </div>
         </div>
 
-        <!-- Upper Drawer for Template or Tag Disponibili -->
-        ${state.bcTemplateOpen ? `
-          <div class="bc-upper-drawer">
-            <div class="bc-upper-drawer-head">
-              <span class="bc-upper-drawer-title">${ICONS.zap16} <span>MESSAGGI PRONTI (TEMPLATE) · Tocca per inserire</span></span>
-              <button type="button" class="bc-pop-close" onclick="toggleBcPopover(null)">✕</button>
-            </div>
-            <div class="bc-upper-templates-grid">
-              <button type="button" class="card-mp" onclick="insertCannedReply('1. Accesso + Omaggio (Ok)');toggleBcPopover(null);">
-                <span class="dot-amber"></span>
-                <span>1. Accesso + Omaggio (Ok)</span>
-              </button>
-              <button type="button" class="card-mp" onclick="insertCannedReply('1. Come funziona il Check-In (OK)');toggleBcPopover(null);">
-                <span class="dot-amber"></span>
-                <span>1. Come funziona il Check-In (OK)</span>
-              </button>
-              <button type="button" class="card-mp" onclick="insertCannedReply('2. Check-In Online Obbligato + Omaggio (OK)');toggleBcPopover(null);">
-                <span class="dot-amber"></span>
-                <span>2. Check-In Online Obbligato + Omaggio (OK)</span>
-              </button>
-              <button type="button" class="card-mp" onclick="insertCannedReply('3. Benvenuto a Catania - Tax (OK)');toggleBcPopover(null);">
-                <span class="dot-amber"></span>
-                <span>3. Benvenuto a Catania - Tax (OK)</span>
-              </button>
-              <button type="button" class="card-mp" onclick="insertCannedReply('4. Info Parcheggio Garage Suite 14 (15€/notte)');toggleBcPopover(null);">
-                <span class="dot-amber"></span>
-                <span>4. Info Parcheggio Garage Suite 14 (15€/notte)</span>
-              </button>
-            </div>
-          </div>
-        ` : ''}
-
+        <!-- Upper Drawer for Tag Disponibili -->
         ${state.bcTagsOpen ? `
           <div class="bc-upper-drawer">
             <div class="bc-upper-drawer-head">
@@ -1409,15 +1379,251 @@ function applyFreePrompt() {
   showToast(`Bozza rigenerata con istruzione: "${instruction}"`);
 }
 
-function insertCannedReply(title) {
-  const cur = state.draftOpen ? (state.drafts[state.selectedConvId] || '') : '';
+const CANNED_CATEGORIES = [
+  'Tutti',
+  'Wi-Fi & Info',
+  'Check-in',
+  'Check-out',
+  'Ristorazione',
+  'Parcheggio',
+  'Tassa & Regole'
+];
+
+const CANNED_REPLIES = [
+  {
+    id: 'wifi_colazione',
+    title: 'Codice Wi-Fi & Orari Colazione',
+    category: 'Wi-Fi & Info',
+    badgeLabel: 'Wi-Fi & Info',
+    summary: 'Codice AURORA2026 e colazione 7:00-10:30 al piano terra.',
+    body: 'Ciao {Ospite}! Ecco le credenziali Wi-Fi per la tua {Camera}: rete "CasaAurora_Guest", password "AuroraGuest2026". Ti ricordiamo inoltre che la colazione è servita dalle 07:00 alle 10:30 nella sala al piano terra.'
+  },
+  {
+    id: 'fibra_smartworking',
+    title: 'Fibra Ultraveloce & Smart Working',
+    category: 'Wi-Fi & Info',
+    badgeLabel: 'Wi-Fi & Info',
+    summary: 'Rete Business 1Gbps senza password per smart working.',
+    body: 'Ciao {Ospite}! Per lavorare in smart working dalla {Camera} puoi collegarti alla rete dedicata "Aurora_Business_1Gbps" (fibra FTTH 1Gbps simmetrica). In camera trovi anche una scrivania ergonomica con presa dedicata.'
+  },
+  {
+    id: 'late_checkin_pin',
+    title: 'Istruzioni Late Check-in & PIN SmartLock',
+    category: 'Check-in',
+    badgeLabel: 'Check-in & Arrivo',
+    summary: 'Codice PIN tastierino e istruzioni arrivo autonomo.',
+    body: 'Ciao {Ospite}, benvenuto a Casa Aurora! Per il tuo arrivo autonomo nella {Camera} (dalle ore 15:00), digita sul tastierino SmartLock Nuki all\'ingresso il codice PIN {Nuki} seguito dal tasto conferma.'
+  },
+  {
+    id: 'early_checkin_free',
+    title: 'Conferma Early Check-in (Gratuito)',
+    category: 'Check-in',
+    badgeLabel: 'Check-in & Arrivo',
+    featured: true,
+    summary: 'Camera pronta in anticipo alle 14:00 senza costi.',
+    body: 'Ciao {Ospite}! Siamo felici di confermarti l\'Early Check-in gratuito: la tua {Camera} sarà pronta in anticipo già dalle ore 14:00 senza alcun supplemento. Il tuo codice Nuki {Nuki} sarà attivo da quell\'ora!'
+  },
+  {
+    id: 'express_checkout',
+    title: 'Procedura Express Check-out',
+    category: 'Check-out',
+    badgeLabel: 'Check-out & Partenza',
+    summary: 'Check-out entro le 11:00 e deposito bagagli gratuito.',
+    body: 'Ciao {Ospite}, ti ricordiamo che il check-out per la {Camera} è previsto entro le ore 11:00. Con la procedura Express puoi lasciare il badge sul tavolo in camera; il deposito bagagli al piano terra è gratuito per tutta la giornata!'
+  },
+  {
+    id: 'voucher_cancellazione',
+    title: 'Proposta Voucher Cancellazione Soggiorno',
+    category: 'Check-out',
+    badgeLabel: 'Check-out & Partenza',
+    summary: 'Voucher 12 mesi per emergenza o cancellazione.',
+    body: 'Ciao {Ospite}, comprendiamo l\'imprevisto. Possiamo emettere un Voucher del 100% dell\'importo valido per 12 mesi presso Casa Aurora per riprogrammare il tuo soggiorno in qualsiasi data disponibile.'
+  },
+  {
+    id: 'garage_ztl',
+    title: 'Accesso Garage Privato & ZTL',
+    category: 'Parcheggio',
+    badgeLabel: 'Parcheggio & Transfer',
+    summary: 'Posto auto coperto riservato (15€/notte) e apertura con codice Nuki.',
+    body: 'Ciao {Ospite}! Il posto auto coperto riservato alla {Camera} è disponibile nel nostro garage privato interno a 15€/notte (fuori dalla ZTL). Puoi aprire la rampa direttamente con il tuo codice Nuki {Nuki}.'
+  },
+  {
+    id: 'ristorazione_convenzioni',
+    title: 'Convenzione Ristoranti & Colazione in Camera',
+    category: 'Ristorazione',
+    badgeLabel: 'Ristorazione',
+    summary: 'Trattorie convenzionate (-10%) e servizio colazione in Suite.',
+    body: 'Ciao {Ospite}! A soli 5 minuti a piedi da Casa Aurora ti consigliamo l\'Osteria Etnea e la Trattoria del Duomo: mostrando la chiave digitale della {Camera} avrai il 10% di sconto riservato ai nostri ospiti.'
+  },
+  {
+    id: 'tassa_soggiorno_regole',
+    title: 'Benvenuto a Catania & Tassa di Soggiorno',
+    category: 'Tassa & Regole',
+    badgeLabel: 'Tassa & Regole',
+    summary: 'Riepilogo tassa comunale e regole di cortesia della struttura.',
+    body: 'Ciao {Ospite}! Ti diamo il benvenuto a Catania nella {Camera}. Ti ricordiamo che la tassa di soggiorno comunale (2,00€ a persona/notte) può essere saldata comodamente dal link del check-in online o alla partenza.'
+  }
+];
+
+function openCannedRepliesModal() {
+  const modal = document.getElementById('modalBackdrop');
+  const content = document.getElementById('modalContent');
+  if (!modal || !content) return;
+
+  state.mpSearchQuery = '';
+  state.mpActiveCategory = 'Tutti';
+  content.className = 'modal-card mp-modal';
+
+  content.innerHTML = `
+    <!-- Top Header -->
+    <div class="mp-modal-header">
+      <div class="mp-header-left">
+        <div class="mp-icon-badge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <line x1="10" y1="9" x2="8" y2="9"/>
+          </svg>
+        </div>
+        <div class="mp-header-titles">
+          <div class="mp-title">Messaggi Pronti</div>
+          <div class="mp-subtitle">Seleziona una risposta standard da personalizzare con i dati del soggiorno</div>
+        </div>
+      </div>
+      <button type="button" class="mp-close-btn" onclick="closeModal()" aria-label="Chiudi">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Search & Category Pills -->
+    <div class="mp-controls-section">
+      <div class="mp-search-box">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          type="text"
+          id="mpSearchInput"
+          placeholder="Cerca per titolo, contenuto o servizio..."
+          oninput="filterCannedModal(this.value)"
+        />
+      </div>
+
+      <div class="mp-cat-row" id="mpCatRow">
+        ${CANNED_CATEGORIES.map(cat => `
+          <button
+            type="button"
+            class="mp-cat-pill ${state.mpActiveCategory === cat ? 'active' : ''}"
+            onclick="setCannedCategory('${cat}')"
+          >${cat}</button>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- Scrollable Cards List -->
+    <div class="mp-cards-list" id="mpCardsListContainer"></div>
+
+    <!-- Bottom Sticky Footer -->
+    <div class="mp-modal-footer">
+      <span class="mp-footer-note">I parametri segnaposto (es. nome ospite, numero camera, PIN) vengono compilati in automatico.</span>
+      <button type="button" class="mp-btn-cancel" onclick="closeModal()">Annulla</button>
+    </div>
+  `;
+
+  renderCannedRepliesList();
+  modal.classList.add('open');
+  setTimeout(() => document.getElementById('mpSearchInput')?.focus(), 50);
+}
+
+function setCannedCategory(cat) {
+  state.mpActiveCategory = cat;
+  const catRow = document.getElementById('mpCatRow');
+  if (catRow) {
+    catRow.innerHTML = CANNED_CATEGORIES.map(c => `
+      <button
+        type="button"
+        class="mp-cat-pill ${state.mpActiveCategory === c ? 'active' : ''}"
+        onclick="setCannedCategory('${c}')"
+      >${c}</button>
+    `).join('');
+  }
+  renderCannedRepliesList();
+}
+
+function filterCannedModal(q) {
+  state.mpSearchQuery = (q || '').trim().toLowerCase();
+  renderCannedRepliesList();
+}
+
+function renderCannedRepliesList() {
+  const container = document.getElementById('mpCardsListContainer');
+  if (!container) return;
+
+  const q = state.mpSearchQuery;
+  const cat = state.mpActiveCategory;
+
+  const filtered = CANNED_REPLIES.filter(item => {
+    const matchCat = cat === 'Tutti' || item.category === cat;
+    const matchQ = !q ||
+      item.title.toLowerCase().includes(q) ||
+      item.summary.toLowerCase().includes(q) ||
+      item.badgeLabel.toLowerCase().includes(q) ||
+      item.body.toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="mp-empty-state">
+        Nessun messaggio pronto trovato per i filtri selezionati.
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(item => `
+    <div class="mp-item-card ${item.featured ? 'featured' : ''}" onclick="selectCannedReplyFromModal('${item.id}')">
+      <div class="mp-item-top">
+        <span class="mp-item-title">${item.title}</span>
+        <span class="mp-item-badge">${item.badgeLabel}</span>
+      </div>
+      <div class="mp-item-summary">${item.summary}</div>
+    </div>
+  `).join('');
+}
+
+function selectCannedReplyFromModal(id) {
+  const item = CANNED_REPLIES.find(r => r.id === id);
+  if (!item) return;
+
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const guestFirst = conv.name.replace('↳ ', '').split(' ')[0];
+  const roomName = conv.stay?.room || 'Suite 14';
+  const nukiCode = conv.stay?.nukiCode || '000000';
+
+  const compiledText = item.body
+    .replace(/\{Ospite\}/g, guestFirst)
+    .replace(/\{Camera\}/g, roomName)
+    .replace(/\{Nuki\}/g, nukiCode);
+
   state.composerExpanded = true;
   state.draftOpen = true;
+  state.promptMode = false;
   state.replyTab = 'risposta';
-  state.drafts[state.selectedConvId] = (cur ? `${cur}\n\n[Info rapida: ${title}]` : `[Info rapida: ${title}]`).trim();
+  state.drafts[state.selectedConvId] = compiledText;
+
+  closeModal();
   renderConversationLists();
   renderSiderAI();
-  showToast(`Messaggio pronto aggiunto al composer`);
+  showToast(`Messaggio pronto "${item.title}" compilato e inserito nel composer`);
+}
+
+function insertCannedReply(title) {
+  openCannedRepliesModal();
 }
 
 function insertTagPMS(val) {
