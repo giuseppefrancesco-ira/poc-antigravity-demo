@@ -4607,8 +4607,9 @@ button, input, textarea {
 
 /* Send Button */
 .bc-send-btn {
+  width: 34px;
   height: 34px;
-  padding: 0 16px;
+  padding: 0;
   border-radius: 999px;
   border: none;
   font-size: 12.5px;
@@ -4684,8 +4685,9 @@ button, input, textarea {
 }
 
 .bc-send-btn.collapsed {
+  width: 36px;
   height: 36px;
-  padding: 0 16px;
+  padding: 0;
   background: #93C5FD;
   color: #FFFFFF;
 }
@@ -6231,8 +6233,9 @@ button, input, textarea {
 
 .bottom-composer-wrap.mobile .bc-send-btn.collapsed {
   margin-left: auto;
+  width: 30px;
   height: 30px;
-  padding: 0 13px;
+  padding: 0;
   font-size: 12px;
 }
 
@@ -6285,8 +6288,9 @@ button, input, textarea {
 
 .bottom-composer-wrap.mobile .bc-send-btn.expanded {
   margin-left: auto;
+  width: 30px;
   height: 30px;
-  padding: 0 14px;
+  padding: 0;
   font-size: 12px;
 }
 
@@ -7927,9 +7931,8 @@ function renderBottomComposer() {
             </select>
           </div>
 
-          <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()">
+          <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()" title="Invia" aria-label="Invia">
             ${ICONS.sendHoriz}
-            <span>Invia</span>
           </button>
         </div>
       </div>
@@ -8179,9 +8182,8 @@ function renderBottomComposer() {
                 </select>
               </div>
 
-              <button type="button" class="bc-send-btn expanded ${hasText ? 'ready' : ''}" onclick="sendReplyNow()">
+              <button type="button" class="bc-send-btn expanded ${hasText ? 'ready' : ''}" onclick="sendReplyNow()" title="Invia" aria-label="Invia">
                 ${ICONS.sendHoriz}
-                <span>Invia</span>
               </button>
             `}
           </div>

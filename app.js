@@ -1083,9 +1083,8 @@ function renderBottomComposer() {
             </select>
           </div>
 
-          <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()">
+          <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()" title="Invia" aria-label="Invia">
             ${ICONS.sendHoriz}
-            <span>Invia</span>
           </button>
         </div>
       </div>
@@ -1335,9 +1334,8 @@ function renderBottomComposer() {
                 </select>
               </div>
 
-              <button type="button" class="bc-send-btn expanded ${hasText ? 'ready' : ''}" onclick="sendReplyNow()">
+              <button type="button" class="bc-send-btn expanded ${hasText ? 'ready' : ''}" onclick="sendReplyNow()" title="Invia" aria-label="Invia">
                 ${ICONS.sendHoriz}
-                <span>Invia</span>
               </button>
             `}
           </div>
