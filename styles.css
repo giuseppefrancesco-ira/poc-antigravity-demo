@@ -4043,6 +4043,19 @@ button, input, textarea {
   border-color: #93C5FD;
 }
 
+.bc-lang-flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.lang-flag-svg {
+  border-radius: 2px;
+  display: block;
+  flex-shrink: 0;
+}
+
 .bc-lang-code {
   font-size: 10px;
   font-weight: 800;

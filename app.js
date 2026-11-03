@@ -455,7 +455,7 @@ function renderThread() {
 
   const langCodeEl = document.getElementById('desktopLangCode');
   const langNameEl = document.getElementById('desktopLangName');
-  if (langCodeEl) langCodeEl.textContent = conv.langCode;
+  if (langCodeEl) langCodeEl.innerHTML = getLangFlagSvg(conv.langCode);
   if (langNameEl) langNameEl.textContent = conv.langName;
 
   const mobName = document.getElementById('mobChatGuestName');
@@ -463,8 +463,8 @@ function renderThread() {
   const mobLang = document.getElementById('mobLangBadgeLabel');
   const mobAISub = document.getElementById('mobAISubtitle');
   if (mobName) mobName.textContent = conv.name.replace('↳ ', '');
-  if (mobSub) mobSub.textContent = `${conv.stay.room} · ${conv.channel} · ${conv.langCode} ${conv.langName}`;
-  if (mobLang) mobLang.textContent = `${conv.langCode} ${conv.langName}`;
+  if (mobSub) mobSub.textContent = `${conv.stay.room} · ${conv.channel} · ${conv.langName}`;
+  if (mobLang) mobLang.innerHTML = `${getLangFlagSvg(conv.langCode)} <span>${conv.langName}</span>`;
   if (mobAISub) mobAISub.textContent = `${conv.name.replace('↳ ', '')} · ${conv.stay.room}`;
 
   // Waveform bars (16 bars: 8 #2E54E8, 8 #CBD5E1, exact heights from Figma 312:6984)
@@ -757,6 +757,26 @@ function getChannelDisplayLabel(channel) {
   return channel;
 }
 
+function getLangFlagSvg(code) {
+  const c = (code || 'IT').toUpperCase();
+  if (c === 'PL') {
+    return `<svg class="lang-flag-svg" width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><rect width="16" height="6" fill="#FFFFFF"/><rect y="6" width="16" height="6" fill="#DC143C"/><rect x="0.5" y="0.5" width="15" height="11" rx="2" fill="none" stroke="rgba(15,23,42,0.12)"/></svg>`;
+  }
+  if (c === 'DE') {
+    return `<svg class="lang-flag-svg" width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><rect width="16" height="4" fill="#111827"/><rect y="4" width="16" height="4" fill="#DD0000"/><rect y="8" width="16" height="4" fill="#FFCE00"/><rect x="0.5" y="0.5" width="15" height="11" rx="2" fill="none" stroke="rgba(15,23,42,0.12)"/></svg>`;
+  }
+  if (c === 'EN') {
+    return `<svg class="lang-flag-svg" width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><rect width="16" height="12" fill="#012169"/><path d="M0 0L16 12M16 0L0 12" stroke="#FFFFFF" stroke-width="2.4"/><path d="M0 0L16 12M16 0L0 12" stroke="#C8102E" stroke-width="1.2"/><path d="M8 0V12M0 6H16" stroke="#FFFFFF" stroke-width="3.6"/><path d="M8 0V12M0 6H16" stroke="#C8102E" stroke-width="2"/><rect x="0.5" y="0.5" width="15" height="11" rx="2" fill="none" stroke="rgba(15,23,42,0.12)"/></svg>`;
+  }
+  if (c === 'ES') {
+    return `<svg class="lang-flag-svg" width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><rect width="16" height="3" fill="#AA151B"/><rect y="3" width="16" height="6" fill="#F1BF00"/><rect y="9" width="16" height="3" fill="#AA151B"/><rect x="0.5" y="0.5" width="15" height="11" rx="2" fill="none" stroke="rgba(15,23,42,0.12)"/></svg>`;
+  }
+  if (c === 'FR') {
+    return `<svg class="lang-flag-svg" width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><rect width="5.33" height="12" fill="#002395"/><rect x="5.33" width="5.34" height="12" fill="#FFFFFF"/><rect x="10.67" width="5.33" height="12" fill="#ED2939"/><rect x="0.5" y="0.5" width="15" height="11" rx="2" fill="none" stroke="rgba(15,23,42,0.12)"/></svg>`;
+  }
+  return `<svg class="lang-flag-svg" width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><rect width="5.33" height="12" fill="#009246"/><rect x="5.33" width="5.34" height="12" fill="#FFFFFF"/><rect x="10.67" width="5.33" height="12" fill="#CE2B37"/><rect x="0.5" y="0.5" width="15" height="11" rx="2" fill="none" stroke="rgba(15,23,42,0.12)"/></svg>`;
+}
+
 // Render Bottom Messaging Composer (Expanded & Collapsed modes 1:1 with reference screenshots)
 function renderBottomComposer() {
   const deskComp = document.getElementById('desktopBottomComposer');
@@ -840,17 +860,16 @@ function renderBottomComposer() {
 
         <!-- Language Pill (left of Invia) -->
         <div class="bc-lang-pill" title="Lingua di traduzione automatica in uscita">
-          <span class="bc-lang-code">${conv.langCode}</span>
+          <span class="bc-lang-flag">${getLangFlagSvg(conv.langCode)}</span>
           <span class="bc-lang-name">${conv.langName}</span>
-          <span class="bc-lang-on">(ON)</span>
           <span class="bc-chevron-blue">${ICONS.chevronDown}</span>
           <select class="bc-select-overlay" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
-            <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>DE Tedesco (ON)</option>
-            <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>PL Polacco (ON)</option>
-            <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>EN Inglese (ON)</option>
-            <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>ES Spagnolo (ON)</option>
-            <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>FR Francese (ON)</option>
-            <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>IT Italiano (ON)</option>
+            <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
+            <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
+            <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
+            <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
+            <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
+            <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
           </select>
         </div>
 
@@ -1104,17 +1123,16 @@ function renderBottomComposer() {
 
               <!-- Language Pill (in basso a sinistra di Invia) -->
               <div class="bc-lang-pill" title="Lingua di traduzione automatica in uscita">
-                <span class="bc-lang-code">${conv.langCode}</span>
+                <span class="bc-lang-flag">${getLangFlagSvg(conv.langCode)}</span>
                 <span class="bc-lang-name">${conv.langName}</span>
-                <span class="bc-lang-on">(ON)</span>
                 <span class="bc-chevron-blue">${ICONS.chevronDown}</span>
                 <select class="bc-select-overlay" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
-                  <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>DE Tedesco (ON)</option>
-                  <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>PL Polacco (ON)</option>
-                  <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>EN Inglese (ON)</option>
-                  <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>ES Spagnolo (ON)</option>
-                  <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>FR Francese (ON)</option>
-                  <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>IT Italiano (ON)</option>
+                  <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
+                  <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
+                  <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
+                  <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
+                  <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
+                  <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
                 </select>
               </div>
 
