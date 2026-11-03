@@ -5883,36 +5883,6 @@ function renderBottomComposer() {
     html = `
       <div class="bc-expanded">
         <!-- Popovers anchored above the composer -->
-        ${state.bcToneOpen ? `
-          <div class="bc-floating-popover tone-pop">
-            <div class="bc-pop-header">
-              <span>AI Copilot & Tono di voce</span>
-              <button type="button" class="bc-pop-close" onclick="toggleBcPopover(null)">✕</button>
-            </div>
-            <div class="bc-pop-list">
-              <button type="button" class="bc-pop-item highlight-ai" onclick="openDraftEditor();toggleBcPopover(null);">
-                ${ICONS.sparkles}
-                <span>Genera risposta AI completa</span>
-              </button>
-              <button type="button" class="bc-pop-item highlight-sky" onclick="openPromptMode();toggleBcPopover(null);">
-                ${ICONS.pencil}
-                <span>Scrivi prompt / Istruzione...</span>
-              </button>
-              <div class="bc-pop-divider"></div>
-              <div class="bc-pop-sublabel">Cambia tono della bozza</div>
-              <div class="bc-tone-pills-row">
-                <button type="button" class="bc-tone-chip ${state.activeTone === 'Cordiale' ? 'active' : ''}" onclick="state.draftOpen=true;selectTone('Cordiale', 0);toggleBcPopover(null);">😊 Cordiale</button>
-                <button type="button" class="bc-tone-chip ${state.activeTone === 'Formale' ? 'active' : ''}" onclick="state.draftOpen=true;selectTone('Formale', 1);toggleBcPopover(null);">👔 Formale</button>
-                <button type="button" class="bc-tone-chip ${state.activeTone === 'Più breve' ? 'active' : ''}" onclick="state.draftOpen=true;selectTone('Più breve', 2);toggleBcPopover(null);">⚡ Più breve</button>
-              </div>
-              <button type="button" class="bc-pop-item" onclick="state.draftOpen=true;improveDraftText();toggleBcPopover(null);">
-                ${ICONS.wand}
-                <span>Migliora chiarezza e cortesia</span>
-              </button>
-            </div>
-          </div>
-        ` : ''}
-
         ${state.bcMoreOpen ? `
           <div class="bc-floating-popover more-pop">
             <div class="bc-pop-header">
@@ -6164,9 +6134,9 @@ function renderBottomComposer() {
             <button type="button" class="bc-icon-btn" onclick="insertTagPMS('😊')" title="Inserisci emoji">
               ${ICONS.smile16}
             </button>
-            <button type="button" class="bc-pill-btn ai-tone ${state.bcToneOpen ? 'active' : ''}" onclick="toggleBcPopover('tone')">
-              ${ICONS.sparkles}
-              <span>AI Tono</span>
+            <button type="button" class="bc-pill-btn ai-tone" onclick="improveDraftText()" title="Migliora il testo con l'AI">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+              <span>Migliora con AI</span>
             </button>
             <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
               ${ICONS.mic16}
@@ -6427,10 +6397,13 @@ function selectTone(tone, idx) {
 }
 
 function improveDraftText() {
+  state.composerExpanded = true;
+  state.draftOpen = true;
+  state.promptMode = false;
   state.drafts[state.selectedConvId] = `Ciao Adam! Ti confermo con piacere che il posto auto coperto n. 14 (riservato alla Suite 14) è disponibile nel nostro garage interno a 15€/notte. L'accesso è già abilitato con il tuo codice Nuki 000000. Fammi sapere se desideri confermarlo!`;
   renderConversationLists();
   renderSiderAI();
-  showToast('Testo migliorato (chiarezza e cortesia) e salvato in automatico');
+  showToast('Testo migliorato con AI e pronto per l\'invio');
 }
 
 function updateDraftText(val, el) {
