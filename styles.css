@@ -5018,4 +5018,559 @@ button, input, textarea {
   background: #F1F5F9;
 }
 
+/* =================================================================
+   RIGHT SIDER: DETTAGLI OSPITE & INFORMAZIONI PMS (1:1 SCREENSHOT)
+   ================================================================= */
+.sider-ai {
+  background: #FFFFFF;
+}
+
+.gs-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #F1F5F9;
+  background: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.gs-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.gs-user-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gs-topbar-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.gs-topbar-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.2;
+}
+
+.gs-topbar-sub {
+  font-size: 11px;
+  color: #64748B;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gs-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.gs-copilot-btn {
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  color: #0F172A;
+  font-size: 11.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gs-copilot-btn:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+.gs-copilot-btn.active {
+  background: #FFF7ED;
+  border-color: #FDBA74;
+  color: #9A3412;
+}
+
+.gs-close-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: #64748B;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.gs-close-btn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+.gs-scroll-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #FFFFFF;
+}
+
+.gs-copilot-drawer {
+  background: #FFFBF5;
+  border: 1px solid #FED7AA;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gs-copilot-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gs-copilot-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9A3412;
+  background: #FFEDD5;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.gs-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+}
+
+.gs-guest-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.gs-guest-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.gs-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #DBEAFE;
+  color: #1D4ED8;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gs-name-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.gs-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.2;
+}
+
+.gs-phone-sub {
+  font-size: 12px;
+  color: #64748B;
+}
+
+.gs-status-pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.gs-status-pill.in-stay {
+  background: #DCFCE7;
+  color: #15803D;
+}
+
+.gs-status-pill.checkout {
+  background: #FEF3C7;
+  color: #B45309;
+}
+
+.gs-status-pill.archived {
+  background: #F1F5F9;
+  color: #475569;
+}
+
+.gs-card-divider {
+  height: 1px;
+  background: #F1F5F9;
+  margin: 14px 0 12px;
+}
+
+.gs-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.gs-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gs-wa-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #22C55E;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gs-mail-icon {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gs-contact-val {
+  font-size: 12.5px;
+  color: #1E293B;
+  font-weight: 500;
+}
+
+/* 4 KPI Boxes */
+.gs-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.gs-kpi-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 11px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.gs-kpi-label {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #64748B;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.gs-kpi-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.25;
+}
+
+/* Preferenze ospite */
+.gs-pref-card {
+  background: #FFF5F7;
+  border: 1px solid #FCE7F3;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.gs-pref-card:hover {
+  background: #FDF2F8;
+  border-color: #FBCFE8;
+}
+
+.gs-pref-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gs-pref-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.gs-pref-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #9D174D;
+}
+
+.gs-pref-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gs-pref-body {
+  font-size: 12.5px;
+  color: #334155;
+  line-height: 1.45;
+}
+
+/* Trattamento & Price Bar */
+.gs-treatment-bar {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 13px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.gs-treatment-text {
+  font-size: 12.5px;
+  color: #475569;
+}
+
+.gs-treatment-text strong {
+  color: #0F172A;
+  font-weight: 700;
+}
+
+.gs-treatment-price {
+  font-size: 15px;
+  font-weight: 800;
+  color: #2563EB;
+}
+
+/* Note Turno & Handover */
+.gs-handover-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gs-handover-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gs-handover-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.gs-add-note-link {
+  border: none;
+  background: transparent;
+  color: #2563EB;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.gs-add-note-link:hover {
+  background: #EFF6FF;
+}
+
+.gs-handover-body {
+  font-size: 12.5px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.gs-shift-notes-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px dashed #E2E8F0;
+}
+
+.gs-shift-note-item {
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 8px;
+  padding: 7px 9px;
+}
+
+.gs-shift-note-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10.5px;
+  color: #92400E;
+  margin-bottom: 2px;
+}
+
+.gs-shift-note-txt {
+  font-size: 11.5px;
+  color: #78350F;
+  line-height: 1.35;
+}
+
+/* PMS Card inside Sider */
+.gs-pms-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gs-pms-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gs-pms-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gs-pms-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.gs-sync-mini-btn {
+  height: 26px;
+  padding: 0 9px;
+  border-radius: 7px;
+  border: 1px solid #BFDBFE;
+  background: #EFF6FF;
+  color: #1D4ED8;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.gs-sync-mini-btn:hover {
+  background: #DBEAFE;
+}
+
+.gs-pms-subblock {
+  padding-top: 10px;
+  border-top: 1px solid #F1F5F9;
+}
+
+.gs-pms-subhead {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.gs-pms-subhead-inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gs-pms-subtitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.gs-pms-subhint {
+  font-size: 11px;
+  color: #64748B;
+}
+
+.gs-pms-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.gs-pms-save-btn {
+  margin-top: 4px;
+  height: 34px;
+  width: 100%;
+  border-radius: 9px;
+  border: none;
+  background: #2563EB;
+  color: #FFFFFF;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.gs-pms-save-btn:hover {
+  background: #1D4ED8;
+}
+
+
 

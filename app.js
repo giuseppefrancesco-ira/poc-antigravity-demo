@@ -54,6 +54,8 @@ const ICONS = {
 // State
 const state = {
   composerExpanded: true, // true = modalità espansa, false = modalità ridotta a pillola
+  siderCopilotOpen: false, // toggle pannello AI Copilot nel sider destro
+  siderCollapsed: false,   // eventuale chiusura/riapertura sider destro
   bcTemplateOpen: false,
   bcTagsOpen: false,
   bcToneOpen: false,
@@ -632,68 +634,180 @@ function renderThread() {
   if (mobArea) mobArea.innerHTML = messagesHtml;
 }
 
-// Render Right AI Sider (Clean, Essential, 1:1 with Figma)
+// Render Right Sider: Dettagli ospite & Informazioni PMS + AI Copilot (1:1 con reference screenshot)
 function renderSiderAI() {
   const deskSider = document.getElementById('desktopSiderAI');
   const mobSider = document.getElementById('mobileSiderAI');
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
-  const currentDraft = state.drafts[state.selectedConvId] || state.drafts.adam;
   const h = conv.handover || CONVERSATIONS[0].handover;
 
-  const isNightHour = (() => {
-    const hr = parseInt(state.schedHour || '10', 10);
-    return hr >= 22 || hr < 8;
-  })();
+  if (deskSider) {
+    deskSider.style.display = state.siderCollapsed ? 'none' : 'flex';
+  }
 
-  const calCells = [
-    { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: 1, muted: true },
-    { d: 2 }, { d: 3 }, { d: 4 }, { d: 5 }, { d: 6 }, { d: 7 }, { d: 8 },
-    { d: 9 }, { d: 10 }, { d: 11 }, { d: 12 }, { d: 13 }, { d: 14 }, { d: 15 },
-    { d: 16 }, { d: 17, highlight: true }, { d: 18 }, { d: 19 }, { d: 20 }, { d: 21 }, { d: 22 },
-    { d: 23 }, { d: 24 }, { d: 25 }, { d: 26 }, { d: 27 }, { d: 28 }, { d: 29 },
-    { d: 30 }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }
-  ];
+  const cleanName = conv.name.replace('↳ ', '').replace(/\s*\(.*?\)\s*/g, '').trim();
+  const nameParts = cleanName.split(' ');
+  const firstName = nameParts.slice(0, -1).join(' ') || nameParts[0] || 'Ospite';
+  const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+  const initials = ((firstName[0] || '') + (lastName[0] || firstName[1] || '')).toUpperCase();
 
-  const hourOptions = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
-    .map(h => `<option value="${h}" ${state.schedHour === h ? 'selected' : ''}>${h}</option>`).join('');
-  const minOptions = ['00', '15', '30', '45']
-    .map(m => `<option value="${m}" ${state.schedMin === m ? 'selected' : ''}>${m}</option>`).join('');
+  const metaByConv = {
+    adam: {
+      checkin: '6 ott 2026',
+      checkout: '11 ott 2026',
+      checkinFull: '06/10/2026',
+      checkoutFull: '11/10/2026',
+      roomShort: 'Suite 14',
+      guestsShort: '2 adulti',
+      guestsNum: '2',
+      statusBadge: 'In Soggiorno',
+      statusClass: 'in-stay',
+      preferences: 'Viaggia spesso per lavoro. Apprezza camere tranquille, posto auto coperto riservato e colazione con opzioni senza glutine.',
+      treatment: 'Colazione Inclusa',
+      price: '€1120',
+      handoverNote: 'Adam Nowak chiede disponibilità e tariffa del posto auto coperto #14 per la Suite 14 e modalità di accesso con codice Nuki.',
+      nukiCode: conv.stay.nukiCode || '000000',
+      checkinPin: conv.stay.checkinPin || '238068'
+    },
+    olga: {
+      checkin: '6 ott 2026',
+      checkout: '11 ott 2026',
+      checkinFull: '06/10/2026',
+      checkoutFull: '11/10/2026',
+      roomShort: 'Suite 14',
+      guestsShort: '2 adulti',
+      guestsNum: '2',
+      statusBadge: 'In Soggiorno',
+      statusClass: 'in-stay',
+      preferences: 'Co-ospite collegata alla prenotazione principale (#DEMO-1048). Preferisce comunicazioni rapide su WhatsApp.',
+      treatment: 'Colazione Inclusa',
+      price: '€1120',
+      handoverNote: 'Olga Nowak ha confermato la ricezione del codice Nuki e ha ritirato la mappa del centro storico in reception.',
+      nukiCode: conv.stay.nukiCode || '000000',
+      checkinPin: conv.stay.checkinPin || '238068'
+    },
+    maria: {
+      checkin: '29 ott 2026',
+      checkout: '2 nov 2026',
+      checkinFull: '29/10/2026',
+      checkoutFull: '02/11/2026',
+      roomShort: 'Junior 08',
+      guestsShort: '2 adulti',
+      guestsNum: '2',
+      statusBadge: 'In Soggiorno',
+      statusClass: 'in-stay',
+      preferences: 'Arrivo previsto nel pomeriggio (16:30). Richiede connessione Wi-Fi ad alte prestazioni e cuscini extra.',
+      treatment: 'Colazione Inclusa',
+      price: '€890',
+      handoverNote: 'Maria Camila Villamizar chiede la password del Wi-Fi veloce per la Junior Suite 08 e gli orari della colazione.',
+      nukiCode: conv.stay.nukiCode || '753293',
+      checkinPin: conv.stay.checkinPin || '419022'
+    },
+    cliff: {
+      checkin: '25 ott 2026',
+      checkout: '28 ott 2026',
+      checkinFull: '25/10/2026',
+      checkoutFull: '28/10/2026',
+      roomShort: 'Deluxe 04',
+      guestsShort: '1 adulto',
+      guestsNum: '1',
+      statusBadge: 'Check-out',
+      statusClass: 'checkout',
+      preferences: 'Soggiorno business individuale. Molto puntuale al check-out, apprezza procedura express senza attese.',
+      treatment: 'Solo Pernottamento',
+      price: '€640',
+      handoverNote: 'Check-out completato per Deluxe 04 in perfetto ordine. Bozza recensione ospite 5★ pronta per la pubblicazione.',
+      nukiCode: conv.stay.nukiCode || '551920',
+      checkinPin: conv.stay.checkinPin || '883104'
+    },
+    florian: {
+      checkin: '22 ott 2026',
+      checkout: '25 ott 2026',
+      checkinFull: '22/10/2026',
+      checkoutFull: '25/10/2026',
+      roomShort: 'Suite 12',
+      guestsShort: '2 adulti',
+      guestsNum: '2',
+      statusBadge: 'Archiviata',
+      statusClass: 'archived',
+      preferences: 'Ospite abituale. Apprezza consigli enogastronomici locali e check-in autonomo con SmartLock.',
+      treatment: 'Colazione Inclusa',
+      price: '€780',
+      handoverNote: 'Soggiorno concluso e archiviato. Saluto finale e recensione Airbnb già inviati.',
+      nukiCode: conv.stay.nukiCode || '330194',
+      checkinPin: conv.stay.checkinPin || '192837'
+    }
+  };
 
-  const isNoteMode = state.composerMode === 'note';
-  const headerTitleLabel = isNoteMode
-    ? 'Nota manuale'
-    : (state.draftOpen ? 'Modifica risposta AI' : 'Modifica risposta');
+  const m = metaByConv[conv.id] || metaByConv.adam;
+  const prefText = conv.customPreferences || m.preferences;
+  const syncIconSm = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`;
+
+  const internalNotesList = (conv.internalNotes || []).map(n => `
+    <div class="gs-shift-note-item">
+      <div class="gs-shift-note-meta">
+        <span><strong>${n.author}</strong> · ${n.channelType || 'Nota turno'}</span>
+        <span>${n.time}</span>
+      </div>
+      <div class="gs-shift-note-txt">${n.text}</div>
+    </div>
+  `).join('');
 
   const html = `
-    <!-- 1. Sezione Passaggio di Consegne AI (Richiudibile) -->
-    <div class="sider-section">
-      <div class="sider-sec-header" onclick="toggleAccordion('consegne')">
-        <div class="icon-badge sm indigo">${ICONS.sparkles16}</div>
-        <div class="sec-texts">
-          <div class="sec-title">PASSAGGIO DI CONSEGNE AI</div>
-          <div class="sec-sub">${state.acc_consegne ? 'Riepilogo contesto e stato autonomia' : h.motivo}</div>
+    <!-- Top Header: Dettagli ospite + AI Copilot button + Close -->
+    <div class="gs-topbar">
+      <div class="gs-topbar-left">
+        <div class="gs-user-icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
         </div>
-        <span style="color:#64748B;display:inline-flex;">${state.acc_consegne ? ICONS.chevronUp : ICONS.chevronDown16}</span>
+        <div class="gs-topbar-titles">
+          <div class="gs-topbar-title">Dettagli ospite</div>
+          <div class="gs-topbar-sub">Informazioni prenotazione e preferenze</div>
+        </div>
       </div>
 
-      ${state.acc_consegne ? `
-        <div class="card-riassunto-consegne">
+      <div class="gs-topbar-right">
+        <button type="button" class="gs-copilot-btn ${state.siderCopilotOpen ? 'active' : ''}" onclick="toggleSiderCopilot()" title="Mostra/Nascondi AI Copilot & Autonomia">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L14.2 8.8L21 11L14.2 13.2L12 20L9.8 13.2L3 11L9.8 8.8L12 2Z" fill="#F59E0B"/>
+            <path d="M19 2L19.7 4.3L22 5L19.7 5.7L19 8L18.3 5.7L16 5L18.3 4.3L19 2Z" fill="#F59E0B"/>
+          </svg>
+          <span>AI Copilot</span>
+        </button>
+        <button type="button" class="gs-close-btn" onclick="toggleDesktopSider(true)" title="Chiudi pannello laterale" aria-label="Chiudi">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="gs-scroll-body">
+
+      ${state.siderCopilotOpen ? `
+        <!-- Pannello AI Copilot (Passaggio di Consegne & Autonomia) -->
+        <div class="gs-copilot-drawer">
+          <div class="gs-copilot-head">
+            <span class="gs-copilot-badge">${ICONS.sparkles16} <span>AI Copilot · Passaggio di Consegne</span></span>
+            <button type="button" class="bc-pop-close" onclick="toggleSiderCopilot()">✕</button>
+          </div>
           <div class="riga-motivo">${h.motivo}</div>
           <div class="riga-contesto">
             <span class="contesto-icon">${ICONS.check}</span>
             <span>${h.fatto}</span>
           </div>
-
-          <div class="pill-azione-suggerita" onclick="openDraftEditor()" title="Apri bozza con questa azione">
+          <div class="pill-azione-suggerita" onclick="openDraftEditor()" title="Genera risposta suggerita nel composer">
             <div class="pill-azione-left">
               ${ICONS.zap}
               <span>${h.azione}</span>
             </div>
             <span class="pill-azione-arrow">${ICONS.arrowRight}</span>
           </div>
-
           <div class="div-card"></div>
-
           <div class="riga-autonomia">
             <div class="autonomia-meta">
               <span class="badge-autonomia-pct">AI 94%</span>
@@ -708,6 +822,202 @@ function renderSiderAI() {
           </div>
         </div>
       ` : ''}
+
+      <!-- 1. Card Principale Ospite & Contatti -->
+      <div class="gs-card gs-guest-card">
+        <div class="gs-guest-top">
+          <div class="gs-guest-identity">
+            <div class="gs-avatar">${initials}</div>
+            <div class="gs-name-wrap">
+              <div class="gs-name">${cleanName}</div>
+              <div class="gs-phone-sub">${conv.stay.phone}</div>
+            </div>
+          </div>
+          <span class="gs-status-pill ${m.statusClass}">${m.statusBadge}</span>
+        </div>
+
+        <div class="gs-card-divider"></div>
+
+        <div class="gs-contact-list">
+          <div class="gs-contact-row" onclick="navigator.clipboard?.writeText('${conv.stay.phone}');showToast('Numero copiato negli appunti')" title="Clicca per copiare il telefono">
+            <span class="gs-wa-circle">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#FFFFFF">
+                <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.82 14.01c-.24.68-1.41 1.3-1.95 1.38-.5.08-1.13.11-1.83-.11-.42-.13-.97-.31-1.67-.61-2.95-1.27-4.88-4.25-5.03-4.45-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37.2 0 .4.01.57.01.18 0 .43-.07.67.51.24.59.82 2.01.89 2.16.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.02 1.12.99 2.06 1.3 2.36 1.45.3.15.47.12.64-.07.17-.2.74-.86.94-1.16.2-.3.4-.25.67-.15.27.1 1.71.81 2 .96.3.15.49.22.57.34.07.13.07.72-.17 1.4z"/>
+              </svg>
+            </span>
+            <span class="gs-contact-val">${conv.stay.phone}</span>
+          </div>
+
+          <div class="gs-contact-row" onclick="navigator.clipboard?.writeText('${conv.stay.email}');showToast('Email copiata negli appunti')" title="Clicca per copiare l'email">
+            <span class="gs-mail-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+            </span>
+            <span class="gs-contact-val">${conv.stay.email}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Griglia 4 Box KPI (CHECK-IN, CHECK-OUT, CAMERA, OSPITI) -->
+      <div class="gs-kpi-grid">
+        <div class="gs-kpi-box">
+          <span class="gs-kpi-label">CHECK-IN</span>
+          <span class="gs-kpi-value">${m.checkin}</span>
+        </div>
+        <div class="gs-kpi-box">
+          <span class="gs-kpi-label">CHECK-OUT</span>
+          <span class="gs-kpi-value">${m.checkout}</span>
+        </div>
+        <div class="gs-kpi-box">
+          <span class="gs-kpi-label">CAMERA</span>
+          <span class="gs-kpi-value">${conv.stay.room}</span>
+        </div>
+        <div class="gs-kpi-box">
+          <span class="gs-kpi-label">OSPITI</span>
+          <span class="gs-kpi-value">${m.guestsShort}</span>
+        </div>
+      </div>
+
+      <!-- 3. Card Preferenze ospite -->
+      <div class="gs-pref-card" onclick="editGuestPreferences()" title="Clicca per modificare le preferenze dell'ospite">
+        <div class="gs-pref-header">
+          <div class="gs-pref-title-wrap">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#DB2777" stroke="#DB2777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            </svg>
+            <span class="gs-pref-title">Preferenze ospite</span>
+          </div>
+          <span class="gs-pref-chevron">›</span>
+        </div>
+        <div class="gs-pref-body">${prefText}</div>
+      </div>
+
+      <!-- 4. Barra Trattamento & Prezzo -->
+      <div class="gs-treatment-bar">
+        <span class="gs-treatment-text">Trattamento: <strong>${m.treatment}</strong></span>
+        <span class="gs-treatment-price">${m.price}</span>
+      </div>
+
+      <!-- 5. Card Note Turno & Handover -->
+      <div class="gs-card gs-handover-card">
+        <div class="gs-handover-head">
+          <span class="gs-handover-title">Note Turno & Handover</span>
+          <button type="button" class="gs-add-note-link" onclick="setComposerMode('note')" title="Aggiungi nota turno">+ Nota</button>
+        </div>
+        <div class="gs-handover-body">${m.handoverNote}</div>
+        ${internalNotesList ? `<div class="gs-shift-notes-wrap">${internalNotesList}</div>` : ''}
+      </div>
+
+      <!-- 6. Informazioni PMS & Aggancio Prenotazione (Spostate nel sider a destra) -->
+      <div class="gs-card gs-pms-card" id="gsPmsSection">
+        <div class="gs-pms-head">
+          <div class="gs-pms-title-row">
+            <span class="gs-pms-title">Aggancio prenotazione PMS</span>
+            <span class="stay-pms-verified-pill">${ICONS.check} ${conv.stay.bookingCode}</span>
+          </div>
+          <button type="button" class="gs-sync-mini-btn" onclick="triggerHubSync();showToast('Dati prenotazione sincronizzati dal PMS')">
+            ${syncIconSm}
+            <span>Aggiorna</span>
+          </button>
+        </div>
+
+        <select id="pmsBookingSelect" class="stay-select-input" onchange="confirmBookingLinkChange()">
+          <option value="${conv.stay.bookingCode}" selected>${conv.stay.bookingCode} — ${cleanName} (${conv.stay.room} · ${conv.stay.dates})</option>
+          <option value="#DEMO-1052">#DEMO-1052 — Adam Nowak (Suite 18 · 11/10–14/10 Estensione)</option>
+          <option value="#BKG-8821">#BKG-8821 — Maria Camila Villamizar (Junior Suite 08 · 29/10–02/11)</option>
+        </select>
+
+        <!-- Accessi e Tag Dinamici PMS -->
+        <div class="gs-pms-subblock">
+          <div class="gs-pms-subhead">
+            <span class="gs-pms-subtitle">Accessi e tag PMS</span>
+            <span class="gs-pms-subhint">Clicca sul tag per inserirlo nel messaggio</span>
+          </div>
+
+          <div class="stay-tags-card">
+            <div class="stay-tag-row">
+              <div class="stay-tag-left" onclick="insertTagPMS('${m.nukiCode}')" title="Inserisci codice Nuki nel messaggio">
+                <span class="stay-copy-icon">${ICONS.copy}</span>
+                <div class="stay-tag-texts">
+                  <span class="stay-tag-code">{CODICE_NUKI}</span>
+                  <span class="stay-tag-desc">Codice SmartLock Nuki</span>
+                </div>
+              </div>
+              <input type="text" id="stayNukiInput" class="stay-tag-val-input" value="${m.nukiCode}" onchange="confirmBookingLinkChange()" />
+            </div>
+
+            <div class="stay-tag-row">
+              <div class="stay-tag-left" onclick="insertTagPMS('${m.checkinPin}')" title="Inserisci PIN check-in online nel messaggio">
+                <span class="stay-copy-icon">${ICONS.copy}</span>
+                <div class="stay-tag-texts">
+                  <span class="stay-tag-code">{CHECKIN_ONLINE_PIN}</span>
+                  <span class="stay-tag-desc">PIN check-in online</span>
+                </div>
+              </div>
+              <input type="text" id="stayPinInput" class="stay-tag-val-input" value="${m.checkinPin}" onchange="confirmBookingLinkChange()" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Lingua dei messaggi -->
+        <div class="gs-pms-subblock">
+          <div class="gs-pms-subhead-inline">
+            <span style="color:#2E54E8;display:inline-flex;">${ICONS.languages}</span>
+            <span class="gs-pms-subtitle">Lingua dei messaggi</span>
+          </div>
+          <select id="stayLangSelect" class="stay-select-input white" onchange="setOutboundLanguage(this.value)">
+            <option value="${conv.langCode}" selected>Come scrive l'ospite — ${conv.langName.toLowerCase()}</option>
+            <option value="IT">Italiano</option>
+            <option value="PL">Polacco</option>
+            <option value="ES">Spagnolo</option>
+            <option value="EN">Inglese</option>
+            <option value="DE">Tedesco</option>
+            <option value="FR">Francese</option>
+          </select>
+        </div>
+
+        <!-- Dati della prenotazione (Beddy / PMS) -->
+        <div class="gs-pms-subblock">
+          <div class="gs-pms-subhead">
+            <span class="gs-pms-subtitle">Dati della prenotazione (Beddy PMS)</span>
+            <span class="stay-sec-sync-note">${syncIconSm} <span>sincronizzati automaticamente</span></span>
+          </div>
+
+          <div class="gs-pms-form-grid">
+            <div class="stay-field">
+              <label>Nome ${syncIconSm}</label>
+              <input type="text" id="stayFirstNameInput" value="${firstName}" />
+            </div>
+            <div class="stay-field">
+              <label>Cognome ${syncIconSm}</label>
+              <input type="text" id="stayLastNameInput" value="${lastName}" />
+            </div>
+            <div class="stay-field">
+              <label>Check-in ${syncIconSm}</label>
+              <input type="text" value="${m.checkinFull}" />
+            </div>
+            <div class="stay-field">
+              <label>Check-out ${syncIconSm}</label>
+              <input type="text" value="${m.checkoutFull}" />
+            </div>
+            <div class="stay-field">
+              <label>Alloggio ${syncIconSm}</label>
+              <input type="text" value="${conv.stay.room}" onchange="conv.stay.room=this.value;renderThread();renderSiderAI();" />
+            </div>
+            <div class="stay-field">
+              <label>Canale</label>
+              <input type="text" value="${conv.channel}" readonly />
+            </div>
+          </div>
+
+          <button type="button" class="gs-pms-save-btn" onclick="confirmBookingLinkChange()">
+            Salva dati PMS
+          </button>
+        </div>
+      </div>
+
     </div>
   `;
 
@@ -1808,203 +2118,40 @@ function triggerHubSync() {
   }, 700);
 }
 
-// Modals: Scheda Soggiorno & Aggancio PMS + Nuova Conversazione da Ricerca
-function openStayDetailsModal() {
+function toggleSiderCopilot() {
+  state.siderCopilotOpen = !state.siderCopilotOpen;
+  renderSiderAI();
+}
+
+function toggleDesktopSider(collapse) {
+  state.siderCollapsed = typeof collapse === 'boolean' ? collapse : !state.siderCollapsed;
+  renderSiderAI();
+  if (state.siderCollapsed) {
+    showToast('Pannello Dettagli ospite chiuso (clicca ⋮ in alto a destra per riaprirlo)');
+  }
+}
+
+function editGuestPreferences() {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
-  const modal = document.getElementById('modalBackdrop');
-  const content = document.getElementById('modalContent');
-  if (!modal || !content) return;
+  const current = conv.customPreferences || 'Viaggia spesso per lavoro. Apprezza camere tranquille e colazione con opzioni senza glutine.';
+  const updated = prompt('Modifica preferenze ospite:', current);
+  if (updated !== null && updated.trim()) {
+    conv.customPreferences = updated.trim();
+    renderSiderAI();
+    showToast('Preferenze ospite aggiornate');
+  }
+}
 
-  const cleanName = conv.name.replace('↳ ', '').replace(/\s*\(.*?\)\s*/g, '').trim();
-  const nameParts = cleanName.split(' ');
-  const firstName = nameParts.slice(0, -1).join(' ') || nameParts[0] || 'Ospite';
-  const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
-  const initials = ((firstName[0] || '') + (lastName[0] || firstName[1] || '')).toUpperCase();
-
-  const isMaria = conv.id === 'maria';
-  const arrShort = isMaria ? '29 ott' : '6 ott';
-  const partShort = isMaria ? '2 nov' : '11 ott';
-  const nightsNum = isMaria ? '4' : '5';
-  const guestsNum = (conv.stay.guests.match(/\d+/) || ['2'])[0];
-  const checkinFull = isMaria ? '29/10/2026' : '06/10/2026';
-  const checkoutFull = isMaria ? '02/11/2026' : '11/10/2026';
-  const nukiCode = conv.stay.nukiCode || (isMaria ? '753293' : '000000');
-  const checkinPin = conv.stay.checkinPin || '238068';
-
-  const syncIconSm = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`;
-
-  content.className = 'modal-card stay-modal-card';
-  content.innerHTML = `
-    <!-- Top Close Button -->
-    <button type="button" class="stay-modal-close" onclick="closeModal()" title="Chiudi" aria-label="Chiudi">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-
-    <!-- Scrollable Body -->
-    <div class="stay-modal-scroll">
-      <!-- 1. Header Ospite + Azioni -->
-      <div class="stay-modal-header">
-        <div class="stay-guest-left">
-          <div class="stay-avatar">${initials}</div>
-          <div class="stay-guest-titles">
-            <div class="stay-guest-name">${cleanName}</div>
-            <div class="stay-guest-sub">Prenotazione ${conv.channel} · ${conv.stay.room}</div>
-          </div>
-        </div>
-        <div class="stay-header-actions">
-          <button class="stay-btn-sync" onclick="triggerHubSync();showToast('Dati prenotazione sincronizzati dal PMS')">
-            ${syncIconSm}
-            <span>Aggiorna dati</span>
-          </button>
-          <span class="stay-pill-incasa">In casa adesso</span>
-        </div>
-      </div>
-
-      <!-- 2. KPI Riepilogo Soggiorno (4 box) -->
-      <div class="stay-kpi-grid">
-        <div class="stay-kpi-box">
-          <span class="stay-kpi-lbl">Arrivo</span>
-          <span class="stay-kpi-val">${arrShort}</span>
-        </div>
-        <div class="stay-kpi-box">
-          <span class="stay-kpi-lbl">Partenza</span>
-          <span class="stay-kpi-val">${partShort}</span>
-        </div>
-        <div class="stay-kpi-box">
-          <span class="stay-kpi-lbl">Notti</span>
-          <span class="stay-kpi-val">${nightsNum}</span>
-        </div>
-        <div class="stay-kpi-box">
-          <span class="stay-kpi-lbl">Ospiti</span>
-          <span class="stay-kpi-val">${guestsNum}</span>
-        </div>
-      </div>
-
-      <!-- 3. Aggancio Prenotazione PMS -->
-      <div class="stay-pms-link-box">
-        <div class="stay-pms-link-head">
-          <span class="stay-pms-link-title">Aggancio prenotazione PMS</span>
-          <span class="stay-pms-verified-pill">${ICONS.check} Agganciata (${conv.stay.bookingCode})</span>
-        </div>
-        <select id="pmsBookingSelect" class="stay-select-input">
-          <option value="${conv.stay.bookingCode}" selected>${conv.stay.bookingCode} — ${cleanName} (${conv.stay.room} · ${conv.stay.dates})</option>
-          <option value="#DEMO-1052">#DEMO-1052 — Adam Nowak (Suite 18 · 11/10–14/10 Estensione)</option>
-          <option value="#BKG-8821">#BKG-8821 — Maria Camila Villamizar (Junior Suite 08 · 29/10–02/11)</option>
-        </select>
-      </div>
-
-      <!-- 4. Sezione Lingua dei messaggi -->
-      <div class="stay-lang-band">
-        <div class="stay-lang-title">
-          <span style="color:#2E54E8;display:inline-flex;">${ICONS.languages}</span>
-          <span>Lingua dei messaggi</span>
-        </div>
-        <select id="stayLangSelect" class="stay-select-input white">
-          <option value="${conv.langCode}" selected>Come scrive l'ospite — ${conv.langName.toLowerCase()}</option>
-          <option value="IT">Italiano</option>
-          <option value="PL">Polacco</option>
-          <option value="ES">Spagnolo</option>
-          <option value="EN">Inglese</option>
-          <option value="DE">Tedesco</option>
-          <option value="FR">Francese</option>
-        </select>
-        <div class="stay-lang-help">
-          L'AI riconosce la lingua dai messaggi dell'ospite. Prima di inviare puoi comunque cambiarla per quel singolo messaggio.
-        </div>
-      </div>
-
-      <!-- 5. Dati della prenotazione -->
-      <div class="stay-section">
-        <div class="stay-sec-head">
-          <span class="stay-sec-title">Dati della prenotazione</span>
-          <span class="stay-sec-sync-note">${syncIconSm} <span>questi li riscrive Beddy a ogni aggiornamento</span></span>
-        </div>
-
-        <div class="stay-form-grid">
-          <div class="stay-field">
-            <label>Nome ${syncIconSm}</label>
-            <input type="text" id="stayFirstNameInput" value="${firstName}" />
-          </div>
-          <div class="stay-field">
-            <label>Cognome ${syncIconSm}</label>
-            <input type="text" id="stayLastNameInput" value="${lastName}" />
-          </div>
-
-          <div class="stay-field">
-            <label>Check-in ${syncIconSm}</label>
-            <div class="stay-input-icon-wrap">
-              <input type="text" value="${checkinFull}" />
-              <span class="stay-input-icon">${ICONS.calendar}</span>
-            </div>
-          </div>
-          <div class="stay-field">
-            <label>Check-out ${syncIconSm}</label>
-            <div class="stay-input-icon-wrap">
-              <input type="text" value="${checkoutFull}" />
-              <span class="stay-input-icon">${ICONS.calendar}</span>
-            </div>
-          </div>
-
-          <div class="stay-field">
-            <label>Numero ospiti ${syncIconSm}</label>
-            <input type="text" value="${guestsNum}" />
-          </div>
-          <div class="stay-field">
-            <label>Telefono</label>
-            <input type="text" id="stayPhoneInput" value="${conv.stay.phone}" />
-          </div>
-
-          <div class="stay-field">
-            <label>Canale</label>
-            <input type="text" value="${conv.channel}" readonly />
-          </div>
-          <div class="stay-field">
-            <label>Alloggio ${syncIconSm}</label>
-            <input type="text" value="${conv.stay.room}" />
-          </div>
-        </div>
-      </div>
-
-      <!-- 6. Accessi e tag -->
-      <div class="stay-section">
-        <div class="stay-sec-head-col">
-          <span class="stay-sec-title">Accessi e tag</span>
-          <span class="stay-sec-sub">Scrivi il nome fra graffe in un messaggio e l'AI ci mette il valore di questo ospite.</span>
-        </div>
-
-        <div class="stay-tags-card">
-          <div class="stay-tag-row">
-            <div class="stay-tag-left" onclick="navigator.clipboard?.writeText('{CODICE_NUKI}');showToast('Tag {CODICE_NUKI} copiato')" title="Copia tag">
-              <span class="stay-copy-icon">${ICONS.copy}</span>
-              <div class="stay-tag-texts">
-                <span class="stay-tag-code">{CODICE_NUKI}</span>
-                <span class="stay-tag-desc">Codice Nuki</span>
-              </div>
-            </div>
-            <input type="text" id="stayNukiInput" class="stay-tag-val-input" value="${nukiCode}" />
-          </div>
-
-          <div class="stay-tag-row">
-            <div class="stay-tag-left" onclick="navigator.clipboard?.writeText('{CHECKIN_ONLINE_PIN}');showToast('Tag {CHECKIN_ONLINE_PIN} copiato')" title="Copia tag">
-              <span class="stay-copy-icon">${ICONS.copy}</span>
-              <div class="stay-tag-texts">
-                <span class="stay-tag-code">{CHECKIN_ONLINE_PIN}</span>
-                <span class="stay-tag-desc">PIN check-in online</span>
-              </div>
-            </div>
-            <input type="text" id="stayPinInput" class="stay-tag-val-input" value="${checkinPin}" />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 7. Sticky Footer -->
-    <div class="stay-modal-footer">
-      <button class="stay-btn-cancel" onclick="closeModal()">Annulla</button>
-      <button class="stay-btn-save" onclick="confirmBookingLinkChange()">Salva</button>
-    </div>
-  `;
-  modal.classList.add('open');
+function openStayDetailsModal() {
+  state.siderCollapsed = false;
+  renderSiderAI();
+  if (window.innerWidth < 900) {
+    setMobileTab('ai');
+  } else {
+    const pmsEl = document.getElementById('gsPmsSection');
+    pmsEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  showToast('Dettagli ospite e PMS aperti nel pannello destro');
 }
 
 function confirmBookingLinkChange() {
