@@ -4551,8 +4551,69 @@ button, input, textarea {
   color: #7E22CE;
 }
 
+/* Upper Composer Pills & Drawer (Template & Tag disponibili) */
+.bc-top-pill {
+  height: 28px;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
 
+.bc-top-pill:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
 
+.bc-top-pill.template.active {
+  background: #EEF2FF;
+  border-color: #93C5FD;
+  color: #2E54E8;
+  font-weight: 600;
+}
 
+.bc-top-pill.tags.active {
+  background: #EEF2FF;
+  border-color: #93C5FD;
+  color: #2E54E8;
+  font-weight: 600;
+}
 
+.bc-upper-drawer {
+  padding: 10px 16px 12px 16px;
+  background: #F8FAFC;
+  border-bottom: 1px solid #F1F5F9;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bc-upper-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bc-upper-drawer-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.bc-upper-templates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 8px;
+}
 

@@ -55,6 +55,7 @@ const ICONS = {
 const state = {
   composerExpanded: true, // true = modalità espansa, false = modalità ridotta a pillola
   bcTemplateOpen: false,
+  bcTagsOpen: false,
   bcToneOpen: false,
   bcMoreOpen: false,
   draftOpen: false,      // false = vuoto iniziale, true = bozza attiva
@@ -738,67 +739,6 @@ function renderSiderAI() {
         </div>
       ` : ''}
     </div>
-
-    <!-- 2. Sezione Messaggi Pronti (Dropdown Richiudibile) -->
-    <div class="sider-section">
-      <div class="sider-sec-header" onclick="toggleAccordion('mp')">
-        <div class="icon-badge sm amber">${ICONS.zap16}</div>
-        <div class="sec-texts">
-          <div class="sec-title">MESSAGGI PRONTI</div>
-          <div class="sec-sub">Tocca una risposta per aggiungerla al composer</div>
-        </div>
-        <span class="pill-conferma" style="height:22px;padding:0 8px;color:#9A5B06;">20</span>
-        <span style="color:#9A5B06;display:inline-flex;">${state.acc_mp ? ICONS.chevronUp : ICONS.chevronDown16}</span>
-      </div>
-
-      ${state.acc_mp ? `
-        <div class="colonna-cards-mp" style="margin-top:4px;">
-          <div class="card-mp" onclick="insertCannedReply('1. Accesso + Omaggio (Ok)')">
-            <span class="dot-amber"></span>
-            <span>1. Accesso + Omaggio (Ok)</span>
-          </div>
-          <div class="card-mp" onclick="insertCannedReply('1. Come funziona il Check-In (OK)')">
-            <span class="dot-amber"></span>
-            <span>1. Come funziona il Check-In (OK)</span>
-          </div>
-          <div class="card-mp" onclick="insertCannedReply('2. Check-In Online Obbligato + Omaggio (OK)')">
-            <span class="dot-amber"></span>
-            <span>2. Check-In Online Obbligato + Omaggio (OK)</span>
-          </div>
-          <div class="card-mp" onclick="insertCannedReply('3. Benvenuto a Catania - Tax (OK)')">
-            <span class="dot-amber"></span>
-            <span>3. Benvenuto a Catania - Tax (OK)</span>
-          </div>
-          <div class="card-mp" onclick="insertCannedReply('4. Info Parcheggio Garage Suite 14 (15€/notte)')">
-            <span class="dot-amber"></span>
-            <span>4. Info Parcheggio Garage Suite 14 (15€/notte)</span>
-          </div>
-        </div>
-      ` : ''}
-    </div>
-
-    <!-- 3. Sezione Tag Disponibili (Dropdown Richiudibile) -->
-    <div class="sider-section" style="border-bottom:1px solid #E2E8F0;">
-      <div class="sider-sec-header" onclick="toggleAccordion('tags')">
-        <div class="icon-badge sm sky">${ICONS.bookOpen}</div>
-        <div class="sec-texts">
-          <div class="sec-title">TAG DISPONIBILI</div>
-          <div class="sec-sub">Inserisci dati dinamici PMS auto-risolti</div>
-        </div>
-        <span class="pill-sky" style="height:22px;padding:0 8px;">5</span>
-        <span style="color:#64748B;display:inline-flex;">${state.acc_tags ? ICONS.chevronUp : ICONS.chevronDown16}</span>
-      </div>
-
-      ${state.acc_tags ? `
-        <div class="chip-tag-row" style="margin-top:4px;">
-          <span class="chip-pms" onclick="insertTagPMS('${conv.name.replace('↳ ', '').split(' ')[0]}')">{Ospite}: ${conv.name.replace('↳ ', '').split(' ')[0]}</span>
-          <span class="chip-pms" onclick="insertTagPMS('${conv.stay.room}')">{Camera}: ${conv.stay.room}</span>
-          <span class="chip-pms" onclick="insertTagPMS('000000')">{Nuki}: 000000</span>
-          <span class="chip-pms" onclick="insertTagPMS('15:00')">{Check-in}: 15:00</span>
-          <span class="chip-pms" onclick="insertTagPMS('AuroraGuest2026')">{Wi-Fi}: AuroraGuest2026</span>
-        </div>
-      ` : ''}
-    </div>
   `;
 
   if (deskSider) deskSider.innerHTML = html;
@@ -906,41 +846,10 @@ function renderBottomComposer() {
       </div>
     `;
   } else {
-    // EXPANDED MODE (1:1 with screenshot 1)
+    // EXPANDED MODE (1:1 with screenshot 1 + Template & Tag disponibili in the upper part)
     html = `
       <div class="bc-expanded">
         <!-- Popovers anchored above the composer -->
-        ${state.bcTemplateOpen ? `
-          <div class="bc-floating-popover template-pop">
-            <div class="bc-pop-header">
-              <span>Messaggi pronti (Template)</span>
-              <button type="button" class="bc-pop-close" onclick="toggleBcPopover(null)">✕</button>
-            </div>
-            <div class="bc-pop-list">
-              <button type="button" class="bc-pop-item" onclick="insertCannedReply('1. Accesso + Omaggio (Ok)');toggleBcPopover(null);">
-                <span class="dot-amber"></span>
-                <span>1. Accesso + Omaggio (Ok)</span>
-              </button>
-              <button type="button" class="bc-pop-item" onclick="insertCannedReply('1. Come funziona il Check-In (OK)');toggleBcPopover(null);">
-                <span class="dot-amber"></span>
-                <span>1. Come funziona il Check-In (OK)</span>
-              </button>
-              <button type="button" class="bc-pop-item" onclick="insertCannedReply('2. Check-In Online Obbligato + Omaggio (OK)');toggleBcPopover(null);">
-                <span class="dot-amber"></span>
-                <span>2. Check-In Online Obbligato + Omaggio (OK)</span>
-              </button>
-              <button type="button" class="bc-pop-item" onclick="insertCannedReply('3. Benvenuto a Catania - Tax (OK)');toggleBcPopover(null);">
-                <span class="dot-amber"></span>
-                <span>3. Benvenuto a Catania - Tax (OK)</span>
-              </button>
-              <button type="button" class="bc-pop-item" onclick="insertCannedReply('4. Info Parcheggio Garage Suite 14 (15€/notte)');toggleBcPopover(null);">
-                <span class="dot-amber"></span>
-                <span>4. Info Parcheggio Garage Suite 14 (15€/notte)</span>
-              </button>
-            </div>
-          </div>
-        ` : ''}
-
         ${state.bcToneOpen ? `
           <div class="bc-floating-popover tone-pop">
             <div class="bc-pop-header">
@@ -1051,7 +960,7 @@ function renderBottomComposer() {
           </div>
         ` : ''}
 
-        <!-- 1. Top Header Bar -->
+        <!-- 1. Top Header Bar (with Template & Tag disponibili in the upper part) -->
         <div class="bc-header">
           <div class="bc-header-left">
             <span class="bc-title-wrap">
@@ -1089,6 +998,20 @@ function renderBottomComposer() {
                   <option value="Nota interna" ${state.outboundChannel === 'Nota interna' ? 'selected' : ''}>Nota interna (Solo staff)</option>
                 </select>
               </div>
+
+              <!-- Template Pill (Upper Composer) -->
+              <button type="button" class="bc-top-pill template ${state.bcTemplateOpen ? 'active' : ''}" onclick="toggleBcPopover('template')" title="Messaggi pronti / Template">
+                ${ICONS.docTemplate14}
+                <span>Template</span>
+                <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
+              </button>
+
+              <!-- Tag Disponibili Pill (Upper Composer) -->
+              <button type="button" class="bc-top-pill tags ${state.bcTagsOpen ? 'active' : ''}" onclick="toggleBcPopover('tags')" title="Tag dinamici PMS disponibili">
+                ${ICONS.bookOpen}
+                <span>Tag disponibili</span>
+                <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
+              </button>
             ` : `
               <div class="toni-left" style="display:inline-flex;gap:4px;">
                 <button class="btn-tono note-pill ${state.noteType === 'Telefonata' ? 'active' : ''}" onclick="selectNoteType('Telefonata')">Telefonata</button>
@@ -1099,20 +1022,60 @@ function renderBottomComposer() {
           </div>
 
           <div class="bc-header-right">
-            ${state.draftOpen && !isNoteMode ? `
-              <div class="selettore-varianti" onclick="cycleVariant()" title="Cambia alternativa AI">
-                <span style="color:#64748B;">‹</span>
-                <span>Variante ${state.activeVariantIdx + 1} di 3</span>
-                <span style="color:#64748B;">›</span>
-              </div>
-            ` : ''}
-
             <button type="button" class="bc-collapse-btn" onclick="toggleComposerExpand(false)" title="Riduci a barra compatta">
               ${ICONS.chevronDown}
               <span>Riduci</span>
             </button>
           </div>
         </div>
+
+        <!-- Upper Drawer for Template or Tag Disponibili -->
+        ${state.bcTemplateOpen ? `
+          <div class="bc-upper-drawer">
+            <div class="bc-upper-drawer-head">
+              <span class="bc-upper-drawer-title">${ICONS.zap16} <span>MESSAGGI PRONTI (TEMPLATE) · Tocca per inserire</span></span>
+              <button type="button" class="bc-pop-close" onclick="toggleBcPopover(null)">✕</button>
+            </div>
+            <div class="bc-upper-templates-grid">
+              <button type="button" class="card-mp" onclick="insertCannedReply('1. Accesso + Omaggio (Ok)');toggleBcPopover(null);">
+                <span class="dot-amber"></span>
+                <span>1. Accesso + Omaggio (Ok)</span>
+              </button>
+              <button type="button" class="card-mp" onclick="insertCannedReply('1. Come funziona il Check-In (OK)');toggleBcPopover(null);">
+                <span class="dot-amber"></span>
+                <span>1. Come funziona il Check-In (OK)</span>
+              </button>
+              <button type="button" class="card-mp" onclick="insertCannedReply('2. Check-In Online Obbligato + Omaggio (OK)');toggleBcPopover(null);">
+                <span class="dot-amber"></span>
+                <span>2. Check-In Online Obbligato + Omaggio (OK)</span>
+              </button>
+              <button type="button" class="card-mp" onclick="insertCannedReply('3. Benvenuto a Catania - Tax (OK)');toggleBcPopover(null);">
+                <span class="dot-amber"></span>
+                <span>3. Benvenuto a Catania - Tax (OK)</span>
+              </button>
+              <button type="button" class="card-mp" onclick="insertCannedReply('4. Info Parcheggio Garage Suite 14 (15€/notte)');toggleBcPopover(null);">
+                <span class="dot-amber"></span>
+                <span>4. Info Parcheggio Garage Suite 14 (15€/notte)</span>
+              </button>
+            </div>
+          </div>
+        ` : ''}
+
+        ${state.bcTagsOpen ? `
+          <div class="bc-upper-drawer">
+            <div class="bc-upper-drawer-head">
+              <span class="bc-upper-drawer-title" style="color:#0284C7;">${ICONS.bookOpen} <span>TAG DISPONIBILI (DATI DINAMICI PMS AUTO-RISOLTI)</span></span>
+              <button type="button" class="bc-pop-close" onclick="toggleBcPopover(null)">✕</button>
+            </div>
+            <div class="chip-tag-row">
+              <span class="chip-pms" onclick="insertTagPMS('${conv.name.replace('↳ ', '').split(' ')[0]}')">{Ospite}: ${conv.name.replace('↳ ', '').split(' ')[0]}</span>
+              <span class="chip-pms" onclick="insertTagPMS('${conv.stay.room}')">{Camera}: ${conv.stay.room}</span>
+              <span class="chip-pms" onclick="insertTagPMS('000000')">{Nuki}: 000000</span>
+              <span class="chip-pms" onclick="insertTagPMS('15:00')">{Check-in}: 15:00</span>
+              <span class="chip-pms" onclick="insertTagPMS('AuroraGuest2026')">{Wi-Fi}: AuroraGuest2026</span>
+            </div>
+          </div>
+        ` : ''}
 
         <!-- 2. Middle Body Area -->
         <div class="bc-body">
@@ -1198,10 +1161,6 @@ function renderBottomComposer() {
             <button type="button" class="bc-icon-btn" onclick="insertTagPMS('😊')" title="Inserisci emoji">
               ${ICONS.smile16}
             </button>
-            <button type="button" class="bc-pill-btn template ${state.bcTemplateOpen ? 'active' : ''}" onclick="toggleBcPopover('template')">
-              ${ICONS.docTemplate14}
-              <span>Template</span>
-            </button>
             <button type="button" class="bc-pill-btn ai-tone ${state.bcToneOpen ? 'active' : ''}" onclick="toggleBcPopover('tone')">
               ${ICONS.sparkles}
               <span>AI Tono</span>
@@ -1269,6 +1228,7 @@ function toggleAccordion(key) {
 function toggleComposerExpand(expanded) {
   state.composerExpanded = typeof expanded === 'boolean' ? expanded : !state.composerExpanded;
   state.bcTemplateOpen = false;
+  state.bcTagsOpen = false;
   state.bcToneOpen = false;
   state.bcMoreOpen = false;
   renderBottomComposer();
@@ -1276,6 +1236,7 @@ function toggleComposerExpand(expanded) {
 
 function toggleBcPopover(which) {
   state.bcTemplateOpen = which === 'template' ? !state.bcTemplateOpen : false;
+  state.bcTagsOpen = which === 'tags' ? !state.bcTagsOpen : false;
   state.bcToneOpen = which === 'tone' ? !state.bcToneOpen : false;
   state.bcMoreOpen = which === 'more' ? !state.bcMoreOpen : false;
   if (which) state.schedulePopoverOpen = false;
@@ -1308,6 +1269,7 @@ function openPromptMode() {
   state.promptGenerating = false;
   state.draftOpen = false;
   state.bcTemplateOpen = false;
+  state.bcTagsOpen = false;
   state.bcToneOpen = false;
   state.bcMoreOpen = false;
   renderSiderAI();
@@ -1375,6 +1337,7 @@ function closeDraftEditor() {
   state.promptGenerating = false;
   state.schedulePopoverOpen = false;
   state.bcTemplateOpen = false;
+  state.bcTagsOpen = false;
   state.bcToneOpen = false;
   state.bcMoreOpen = false;
   renderConversationLists();
