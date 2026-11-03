@@ -6595,9 +6595,8 @@ function renderThread() {
               <span>Tradotto in ${conv.langName} con AI</span>
             </div>
             <div class="bubble-trad-bar-right">
-              <button type="button" class="bubble-trad-lang-btn host" onclick="showToast('Traduzione automatica AI: Italiano → ${conv.langName}')">
+              <button type="button" class="bubble-trad-lang-btn host" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione automatica AI: Italiano → ${conv.langName}')">
                 ${ICONS.globe}
-                <span>Lingue</span>
               </button>
               <button type="button" class="bubble-trad-toggle-btn host" onclick="toggleHostTrad()">
                 <span>${state.hostTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}</span>
@@ -6655,9 +6654,8 @@ function renderThread() {
               <span>Tradotto dal ${conv.langName} con AI</span>
             </div>
             <div class="bubble-trad-bar-right">
-              <button type="button" class="bubble-trad-lang-btn guest" onclick="showToast('Traduzione automatica AI: ${conv.langName} → Italiano')">
+              <button type="button" class="bubble-trad-lang-btn guest" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione automatica AI: ${conv.langName} → Italiano')">
                 ${ICONS.globe}
-                <span>Lingue</span>
               </button>
               <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleGuestTrad()">
                 <span>${state.guestTradOpen ? 'Nascondi originale' : 'Mostra originale'}</span>
@@ -6704,9 +6702,8 @@ function renderThread() {
               <span>Tradotto in ${conv.langName} con AI</span>
             </div>
             <div class="bubble-trad-bar-right">
-              <button type="button" class="bubble-trad-lang-btn guest" onclick="showToast('Traduzione programmata AI: Italiano → ${conv.langName}')">
+              <button type="button" class="bubble-trad-lang-btn guest" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione programmata AI: Italiano → ${conv.langName}')">
                 ${ICONS.globe}
-                <span>Lingue</span>
               </button>
               <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleSchedTrad()">
                 <span>${state.schedTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}</span>
