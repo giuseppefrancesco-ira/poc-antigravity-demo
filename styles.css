@@ -151,8 +151,8 @@ button, input, textarea {
 .nav-rail {
   width: 64px;
   height: 100%;
-  background: #121C4E;
-  border-right: 1px solid #1E2B6B;
+  background: #18255B;
+  border-right: 1px solid #2C3B75;
   padding: 12px 8px 16px 8px;
   display: flex;
   flex-direction: column;
@@ -178,8 +178,8 @@ button, input, textarea {
 
 .nav-item {
   width: 44px;
-  height: 40px;
-  border-radius: 6px;
+  height: 44px;
+  border-radius: 10px;
   border: 1px solid transparent;
   background: transparent;
   color: #93A2D8;
@@ -196,9 +196,9 @@ button, input, textarea {
 }
 
 .nav-item.active {
-  background: #2457E6;
-  border-color: #4E6EF2;
-  color: #FFFFFF;
+  background: #374577;
+  border-color: transparent;
+  color: #4D73FF;
 }
 
 .nav-spacer {
@@ -206,18 +206,18 @@ button, input, textarea {
 }
 
 /* =========================================================
-   COLUMN 1: LISTA MESSAGGI (338px / 312px, #192556 DARK PALETTE)
+   COLUMN 1: LISTA MESSAGGI (338px / 312px, #1E2C68 PALETTE)
    ========================================================= */
 .col-lista,
 #mobScreenInbox {
-  background: #192556;
+  background: #1E2C68;
 }
 
 .col-lista {
   width: 338px;
   height: 100%;
-  background: #192556;
-  border-right: 1px solid #26346B;
+  background: #1E2C68;
+  border-right: 1px solid #2E3E7A;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -225,8 +225,8 @@ button, input, textarea {
 
 .header-lista {
   padding: 18px 16px 14px 16px;
-  background: #192556;
-  border-bottom: 1px solid #26346B;
+  background: #1E2C68;
+  border-bottom: 1px solid #2E3E7A;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -285,8 +285,8 @@ button, input, textarea {
 
 .ricerca-box {
   height: 38px;
-  background: #313E6E;
-  border: 1px solid #415082;
+  background: #3A497A;
+  border: 1px solid #4A5A8C;
   border-radius: 8px;
   padding: 0 12px;
   display: flex;
@@ -322,8 +322,8 @@ button, input, textarea {
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  border: 1px solid #344478;
-  background: #253363;
+  border: 1px solid #3A4B83;
+  background: #2B3B72;
   color: #E2E8F0;
   width: 100%;
   text-align: left;
@@ -336,20 +336,20 @@ button, input, textarea {
 }
 
 .cartella-row.in-corso {
-  background: #253363;
-  border-color: #344478;
+  background: #2B3B72;
+  border-color: #3A4B83;
   color: #E2E8F0;
 }
 
 .cartella-row.archiviate {
-  background: #253363;
-  border-color: #344478;
+  background: #2B3B72;
+  border-color: #3A4B83;
   color: #E2E8F0;
 }
 
 .cartella-row:hover {
-  background: #2D3D73;
-  border-color: #43558F;
+  background: #33447E;
+  border-color: #495B96;
 }
 
 .cartella-lbl {
@@ -411,7 +411,7 @@ button, input, textarea {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  background: #192556;
+  background: #1E2C68;
 }
 
 .elenco-conv::-webkit-scrollbar {
@@ -419,7 +419,7 @@ button, input, textarea {
 }
 
 .elenco-conv::-webkit-scrollbar-track {
-  background: #192556;
+  background: #1E2C68;
 }
 
 .elenco-conv::-webkit-scrollbar-thumb {
@@ -430,36 +430,36 @@ button, input, textarea {
 .conv-item {
   display: flex;
   flex-direction: row;
-  background: #192556;
-  border-bottom: 1px solid #26346B;
+  background: #1E2C68;
+  border-bottom: 1px solid #2E3E7A;
   cursor: pointer;
   transition: background 0.12s;
 }
 
 .conv-item:hover {
-  background: #223063;
+  background: #283772;
 }
 
 .conv-item.selected {
-  background: #334273;
-  border-bottom-color: #3E4F85;
+  background: #3C4B80;
+  border-bottom-color: #485991;
 }
 
 .conv-item.linked {
-  background: #15204B;
+  background: #19265C;
 }
 
 .conv-item.linked:hover {
-  background: #202E60;
+  background: #24336C;
 }
 
 .conv-item.linked.selected {
-  background: #334273;
+  background: #3C4B80;
 }
 
 .barra-accento {
   width: 4px;
-  background: #93C5FD;
+  background: #3B63FB;
   flex-shrink: 0;
 }
 
@@ -607,8 +607,8 @@ button, input, textarea {
 
 .footer-lista {
   padding: 14px 16px;
-  border-top: 1px solid #26346B;
-  background: #192556;
+  border-top: 1px solid #2E3E7A;
+  background: #1E2C68;
   color: #94A3B8;
   display: flex;
   align-items: center;
@@ -830,12 +830,12 @@ button, input, textarea {
   cursor: pointer;
 }
 
-/* Bolla Blu Host (fluida su monitor grandi, 82% mobile) */
+/* Bolla Blu Host (fluida su monitor grandi, stesso colore del sider #1E2C68) */
 .bolla-blu-host {
   width: clamp(400px, 56%, 560px);
   max-width: 82%;
   padding: 12px 16px;
-  background: #2E54E8;
+  background: #1E2C68;
   color: #FFFFFF;
   font-size: 13px;
   line-height: 1.48;
