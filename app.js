@@ -810,7 +810,7 @@ function renderSiderAI() {
         </div>
         <div class="gs-topbar-titles">
           <div class="gs-topbar-title">Dettagli ospite</div>
-          <div class="gs-topbar-sub">Informazioni prenotazione e preferenze</div>
+          <div class="gs-topbar-sub">Informazioni prenotazione e PMS</div>
         </div>
       </div>
 
@@ -922,21 +922,7 @@ function renderSiderAI() {
         </div>
       </div>
 
-      <!-- 3. Card Preferenze ospite -->
-      <div class="gs-pref-card" onclick="editGuestPreferences()" title="Clicca per modificare le preferenze dell'ospite">
-        <div class="gs-pref-header">
-          <div class="gs-pref-title-wrap">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#DB2777" stroke="#DB2777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-            </svg>
-            <span class="gs-pref-title">Preferenze ospite</span>
-          </div>
-          <span class="gs-pref-chevron" style="color:#9D174D;">${ICONS.chevronRight14}</span>
-        </div>
-        <div class="gs-pref-body">${prefText}</div>
-      </div>
-
-      <!-- 4. Barra Trattamento & Prezzo -->
+      <!-- 3. Barra Trattamento & Prezzo -->
       <div class="gs-treatment-bar">
         <span class="gs-treatment-text" style="display:inline-flex;align-items:center;gap:6px;"><span style="color:#64748B;display:inline-flex;">${ICONS.utensils14}</span> <span>Trattamento: <strong>${m.treatment}</strong></span></span>
         <span class="gs-treatment-price">${m.price}</span>
