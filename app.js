@@ -83,10 +83,8 @@ const state = {
   promptMode: false,     // true = vista "Scrivi prompt / Istruzione" attiva
   promptGenerating: false,
   promptText: '',
-  composerMode: 'reply', // 'reply' | 'note'
-  noteType: 'Telefonata',
-  noteAuthor: 'Sara M. (Reception)',
-  noteDraftText: 'Concordato al telefono con l\'ospite il check-in anticipato alle 13:30 senza supplemento.',
+  composerMode: 'reply',
+  guestNoteDrafts: {},
   mobileTab: 'chat',     // 'inbox', 'chat', 'ai'
   selectedConvId: 'adam',
   quickFilter: 'all',    // 'all', 'unread', 'Airbnb', 'Booking'
@@ -172,9 +170,8 @@ const CONVERSATIONS = [
     internalNotes: [
       {
         author: 'Sara M. (Reception)',
-        channelType: 'Telefonata',
         time: '11:15',
-        text: 'Concordato a voce con l\'ospite il posto auto coperto #14 a 15€/notte, attende conferma scritta in chat.'
+        text: 'Concordato con l\'ospite il posto auto coperto #14 a 15€/notte, attende conferma scritta in chat.'
       }
     ],
     handover: {
@@ -213,7 +210,6 @@ const CONVERSATIONS = [
     internalNotes: [
       {
         author: 'Marco T. (Reception)',
-        channelType: 'Accordo di persona',
         time: '11:16',
         text: 'Ospite passata in reception per ritirare mappa cartacea del centro storico.'
       }
@@ -259,9 +255,8 @@ const CONVERSATIONS = [
     internalNotes: [
       {
         author: 'Sara M. (Reception)',
-        channelType: 'Telefonata',
         time: '10:05',
-        text: 'Chiamata pre-arrivo: confermato arrivo previsto intorno alle 16:30.'
+        text: 'Confermato arrivo previsto intorno alle 16:30.'
       }
     ],
     handover: {
@@ -304,10 +299,9 @@ const CONVERSATIONS = [
     systemEvent: 'Check-out completato per #AIR-7740 · Bozza Recensione Ospite AI generata · 09:42',
     internalNotes: [
       {
-        author: 'Marco T. (Staff)',
-        channelType: 'Accordo di persona',
+        author: 'Marco T. (Reception)',
         time: '09:35',
-        text: 'Riconsegna chiavi di persona al check-out: appartamento Deluxe 04 in perfetto ordine, nessun addebito extra.'
+        text: 'Riconsegna chiavi al check-out: appartamento Deluxe 04 in perfetto ordine, nessun addebito extra.'
       }
     ],
     guestReview: {
@@ -780,15 +774,14 @@ function renderSiderAI() {
   const prefText = conv.customPreferences || m.preferences;
   const syncIconSm = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`;
 
-  const internalNotesList = (conv.internalNotes || []).map(n => `
-    <div class="gs-shift-note-item">
-      <div class="gs-shift-note-meta">
-        <span><strong>${n.author}</strong> · ${n.channelType || 'Nota turno'}</span>
-        <span>${n.time}</span>
-      </div>
-      <div class="gs-shift-note-txt">${n.text}</div>
-    </div>
-  `).join('');
+  const currentNoteObj = (conv.internalNotes && conv.internalNotes[0]) || {
+    author: 'Sara M. (Reception)',
+    time: '11:15',
+    text: m.handoverNote || ''
+  };
+  const currentNoteDraft = typeof state.guestNoteDrafts[conv.id] === 'string'
+    ? state.guestNoteDrafts[conv.id]
+    : currentNoteObj.text;
 
   const html = `
     <!-- Top Header: Dettagli ospite + AI Copilot button + Close -->
@@ -896,6 +889,38 @@ function renderSiderAI() {
             <span class="gs-treatment-price">${m.price}</span>
           </div>
         </div>
+      </div>
+
+      <!-- 4. Note Ospite + Piccolo Form di Modifica -->
+      <div class="gs-card gs-note-card" id="gsGuestNoteSection">
+        <div class="gs-note-head">
+          <div class="gs-note-title-row">
+            <span class="gs-note-icon">${ICONS.stickyNote14}</span>
+            <span class="gs-note-title">Note ospite</span>
+          </div>
+          <span class="gs-note-time">${currentNoteObj.author} · ${currentNoteObj.time}</span>
+        </div>
+
+        <div class="gs-note-display" onclick="focusGuestNoteForm()" title="Clicca per modificare la nota">
+          ${currentNoteObj.text || 'Nessuna nota presente per questo ospite.'}
+        </div>
+
+        <form class="gs-note-form" onsubmit="event.preventDefault();saveGuestDetailNote();">
+          <label class="gs-note-form-lbl" for="guestDetailNoteInput">Modifica nota</label>
+          <textarea
+            id="guestDetailNoteInput"
+            class="gs-note-textarea"
+            rows="2"
+            placeholder="Scrivi o modifica la nota per questo ospite..."
+            oninput="updateGuestDetailNoteDraft(this.value)"
+          >${currentNoteDraft}</textarea>
+          <div class="gs-note-form-actions">
+            <button type="submit" class="gs-note-save-btn">
+              ${ICONS.save14}
+              <span>Salva nota</span>
+            </button>
+          </div>
+        </form>
       </div>
 
       <!-- 6. Informazioni PMS & Aggancio Prenotazione (Spostate nel sider a destra) -->
@@ -1132,7 +1157,6 @@ function renderBottomComposer() {
             <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
             <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
             <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
-            <option value="Nota interna" ${state.outboundChannel === 'Nota interna' ? 'selected' : ''}>Nota interna</option>
           </select>
         </div>
 
@@ -1181,9 +1205,9 @@ function renderBottomComposer() {
                 ${ICONS.bookmarkPlus}
                 <span>Crea / Aggiorna FAQ in Knowledge Base</span>
               </button>
-              <button type="button" class="bc-pop-item" onclick="toggleBcPopover(null);setComposerMode(state.composerMode === 'note' ? 'reply' : 'note');">
+              <button type="button" class="bc-pop-item" onclick="toggleBcPopover(null);focusGuestNoteForm();">
                 ${ICONS.fileText}
-                <span>${isNoteMode ? 'Torna a Risposta ospite' : 'Passa a Nota manuale (Solo staff)'}</span>
+                <span>Modifica nota nel dettaglio ospite</span>
               </button>
             </div>
           </div>
@@ -1247,29 +1271,21 @@ function renderBottomComposer() {
           <div class="bc-header-left">
             <span class="bc-title-wrap">
               <span class="bc-WaitSparkle">${ICONS.sparkles16}</span>
-              <span class="bc-title-text">${isNoteMode ? 'Nota manuale (Staff)' : 'Componi risposta'}</span>
+              <span class="bc-title-text">Componi risposta</span>
             </span>
 
-            ${!isNoteMode ? `
-              <!-- Messaggi Pronti Pill (Upper Composer -> apre Modale) -->
-              <button type="button" class="bc-top-pill template" onclick="openCannedRepliesModal()" title="Apri Messaggi Pronti">
-                ${ICONS.docTemplate14}
-                <span>Messaggi pronti</span>
-              </button>
+            <!-- Messaggi Pronti Pill (Upper Composer -> apre Modale) -->
+            <button type="button" class="bc-top-pill template" onclick="openCannedRepliesModal()" title="Apri Messaggi Pronti">
+              ${ICONS.docTemplate14}
+              <span>Messaggi pronti</span>
+            </button>
 
-              <!-- Tag Disponibili Pill (Upper Composer) -->
-              <button type="button" class="bc-top-pill tags ${state.bcTagsOpen ? 'active' : ''}" onclick="toggleBcPopover('tags')" title="Tag dinamici PMS disponibili">
-                ${ICONS.bookOpen}
-                <span>Tag disponibili</span>
-                <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
-              </button>
-            ` : `
-              <div class="toni-left" style="display:inline-flex;gap:4px;">
-                <button class="btn-tono note-pill ${state.noteType === 'Telefonata' ? 'active' : ''}" onclick="selectNoteType('Telefonata')">Telefonata</button>
-                <button class="btn-tono note-pill ${state.noteType === 'Di persona' ? 'active' : ''}" onclick="selectNoteType('Di persona')">Di persona</button>
-                <button class="btn-tono note-pill ${state.noteType === 'Nota staff' ? 'active' : ''}" onclick="selectNoteType('Nota staff')">Nota staff</button>
-              </div>
-            `}
+            <!-- Tag Disponibili Pill (Upper Composer) -->
+            <button type="button" class="bc-top-pill tags ${state.bcTagsOpen ? 'active' : ''}" onclick="toggleBcPopover('tags')" title="Tag dinamici PMS disponibili">
+              ${ICONS.bookOpen}
+              <span>Tag disponibili</span>
+              <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
+            </button>
           </div>
 
           <div class="bc-header-right">
@@ -1392,7 +1408,6 @@ function renderBottomComposer() {
                   <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
                   <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
                   <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
-                  <option value="Nota interna" ${state.outboundChannel === 'Nota interna' ? 'selected' : ''}>Nota interna (Solo staff)</option>
                 </select>
               </div>
 
@@ -2267,85 +2282,55 @@ function cycleSortOrder() {
 
 function sendReplyNow() {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
-  if (state.outboundChannel === 'Nota interna') {
-    const noteText = (state.drafts[conv.id] || '').trim();
-    if (noteText) {
-      conv.internalNotes = conv.internalNotes || [];
-      conv.internalNotes.push({
-        author: 'Operatore Staff',
-        channelType: 'Nota interna',
-        time: 'Adesso',
-        text: noteText
-      });
-    }
-    renderThread();
-    showToast('Nota manuale salvata nella timeline della conversazione (visibile solo allo staff)');
-    closeDraftEditor();
-    return;
-  }
   conv.dagestire = false;
   renderThread();
   showToast(`Risposta inviata in ${conv.langName} su ${state.outboundChannel}!`);
   closeDraftEditor();
 }
 
-function setComposerMode(mode) {
-  state.composerMode = mode;
-  state.acc_modifica = true;
-  if (mode === 'note') {
-    state.acc_consegne = false;
-  }
-  renderSiderAI();
-  if (mode === 'note') {
-    setTimeout(() => document.getElementById('noteTextarea')?.focus(), 50);
-  }
-}
-
-function selectNoteType(type) {
-  state.noteType = type;
-  const guestFirst = (CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0]).name.replace('↳ ', '').split(' ')[0];
-  if (type === 'Telefonata') {
-    state.noteDraftText = `Concordato al telefono con ${guestFirst} il check-in anticipato alle 13:30 senza supplemento.`;
-  } else if (type === 'Di persona') {
-    state.noteDraftText = `Accordo preso di persona in reception con ${guestFirst}: consegnato secondo mazzo di chiavi e mappa parcheggio.`;
-  } else {
-    state.noteDraftText = `Promemoria per il turno serale: verificare se ${guestFirst} utilizza il posto auto #14 entro le 20:00.`;
-  }
-  renderSiderAI();
-}
-
-function updateNoteDraftText(val, el) {
-  state.noteDraftText = val;
-  if (el) autoResizeTextarea(el);
-}
-
-function setNoteAuthor(val) {
-  state.noteAuthor = val;
-  renderSiderAI();
-}
-
-function saveManualNoteFromComposer() {
+function updateGuestDetailNoteDraft(val) {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
-  const text = (state.noteDraftText || '').trim();
+  state.guestNoteDrafts = state.guestNoteDrafts || {};
+  state.guestNoteDrafts[conv.id] = val;
+}
+
+function saveGuestDetailNote() {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  state.guestNoteDrafts = state.guestNoteDrafts || {};
+  const currentNote = (conv.internalNotes && conv.internalNotes.length > 0) ? conv.internalNotes[conv.internalNotes.length - 1].text : '';
+  const text = (state.guestNoteDrafts[conv.id] !== undefined ? state.guestNoteDrafts[conv.id] : currentNote).trim();
   if (!text) {
-    showToast('Inserisci il testo della nota manuale');
+    conv.internalNotes = [];
+    state.guestNoteDrafts[conv.id] = '';
+    renderSiderAI();
+    showToast('Nota ospite rimossa');
     return;
   }
-  conv.internalNotes = conv.internalNotes || [];
-  conv.internalNotes.push({
-    author: state.noteAuthor,
-    channelType: state.noteType,
-    time: 'Adesso',
+  const now = new Date();
+  const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  conv.internalNotes = [{
+    time: timeStr,
     text
-  });
-  state.composerMode = 'reply';
-  renderThread();
+  }];
+  state.guestNoteDrafts[conv.id] = text;
   renderSiderAI();
-  showToast(`Nota manuale (${state.noteType}) registrata nella conversazione`);
+  showToast('Nota ospite aggiornata nei dettagli ospite');
+}
+
+function focusGuestNoteForm() {
+  if (state.viewport === 'mobile') {
+    setMobileTab('ai');
+  }
+  setTimeout(() => {
+    const section = document.getElementById('gsGuestNoteSection');
+    if (section) section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const ta = document.getElementById('gsGuestNoteTextarea');
+    if (ta) ta.focus();
+  }, 60);
 }
 
 function openManualNoteModal() {
-  setComposerMode('note');
+  focusGuestNoteForm();
 }
 
 function rateAiSuggestion(vote) {
