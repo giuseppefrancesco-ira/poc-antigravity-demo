@@ -554,7 +554,6 @@ function renderThread() {
         <button class="btn-msg-action copy" onclick="copyThreadMessage('host')" title="Copia messaggio" aria-label="Copia messaggio">
           ${ICONS.copy}
         </button>
-        ${renderMsgReadAction(conv, 'host')}
         <button class="btn-msg-action delete" onclick="deleteThreadMessage('host')" title="Elimina messaggio" aria-label="Elimina messaggio">
           ${ICONS.trash}
         </button>
@@ -653,7 +652,6 @@ function renderThread() {
         <button class="btn-msg-action copy" onclick="copyThreadMessage('sched')" title="Copia messaggio" aria-label="Copia messaggio">
           ${ICONS.copy}
         </button>
-        ${renderMsgReadAction(conv, 'sched')}
         <button class="btn-msg-action delete" onclick="deleteThreadMessage('sched')" title="Elimina messaggio" aria-label="Elimina messaggio">
           ${ICONS.trash}
         </button>
