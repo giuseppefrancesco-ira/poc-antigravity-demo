@@ -1131,12 +1131,9 @@ function renderBottomComposer() {
         />
 
         <button type="button" class="bc-generate-ai-btn collapsed" onclick="openDraftEditor()" title="Genera con AI" data-tooltip="Genera con AI" aria-label="Genera con AI">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 14 4 9 9 4"/>
-            <path d="M20 20v-7a4 4 0 0 0-4-4H4"/>
-            <path d="M18.5 2 19.5 4.8 22.3 5.8 19.5 6.8 18.5 9.6 17.5 6.8 14.7 5.8 17.5 4.8 18.5 2Z" fill="currentColor" stroke="none"/>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
           </svg>
-          <span>AI</span>
         </button>
 
         <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
@@ -1348,12 +1345,9 @@ function renderBottomComposer() {
                 data-tooltip="Genera con AI"
                 aria-label="Genera con AI"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="9 14 4 9 9 4"/>
-                  <path d="M20 20v-7a4 4 0 0 0-4-4H4"/>
-                  <path d="M18.5 2 19.5 4.8 22.3 5.8 19.5 6.8 18.5 9.6 17.5 6.8 14.7 5.8 17.5 4.8 18.5 2Z" fill="currentColor" stroke="none"/>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
                 </svg>
-                <span>AI</span>
               </button>
             </div>
           `}
