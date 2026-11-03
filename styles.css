@@ -4320,14 +4320,14 @@ button, input, textarea {
   padding: 0;
   border-radius: 50%;
   border: none;
-  background: #192556;
+  background: #2B62FF;
   color: #FFFFFF;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(18, 28, 78, 0.22);
+  box-shadow: 0 2px 8px rgba(43, 98, 255, 0.28);
   transition: all 0.15s ease;
 }
 
@@ -4337,10 +4337,10 @@ button, input, textarea {
 }
 
 .bc-generate-ai-btn:hover {
-  background: #121C4E;
+  background: #1E50E6;
   color: #FFFFFF;
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(18, 28, 78, 0.32);
+  box-shadow: 0 4px 12px rgba(43, 98, 255, 0.38);
 }
 
 .bc-generate-ai-btn:active {
