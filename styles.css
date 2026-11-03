@@ -6198,6 +6198,104 @@ button, input, textarea {
   border-radius: 14px;
 }
 
+/* =========================================================================
+   HEADER 3-DOTS DROPDOWN & PMS EDIT MODAL
+   ========================================================================= */
+.btn-top.icon-only.active {
+  background: #EFF6FF;
+  border-color: #BFDBFE;
+  color: #2563EB;
+}
+
+.hdr-more-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.hdr-more-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 224px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.14), 0 4px 10px -2px rgba(15, 23, 42, 0.06);
+  padding: 6px;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 1200;
+}
+
+.hdr-more-dropdown.open {
+  display: flex;
+}
+
+.hdr-more-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 9px 11px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #1E293B;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.hdr-more-item:hover {
+  background: #F8FAFC;
+}
+
+.hdr-more-item svg {
+  flex-shrink: 0;
+}
+
+.hdr-more-item.danger {
+  color: #DC2626;
+}
+
+.hdr-more-item.danger:hover {
+  background: #FEF2F2;
+}
+
+.modal-card.pms-edit-modal {
+  width: min(94vw, 430px);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 14px;
+  border-radius: 18px;
+  gap: 10px;
+}
+
+.pms-modal-close-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px 6px 2px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.pms-modal-top-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.pms-modal-inner-card {
+  margin: 0;
+  box-shadow: none;
+}
+
+
 
 
 

@@ -6208,6 +6208,104 @@ button, input, textarea {
   border-radius: 14px;
 }
 
+/* =========================================================================
+   HEADER 3-DOTS DROPDOWN & PMS EDIT MODAL
+   ========================================================================= */
+.btn-top.icon-only.active {
+  background: #EFF6FF;
+  border-color: #BFDBFE;
+  color: #2563EB;
+}
+
+.hdr-more-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.hdr-more-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 224px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.14), 0 4px 10px -2px rgba(15, 23, 42, 0.06);
+  padding: 6px;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 1200;
+}
+
+.hdr-more-dropdown.open {
+  display: flex;
+}
+
+.hdr-more-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 9px 11px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #1E293B;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.hdr-more-item:hover {
+  background: #F8FAFC;
+}
+
+.hdr-more-item svg {
+  flex-shrink: 0;
+}
+
+.hdr-more-item.danger {
+  color: #DC2626;
+}
+
+.hdr-more-item.danger:hover {
+  background: #FEF2F2;
+}
+
+.modal-card.pms-edit-modal {
+  width: min(94vw, 430px);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 14px;
+  border-radius: 18px;
+  gap: 10px;
+}
+
+.pms-modal-close-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px 6px 2px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.pms-modal-top-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.pms-modal-inner-card {
+  margin: 0;
+  box-shadow: none;
+}
+
+
 
 
 
@@ -6368,11 +6466,44 @@ button, input, textarea {
               <span style="font-size:11px;font-weight:700;color:#475569;" id="desktopLangCode">PL</span>
               <span id="desktopLangName">Polacco</span>
             </button>
-            <button class="btn-top icon-only" onclick="openStayDetailsModal()" title="Scheda Soggiorno & Aggancio PMS">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+            <button class="btn-top icon-only" id="btnToggleGuestSiderDesk" onclick="toggleDesktopSider()" title="Apri/chiudi Dettagli ospite">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
             </button>
+            <div class="hdr-more-wrap">
+              <button class="btn-top icon-only" id="btnMoreMenuDesk" onclick="toggleHeaderMoreMenu(event, 'desk')" title="Azioni conversazione e dati ospite">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+                </svg>
+              </button>
+              <div class="hdr-more-dropdown" id="hdrMoreDropdownDesk">
+                <button type="button" class="hdr-more-item" onclick="closeHeaderMoreMenu();openEditGuestPmsModal()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>
+                  </svg>
+                  <span>Modifica dati ospite</span>
+                </button>
+                <button type="button" class="hdr-more-item" onclick="closeHeaderMoreMenu();openGenerateReviewModal()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="#FACC15" stroke="#EAB308" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                  <span>Genera recensione</span>
+                </button>
+                <button type="button" class="hdr-more-item" onclick="closeHeaderMoreMenu();archiveCurrentConversation()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+                  </svg>
+                  <span>Archivia conversazione</span>
+                </button>
+                <button type="button" class="hdr-more-item danger" onclick="closeHeaderMoreMenu();deleteCurrentConversation()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
+                  </svg>
+                  <span>Elimina conversazione</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -6527,11 +6658,44 @@ button, input, textarea {
             <button class="btn-top mob-lang-btn" onclick="showToast('Lingua rilevata automaticamente dall\'AI')">
               <span id="mobLangBadgeLabel" class="mob-lang-badge-inner">PL Polacco</span>
             </button>
-            <button class="btn-top icon-only mob-hdr-btn" title="Scheda Soggiorno & Aggancio PMS" onclick="openStayDetailsModal()">
+            <button class="btn-top icon-only mob-hdr-btn" id="btnToggleGuestSiderMob" title="Apri Dettagli ospite" onclick="setMobileTab('ai')">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
             </button>
+            <div class="hdr-more-wrap">
+              <button class="btn-top icon-only mob-hdr-btn" id="btnMoreMenuMob" title="Azioni conversazione e dati ospite" onclick="toggleHeaderMoreMenu(event, 'mob')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+                </svg>
+              </button>
+              <div class="hdr-more-dropdown" id="hdrMoreDropdownMob">
+                <button type="button" class="hdr-more-item" onclick="closeHeaderMoreMenu();openEditGuestPmsModal()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>
+                  </svg>
+                  <span>Modifica dati ospite</span>
+                </button>
+                <button type="button" class="hdr-more-item" onclick="closeHeaderMoreMenu();openGenerateReviewModal()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="#FACC15" stroke="#EAB308" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                  <span>Genera recensione</span>
+                </button>
+                <button type="button" class="hdr-more-item" onclick="closeHeaderMoreMenu();archiveCurrentConversation()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+                  </svg>
+                  <span>Archivia conversazione</span>
+                </button>
+                <button type="button" class="hdr-more-item danger" onclick="closeHeaderMoreMenu();deleteCurrentConversation()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
+                  </svg>
+                  <span>Elimina conversazione</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="area-messaggi" id="mobileMessagesArea"></div>
@@ -7259,30 +7423,14 @@ function renderThread() {
   if (mobArea) mobArea.innerHTML = messagesHtml;
 }
 
-// Render Right Sider: Dettagli ospite & Informazioni PMS + AI Copilot (1:1 con reference screenshot)
-function renderSiderAI() {
-  const deskSider = document.getElementById('desktopSiderAI');
-  const mobSider = document.getElementById('mobileSiderAI');
-  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
-  const h = conv.handover || CONVERSATIONS[0].handover;
-
-  if (deskSider) {
-    deskSider.style.display = state.siderCollapsed ? 'none' : 'flex';
-  }
-
-  const cleanName = conv.name.replace('↳ ', '').replace(/\s*\(.*?\)\s*/g, '').trim();
-  const nameParts = cleanName.split(' ');
-  const firstName = nameParts.slice(0, -1).join(' ') || nameParts[0] || 'Ospite';
-  const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
-  const initials = ((firstName[0] || '') + (lastName[0] || firstName[1] || '')).toUpperCase();
-
+function getConvPmsMeta(conv) {
   const metaByConv = {
     adam: {
       checkin: '6 ott 2026',
       checkout: '11 ott 2026',
-      checkinFull: '06/10/2026',
-      checkoutFull: '11/10/2026',
-      roomShort: 'Suite 14',
+      checkinFull: conv.stay.checkinFull || '06/10/2026',
+      checkoutFull: conv.stay.checkoutFull || '11/10/2026',
+      roomShort: conv.stay.room || 'Suite 14',
       guestsShort: '2 adulti',
       guestsNum: '2',
       statusBadge: 'In Soggiorno',
@@ -7297,9 +7445,9 @@ function renderSiderAI() {
     olga: {
       checkin: '6 ott 2026',
       checkout: '11 ott 2026',
-      checkinFull: '06/10/2026',
-      checkoutFull: '11/10/2026',
-      roomShort: 'Suite 14',
+      checkinFull: conv.stay.checkinFull || '06/10/2026',
+      checkoutFull: conv.stay.checkoutFull || '11/10/2026',
+      roomShort: conv.stay.room || 'Suite 14',
       guestsShort: '2 adulti',
       guestsNum: '2',
       statusBadge: 'In Soggiorno',
@@ -7314,9 +7462,9 @@ function renderSiderAI() {
     maria: {
       checkin: '29 ott 2026',
       checkout: '2 nov 2026',
-      checkinFull: '29/10/2026',
-      checkoutFull: '02/11/2026',
-      roomShort: 'Junior 08',
+      checkinFull: conv.stay.checkinFull || '29/10/2026',
+      checkoutFull: conv.stay.checkoutFull || '02/11/2026',
+      roomShort: conv.stay.room || 'Junior 08',
       guestsShort: '2 adulti',
       guestsNum: '2',
       statusBadge: 'In Soggiorno',
@@ -7331,9 +7479,9 @@ function renderSiderAI() {
     cliff: {
       checkin: '25 ott 2026',
       checkout: '28 ott 2026',
-      checkinFull: '25/10/2026',
-      checkoutFull: '28/10/2026',
-      roomShort: 'Deluxe 04',
+      checkinFull: conv.stay.checkinFull || '25/10/2026',
+      checkoutFull: conv.stay.checkoutFull || '28/10/2026',
+      roomShort: conv.stay.room || 'Deluxe 04',
       guestsShort: '1 adulto',
       guestsNum: '1',
       statusBadge: 'Check-out',
@@ -7348,9 +7496,9 @@ function renderSiderAI() {
     florian: {
       checkin: '22 ott 2026',
       checkout: '25 ott 2026',
-      checkinFull: '22/10/2026',
-      checkoutFull: '25/10/2026',
-      roomShort: 'Suite 12',
+      checkinFull: conv.stay.checkinFull || '22/10/2026',
+      checkoutFull: conv.stay.checkoutFull || '25/10/2026',
+      roomShort: conv.stay.room || 'Suite 12',
       guestsShort: '2 adulti',
       guestsNum: '2',
       statusBadge: 'Archiviata',
@@ -7363,10 +7511,31 @@ function renderSiderAI() {
       checkinPin: conv.stay.checkinPin || '192837'
     }
   };
+  return metaByConv[conv.id] || metaByConv.adam;
+}
 
-  const m = metaByConv[conv.id] || metaByConv.adam;
+// Render Right Sider: Dettagli ospite (senza card PMS, spostata in Modifica dati ospite dal menu ⋮)
+function renderSiderAI() {
+  const deskSider = document.getElementById('desktopSiderAI');
+  const mobSider = document.getElementById('mobileSiderAI');
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+
+  if (deskSider) {
+    deskSider.style.display = state.siderCollapsed ? 'none' : 'flex';
+  }
+  const deskToggleBtn = document.getElementById('btnToggleGuestSiderDesk');
+  if (deskToggleBtn) {
+    deskToggleBtn.classList.toggle('active', !state.siderCollapsed);
+  }
+
+  const cleanName = conv.name.replace('↳ ', '').replace(/\s*\(.*?\)\s*/g, '').trim();
+  const nameParts = cleanName.split(' ');
+  const firstName = nameParts.slice(0, -1).join(' ') || nameParts[0] || 'Ospite';
+  const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+  const initials = ((firstName[0] || '') + (lastName[0] || firstName[1] || '')).toUpperCase();
+
+  const m = getConvPmsMeta(conv);
   const prefText = conv.customPreferences || m.preferences;
-  const syncIconSm = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`;
 
   const currentNoteObj = (conv.internalNotes && conv.internalNotes[0]) || {
     author: 'Sara M. (Reception)',
@@ -7515,116 +7684,6 @@ function renderSiderAI() {
             </button>
           </div>
         </form>
-      </div>
-
-      <!-- 6. Informazioni PMS & Aggancio Prenotazione (Spostate nel sider a destra) -->
-      <div class="gs-card gs-pms-card" id="gsPmsSection">
-        <div class="gs-pms-head">
-          <div class="gs-pms-title-row">
-            <span style="color:#2563EB;display:inline-flex;">${ICONS.link14}</span>
-            <span class="gs-pms-title">Aggancio prenotazione PMS</span>
-            <span class="stay-pms-verified-pill">${ICONS.check} ${conv.stay.bookingCode}</span>
-          </div>
-          <button type="button" class="gs-sync-mini-btn" onclick="triggerHubSync();showToast('Dati prenotazione sincronizzati dal PMS')">
-            ${syncIconSm}
-            <span>Aggiorna</span>
-          </button>
-        </div>
-
-        <select id="pmsBookingSelect" class="stay-select-input" onchange="confirmBookingLinkChange()">
-          <option value="${conv.stay.bookingCode}" selected>${conv.stay.bookingCode} — ${cleanName} (${conv.stay.room} · ${conv.stay.dates})</option>
-          <option value="#DEMO-1052">#DEMO-1052 — Adam Nowak (Suite 18 · 11/10–14/10 Estensione)</option>
-          <option value="#BKG-8821">#BKG-8821 — Maria Camila Villamizar (Junior Suite 08 · 29/10–02/11)</option>
-        </select>
-
-        <!-- Accessi e Tag Dinamici PMS -->
-        <div class="gs-pms-subblock">
-          <div class="gs-pms-subhead">
-            <span class="gs-pms-subtitle" style="display:inline-flex;align-items:center;gap:5px;"><span style="color:#2563EB;display:inline-flex;">${ICONS.key13}</span> <span>Accessi e tag PMS</span></span>
-            <span class="gs-pms-subhint">Clicca sul tag per inserirlo nel messaggio</span>
-          </div>
-
-          <div class="stay-tags-card">
-            <div class="stay-tag-row">
-              <div class="stay-tag-left" onclick="insertTagPMS('${m.nukiCode}')" title="Inserisci codice Nuki nel messaggio">
-                <span class="stay-copy-icon">${ICONS.copy}</span>
-                <div class="stay-tag-texts">
-                  <span class="stay-tag-code">{CODICE_NUKI}</span>
-                  <span class="stay-tag-desc">Codice SmartLock Nuki</span>
-                </div>
-              </div>
-              <input type="text" id="stayNukiInput" class="stay-tag-val-input" value="${m.nukiCode}" onchange="confirmBookingLinkChange()" />
-            </div>
-
-            <div class="stay-tag-row">
-              <div class="stay-tag-left" onclick="insertTagPMS('${m.checkinPin}')" title="Inserisci PIN check-in online nel messaggio">
-                <span class="stay-copy-icon">${ICONS.copy}</span>
-                <div class="stay-tag-texts">
-                  <span class="stay-tag-code">{CHECKIN_ONLINE_PIN}</span>
-                  <span class="stay-tag-desc">PIN check-in online</span>
-                </div>
-              </div>
-              <input type="text" id="stayPinInput" class="stay-tag-val-input" value="${m.checkinPin}" onchange="confirmBookingLinkChange()" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Lingua dei messaggi -->
-        <div class="gs-pms-subblock">
-          <div class="gs-pms-subhead-inline">
-            <span style="color:#2E54E8;display:inline-flex;">${ICONS.languages}</span>
-            <span class="gs-pms-subtitle">Lingua dei messaggi</span>
-          </div>
-          <select id="stayLangSelect" class="stay-select-input white" onchange="setOutboundLanguage(this.value)">
-            <option value="${conv.langCode}" selected>Come scrive l'ospite — ${conv.langName.toLowerCase()}</option>
-            <option value="IT">Italiano</option>
-            <option value="PL">Polacco</option>
-            <option value="ES">Spagnolo</option>
-            <option value="EN">Inglese</option>
-            <option value="DE">Tedesco</option>
-            <option value="FR">Francese</option>
-          </select>
-        </div>
-
-        <!-- Dati della prenotazione (Beddy / PMS) -->
-        <div class="gs-pms-subblock">
-          <div class="gs-pms-subhead">
-            <span class="gs-pms-subtitle">Dati della prenotazione (Beddy PMS)</span>
-            <span class="stay-sec-sync-note">${syncIconSm} <span>sincronizzati automaticamente</span></span>
-          </div>
-
-          <div class="gs-pms-form-grid">
-            <div class="stay-field">
-              <label>Nome ${syncIconSm}</label>
-              <input type="text" id="stayFirstNameInput" value="${firstName}" />
-            </div>
-            <div class="stay-field">
-              <label>Cognome ${syncIconSm}</label>
-              <input type="text" id="stayLastNameInput" value="${lastName}" />
-            </div>
-            <div class="stay-field">
-              <label>Check-in ${syncIconSm}</label>
-              <input type="text" value="${m.checkinFull}" />
-            </div>
-            <div class="stay-field">
-              <label>Check-out ${syncIconSm}</label>
-              <input type="text" value="${m.checkoutFull}" />
-            </div>
-            <div class="stay-field">
-              <label>Alloggio ${syncIconSm}</label>
-              <input type="text" value="${conv.stay.room}" onchange="conv.stay.room=this.value;renderThread();renderSiderAI();" />
-            </div>
-            <div class="stay-field">
-              <label>Canale</label>
-              <input type="text" value="${conv.channel}" readonly />
-            </div>
-          </div>
-
-          <button type="button" class="gs-pms-save-btn" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;" onclick="confirmBookingLinkChange()">
-            ${ICONS.save14}
-            <span>Salva dati PMS</span>
-          </button>
-        </div>
       </div>
 
     </div>
@@ -8756,9 +8815,46 @@ function toggleDesktopSider(collapse) {
   state.siderCollapsed = typeof collapse === 'boolean' ? collapse : !state.siderCollapsed;
   renderSiderAI();
   if (state.siderCollapsed) {
-    showToast('Pannello Dettagli ospite chiuso (clicca ⋮ in alto a destra per riaprirlo)');
+    showToast('Pannello Dettagli ospite chiuso');
   }
 }
+
+function toggleHeaderMoreMenu(event, which) {
+  if (event) event.stopPropagation();
+  const deskMenu = document.getElementById('hdrMoreDropdownDesk');
+  const mobMenu = document.getElementById('hdrMoreDropdownMob');
+  const deskBtn = document.getElementById('btnMoreMenuDesk');
+  const mobBtn = document.getElementById('btnMoreMenuMob');
+
+  if (which === 'desk' && deskMenu) {
+    const isOpen = deskMenu.classList.contains('open');
+    closeHeaderMoreMenu();
+    if (!isOpen) {
+      deskMenu.classList.add('open');
+      deskBtn?.classList.add('active');
+    }
+  } else if (which === 'mob' && mobMenu) {
+    const isOpen = mobMenu.classList.contains('open');
+    closeHeaderMoreMenu();
+    if (!isOpen) {
+      mobMenu.classList.add('open');
+      mobBtn?.classList.add('active');
+    }
+  }
+}
+
+function closeHeaderMoreMenu() {
+  document.getElementById('hdrMoreDropdownDesk')?.classList.remove('open');
+  document.getElementById('hdrMoreDropdownMob')?.classList.remove('open');
+  document.getElementById('btnMoreMenuDesk')?.classList.remove('active');
+  document.getElementById('btnMoreMenuMob')?.classList.remove('active');
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.hdr-more-wrap')) {
+    closeHeaderMoreMenu();
+  }
+});
 
 function editGuestPreferences() {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
@@ -8772,23 +8868,155 @@ function editGuestPreferences() {
 }
 
 function openStayDetailsModal() {
-  state.siderCollapsed = false;
-  renderSiderAI();
-  if (window.innerWidth < 900) {
-    setMobileTab('ai');
-  } else {
-    const pmsEl = document.getElementById('gsPmsSection');
-    pmsEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-  showToast('Dettagli ospite e PMS aperti nel pannello destro');
+  openEditGuestPmsModal();
 }
 
-function confirmBookingLinkChange() {
+function openEditGuestPmsModal() {
+  const modal = document.getElementById('modalBackdrop');
+  const content = document.getElementById('modalContent');
+  if (!modal || !content) return;
+
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const cleanName = conv.name.replace('↳ ', '').replace(/\s*\(.*?\)\s*/g, '').trim();
+  const nameParts = cleanName.split(' ');
+  const firstName = nameParts.slice(0, -1).join(' ') || nameParts[0] || 'Ospite';
+  const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+  const m = getConvPmsMeta(conv);
+  const syncIconSm = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`;
+
+  content.className = 'modal-card pms-edit-modal';
+  content.innerHTML = `
+    <div class="pms-modal-close-bar">
+      <span class="pms-modal-top-label">Modifica dati ospite & PMS</span>
+      <button type="button" class="faq-close-btn" onclick="closeModal()" aria-label="Chiudi">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="gs-card gs-pms-card pms-modal-inner-card" id="gsPmsSection">
+      <div class="gs-pms-head">
+        <div class="gs-pms-title-row">
+          <span style="color:#2563EB;display:inline-flex;">${ICONS.link14}</span>
+          <span class="gs-pms-title">Aggancio prenotazione PMS</span>
+          <span class="stay-pms-verified-pill">${ICONS.check} ${conv.stay.bookingCode}</span>
+        </div>
+        <button type="button" class="gs-sync-mini-btn" onclick="triggerHubSync();showToast('Dati prenotazione sincronizzati dal PMS')">
+          ${syncIconSm}
+          <span>Aggiorna</span>
+        </button>
+      </div>
+
+      <select id="pmsBookingSelect" class="stay-select-input" onchange="confirmBookingLinkChange(false)">
+        <option value="${conv.stay.bookingCode}" selected>${conv.stay.bookingCode} — ${cleanName} (${conv.stay.room} · ${conv.stay.dates})</option>
+        <option value="#DEMO-1052">#DEMO-1052 — Adam Nowak (Suite 18 · 11/10–14/10 Estensione)</option>
+        <option value="#BKG-8821">#BKG-8821 — Maria Camila Villamizar (Junior Suite 08 · 29/10–02/11)</option>
+      </select>
+
+      <!-- Accessi e Tag Dinamici PMS -->
+      <div class="gs-pms-subblock">
+        <div class="gs-pms-subhead">
+          <span class="gs-pms-subtitle" style="display:inline-flex;align-items:center;gap:5px;"><span style="color:#2563EB;display:inline-flex;">${ICONS.key13}</span> <span>Accessi e tag PMS</span></span>
+          <span class="gs-pms-subhint">Clicca sul tag per inserirlo nel messaggio</span>
+        </div>
+
+        <div class="stay-tags-card">
+          <div class="stay-tag-row">
+            <div class="stay-tag-left" onclick="insertTagPMS('${m.nukiCode}');closeModal();" title="Inserisci codice Nuki nel messaggio">
+              <span class="stay-copy-icon">${ICONS.copy}</span>
+              <div class="stay-tag-texts">
+                <span class="stay-tag-code">{CODICE_NUKI}</span>
+                <span class="stay-tag-desc">Codice SmartLock Nuki</span>
+              </div>
+            </div>
+            <input type="text" id="stayNukiInput" class="stay-tag-val-input" value="${m.nukiCode}" />
+          </div>
+
+          <div class="stay-tag-row">
+            <div class="stay-tag-left" onclick="insertTagPMS('${m.checkinPin}');closeModal();" title="Inserisci PIN check-in online nel messaggio">
+              <span class="stay-copy-icon">${ICONS.copy}</span>
+              <div class="stay-tag-texts">
+                <span class="stay-tag-code">{CHECKIN_ONLINE_PIN}</span>
+                <span class="stay-tag-desc">PIN check-in online</span>
+              </div>
+            </div>
+            <input type="text" id="stayPinInput" class="stay-tag-val-input" value="${m.checkinPin}" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Lingua dei messaggi -->
+      <div class="gs-pms-subblock">
+        <div class="gs-pms-subhead-inline">
+          <span style="color:#2E54E8;display:inline-flex;">${ICONS.languages}</span>
+          <span class="gs-pms-subtitle">Lingua dei messaggi</span>
+        </div>
+        <select id="stayLangSelect" class="stay-select-input white" onchange="setOutboundLanguage(this.value)">
+          <option value="${conv.langCode}" selected>Come scrive l'ospite — ${conv.langName.toLowerCase()}</option>
+          <option value="IT">Italiano</option>
+          <option value="PL">Polacco</option>
+          <option value="ES">Spagnolo</option>
+          <option value="EN">Inglese</option>
+          <option value="DE">Tedesco</option>
+          <option value="FR">Francese</option>
+        </select>
+      </div>
+
+      <!-- Dati della prenotazione (Beddy / PMS) -->
+      <div class="gs-pms-subblock">
+        <div class="gs-pms-subhead">
+          <span class="gs-pms-subtitle">Dati della prenotazione (Beddy PMS)</span>
+          <span class="stay-sec-sync-note">${syncIconSm} <span>sincronizzati automaticamente</span></span>
+        </div>
+
+        <div class="gs-pms-form-grid">
+          <div class="stay-field">
+            <label>Nome ${syncIconSm}</label>
+            <input type="text" id="stayFirstNameInput" value="${firstName}" />
+          </div>
+          <div class="stay-field">
+            <label>Cognome ${syncIconSm}</label>
+            <input type="text" id="stayLastNameInput" value="${lastName}" />
+          </div>
+          <div class="stay-field">
+            <label>Check-in ${syncIconSm}</label>
+            <input type="text" id="stayCheckinInput" value="${m.checkinFull}" />
+          </div>
+          <div class="stay-field">
+            <label>Check-out ${syncIconSm}</label>
+            <input type="text" id="stayCheckoutInput" value="${m.checkoutFull}" />
+          </div>
+          <div class="stay-field">
+            <label>Alloggio ${syncIconSm}</label>
+            <input type="text" id="stayRoomInput" value="${conv.stay.room}" />
+          </div>
+          <div class="stay-field">
+            <label>Canale</label>
+            <input type="text" value="${conv.channel}" readonly />
+          </div>
+        </div>
+
+        <button type="button" class="gs-pms-save-btn" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;" onclick="confirmBookingLinkChange(true)">
+          ${ICONS.save14}
+          <span>Salva dati PMS</span>
+        </button>
+      </div>
+    </div>
+  `;
+  modal.classList.add('open');
+}
+
+function confirmBookingLinkChange(shouldClose = true) {
   const sel = document.getElementById('pmsBookingSelect');
   const langEl = document.getElementById('stayLangSelect');
   const phoneEl = document.getElementById('stayPhoneInput');
   const nukiEl = document.getElementById('stayNukiInput');
   const pinEl = document.getElementById('stayPinInput');
+  const firstEl = document.getElementById('stayFirstNameInput');
+  const lastEl = document.getElementById('stayLastNameInput');
+  const checkinEl = document.getElementById('stayCheckinInput');
+  const checkoutEl = document.getElementById('stayCheckoutInput');
+  const roomEl = document.getElementById('stayRoomInput');
+
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
   if (sel && sel.value) {
     conv.stay.bookingCode = sel.value;
@@ -8801,11 +9029,90 @@ function confirmBookingLinkChange() {
   if (phoneEl && phoneEl.value.trim()) conv.stay.phone = phoneEl.value.trim();
   if (nukiEl && nukiEl.value.trim()) conv.stay.nukiCode = nukiEl.value.trim();
   if (pinEl && pinEl.value.trim()) conv.stay.checkinPin = pinEl.value.trim();
+  if (firstEl || lastEl) {
+    const newFull = [firstEl?.value.trim(), lastEl?.value.trim()].filter(Boolean).join(' ');
+    if (newFull) {
+      const prefix = conv.name.startsWith('↳ ') ? '↳ ' : '';
+      conv.name = prefix + newFull;
+    }
+  }
+  if (checkinEl && checkinEl.value.trim()) conv.stay.checkinFull = checkinEl.value.trim();
+  if (checkoutEl && checkoutEl.value.trim()) conv.stay.checkoutFull = checkoutEl.value.trim();
+  if (roomEl && roomEl.value.trim()) conv.stay.room = roomEl.value.trim();
 
-  closeModal();
+  if (shouldClose) closeModal();
+  renderConversationLists();
   renderThread();
   renderSiderAI();
-  showToast(`Scheda soggiorno e aggancio PMS (${conv.stay.bookingCode}) salvati`);
+  showToast(`Dati ospite e aggancio PMS (${conv.stay.bookingCode}) salvati`);
+}
+
+function openGenerateReviewModal() {
+  const modal = document.getElementById('modalBackdrop');
+  const content = document.getElementById('modalContent');
+  if (!modal || !content) return;
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const cleanName = conv.name.replace('↳ ', '').replace(/\s*\(.*?\)\s*/g, '').trim();
+  const reviewText = `Ospite esemplare! ${cleanName} ha lasciato l'alloggio (${conv.stay.room}) in condizioni perfette, rispettando tutte le regole della casa e comunicando sempre con grande cortesia. Consigliatissimo a tutta la community!`;
+
+  content.className = 'modal-card';
+  content.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #E2E8F0;padding-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#FACC15" stroke="#EAB308" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#0F172A;">Genera recensione ospite con AI</div>
+          <div style="font-size:12px;color:#64748B;">${cleanName} · ${conv.stay.room} (${conv.channel})</div>
+        </div>
+      </div>
+      <button type="button" class="faq-close-btn" onclick="closeModal()" aria-label="Chiudi">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;padding:6px 0;">
+      <div style="display:flex;align-items:center;gap:4px;font-size:12.5px;font-weight:600;color:#0F172A;">
+        <span>Valutazione suggerita:</span>
+        <span style="color:#EAB308;letter-spacing:1px;">★★★★★</span>
+        <span style="font-size:11.5px;color:#16A34A;font-weight:700;margin-left:4px;">5.0 / 5</span>
+      </div>
+      <textarea id="aiGuestReviewText" style="width:100%;min-height:92px;padding:10px 12px;border:1px solid #CBD5E1;border-radius:10px;font-family:inherit;font-size:13px;line-height:1.45;color:#1E293B;resize:vertical;">${reviewText}</textarea>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;gap:8px;">
+      <button type="button" class="btn-correggi-aggancio" style="height:36px;padding:0 14px;" onclick="navigator.clipboard?.writeText(document.getElementById('aiGuestReviewText')?.value||'');showToast('Recensione copiata negli appunti')">Copia testo</button>
+      <button type="button" class="gs-pms-save-btn" style="width:auto;height:36px;padding:0 16px;margin:0;" onclick="closeModal();showToast('Recensione 5★ inviata su ' + '${conv.channel}')">Pubblica recensione</button>
+    </div>
+  `;
+  modal.classList.add('open');
+}
+
+function archiveCurrentConversation() {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  conv.folder = 'archiviate';
+  conv.phaseLabel = 'Archiviata';
+  conv.phaseClass = 'archiviata';
+  renderConversationLists();
+  renderThread();
+  renderSiderAI();
+  showToast(`Conversazione con ${conv.name.replace('↳ ', '')} archiviata`);
+}
+
+function deleteCurrentConversation() {
+  const idx = CONVERSATIONS.findIndex(c => c.id === state.selectedConvId);
+  if (idx === -1) return;
+  const conv = CONVERSATIONS[idx];
+  const cleanName = conv.name.replace('↳ ', '');
+  if (CONVERSATIONS.length <= 1) {
+    showToast('Impossibile eliminare l\'unica conversazione attiva nella demo');
+    return;
+  }
+  CONVERSATIONS.splice(idx, 1);
+  state.selectedConvId = CONVERSATIONS[0].id;
+  renderConversationLists();
+  renderThread();
+  renderSiderAI();
+  showToast(`Conversazione con ${cleanName} eliminata`);
 }
 
 function openNewConvModal() {
