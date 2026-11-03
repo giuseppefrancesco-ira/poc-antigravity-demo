@@ -62,11 +62,14 @@ const ICONS = {
   link14: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`,
   key13: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>`,
   save14: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>`,
-  bookingIcon: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>`
+  bookingIcon: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>`,
+  checkCircle15: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="9 12 11 14 15 10"/></svg>`,
+  check13: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
 };
 
 // State
 const state = {
+  msgRead: {},
   composerExpanded: true, // true = modalità espansa, false = modalità ridotta a pillola
   siderCopilotOpen: false, // toggle pannello AI Copilot nel sider destro
   siderCollapsed: false,   // eventuale chiusura/riapertura sider destro
@@ -565,6 +568,7 @@ function renderThread() {
         <button class="btn-msg-action copy" onclick="copyThreadMessage('host')" title="Copia messaggio" aria-label="Copia messaggio">
           ${ICONS.copy}
         </button>
+        ${renderMsgReadAction(conv, 'host')}
         <button class="btn-msg-action delete" onclick="deleteThreadMessage('host')" title="Elimina messaggio" aria-label="Elimina messaggio">
           ${ICONS.trash}
         </button>
@@ -613,6 +617,7 @@ function renderThread() {
         <button class="btn-msg-action copy" onclick="copyThreadMessage('guest')" title="Copia messaggio" aria-label="Copia messaggio">
           ${ICONS.copy}
         </button>
+        ${renderMsgReadAction(conv, 'guest')}
         <button class="btn-msg-action delete" onclick="deleteThreadMessage('guest')" title="Elimina messaggio" aria-label="Elimina messaggio">
           ${ICONS.trash}
         </button>
@@ -664,6 +669,7 @@ function renderThread() {
         <button class="btn-msg-action copy" onclick="copyThreadMessage('sched')" title="Copia messaggio" aria-label="Copia messaggio">
           ${ICONS.copy}
         </button>
+        ${renderMsgReadAction(conv, 'sched')}
         <button class="btn-msg-action delete" onclick="deleteThreadMessage('sched')" title="Elimina messaggio" aria-label="Elimina messaggio">
           ${ICONS.trash}
         </button>
@@ -1936,6 +1942,44 @@ function toggleGuestTrad() {
 function toggleSchedTrad() {
   state.schedTradOpen = !state.schedTradOpen;
   renderThread();
+}
+
+function isMsgRead(conv, type) {
+  const key = `${conv.id}_${type}`;
+  if (typeof state.msgRead[key] === 'boolean') return state.msgRead[key];
+  if (type === 'host') return true;
+  if (type === 'guest') return !conv.dagestire;
+  return false;
+}
+
+function renderMsgReadAction(conv, type) {
+  const read = isMsgRead(conv, type);
+  if (read) {
+    return `
+      <button type="button" class="btn-msg-action read-pill" onclick="toggleMsgRead('${type}')" title="Segna come non letto" aria-label="Letto">
+        ${ICONS.check13}
+        <span>Letto</span>
+      </button>
+    `;
+  }
+  return `
+    <button type="button" class="btn-msg-action read-toggle" onclick="toggleMsgRead('${type}')" title="Segna come letto" aria-label="Segna come letto">
+      ${ICONS.checkCircle15}
+    </button>
+  `;
+}
+
+function toggleMsgRead(type) {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const key = `${conv.id}_${type}`;
+  const nextVal = !isMsgRead(conv, type);
+  state.msgRead[key] = nextVal;
+  if (type === 'guest') {
+    conv.dagestire = !nextVal;
+    renderConversationLists();
+  }
+  renderThread();
+  showToast(nextVal ? 'Messaggio segnato come letto' : 'Messaggio segnato come da leggere');
 }
 
 function copyThreadMessage(type) {

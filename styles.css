@@ -1168,14 +1168,14 @@ button, input, textarea {
 .msg-bottom-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   margin-top: 2px;
 }
 
 .btn-msg-action {
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
   border: none;
   background: transparent;
   display: inline-flex;
@@ -1187,7 +1187,8 @@ button, input, textarea {
 }
 
 .btn-msg-action.copy {
-  color: #64748B;
+  background: #F1F5F9;
+  color: #475569;
 }
 
 .btn-msg-action.copy:hover {
@@ -1195,7 +1196,35 @@ button, input, textarea {
   color: #334155;
 }
 
+.btn-msg-action.read-toggle {
+  background: #DCFCE7;
+  color: #15803D;
+}
+
+.btn-msg-action.read-toggle:hover {
+  background: #BBF7D0;
+  color: #166534;
+}
+
+.btn-msg-action.read-pill {
+  width: auto;
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 6px;
+  background: #ECFDF5;
+  color: #15803D;
+  font-size: 12px;
+  font-weight: 500;
+  gap: 5px;
+}
+
+.btn-msg-action.read-pill:hover {
+  background: #DCFCE7;
+  color: #166534;
+}
+
 .btn-msg-action.delete {
+  background: #FEF2F2;
   color: #EF4444;
 }
 
