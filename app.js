@@ -414,7 +414,7 @@ function renderConversationLists() {
             ${c.positivo ? `<span class="pill checkin">${ICONS.smile} Positivo</span>` : ''}
           </div>
           <div class="conv-prev">${prevHtml}</div>
-          ${c.dagestire ? `<div class="conv-attesa-row"><span class="pill-attesa-risposta">IN ATTESA DI RISPOSTA</span></div>` : ''}
+          ${c.dagestire ? `<div class="conv-attesa-row"><span class="pill-attesa-risposta">DA GESTIRE</span></div>` : ''}
         </div>
       </div>
     `;
