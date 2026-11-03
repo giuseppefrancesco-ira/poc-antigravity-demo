@@ -4626,6 +4626,7 @@ button, input, textarea {
 
 /* --- COLLAPSED PILL BAR (1:1 WITH SCREENSHOT 2) --- */
 .bc-collapsed {
+  position: relative;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 999px;
@@ -6392,6 +6393,287 @@ button, input, textarea {
   margin: 0;
   box-shadow: none;
 }
+
+/* =========================================================================
+   TRANSLATION PREVIEW & LIVE EDIT TOOLTIP (.bc-trans-popover)
+   ========================================================================= */
+.bc-lang-pill {
+  font-family: inherit;
+  outline: none;
+}
+
+.bc-lang-pill.has-text {
+  background: #EFF6FF;
+  border-color: #93C5FD;
+}
+
+.bc-lang-pill.active {
+  background: #DBEAFE;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.16);
+}
+
+.bc-lang-pill.is-edited {
+  background: #EEF2FF;
+  border-color: #818CF8;
+}
+
+.bc-lang-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2563EB;
+  display: inline-block;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.18);
+}
+
+.bc-lang-status-dot.edited {
+  background: #4F46E5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.22);
+}
+
+.bc-chevron-blue {
+  transition: transform 0.18s ease;
+}
+
+.bc-chevron-blue.open {
+  transform: rotate(180deg);
+}
+
+.bc-trans-popover {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 8px;
+  width: min(390px, calc(100vw - 28px));
+  background: #FFFFFF;
+  border: 1px solid #BFDBFE;
+  border-radius: 14px;
+  box-shadow: 0 14px 32px -4px rgba(15, 23, 42, 0.16), 0 4px 12px -2px rgba(37, 99, 235, 0.08);
+  padding: 12px;
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  animation: bcTransFadeIn 0.15s ease-out;
+}
+
+.bc-trans-popover::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  right: 68px;
+  width: 11px;
+  height: 11px;
+  background: #FFFFFF;
+  border-right: 1px solid #BFDBFE;
+  border-bottom: 1px solid #BFDBFE;
+  transform: rotate(45deg);
+}
+
+@keyframes bcTransFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bc-trans-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.bc-trans-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.bc-trans-flag {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.bc-trans-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0F172A;
+  white-space: nowrap;
+}
+
+.bc-trans-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.bc-trans-badge.auto {
+  background: #EFF6FF;
+  color: #2563EB;
+  border: 1px solid #BFDBFE;
+}
+
+.bc-trans-badge.edited {
+  background: #EEF2FF;
+  color: #4F46E5;
+  border: 1px solid #C7D2FE;
+}
+
+.bc-trans-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.bc-trans-reset-btn {
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 6px;
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  color: #475569;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.bc-trans-reset-btn:hover {
+  background: #EFF6FF;
+  border-color: #BFDBFE;
+  color: #2563EB;
+}
+
+.bc-trans-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.bc-trans-textarea {
+  width: 100%;
+  min-height: 76px;
+  max-height: 160px;
+  padding: 9px 11px;
+  border-radius: 10px;
+  border: 1px solid #CBD5E1;
+  background: #F8FAFC;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 1.48;
+  color: #0F172A;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.bc-trans-textarea:focus {
+  background: #FFFFFF;
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.bc-trans-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 2px;
+}
+
+.bc-trans-hint {
+  font-size: 11px;
+  color: #64748B;
+  line-height: 1.3;
+}
+
+.bc-trans-confirm-btn {
+  height: 28px;
+  padding: 0 11px;
+  border-radius: 8px;
+  border: none;
+  background: #2563EB;
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.bc-trans-confirm-btn:hover {
+  background: #1D4ED8;
+}
+
+.bc-trans-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 4px 2px 2px 2px;
+}
+
+.bc-trans-empty-text {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #475569;
+}
+
+.bc-trans-demo-btn {
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 8px;
+  border: 1px solid #BFDBFE;
+  background: #EFF6FF;
+  color: #2563EB;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.bc-trans-demo-btn:hover {
+  background: #DBEAFE;
+  border-color: #93C5FD;
+}
+
+.bottom-composer-wrap.mobile .bc-trans-popover {
+  right: 0;
+  left: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
 
 
 

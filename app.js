@@ -77,6 +77,8 @@ const state = {
   bcTagsOpen: false,
   bcToneOpen: false,
   bcMoreOpen: false,
+  bcTransOpen: false,
+  customTranslations: {},
   mpSearchQuery: '',
   mpActiveCategory: 'Tutti',
   draftOpen: false,      // false = vuoto iniziale, true = bozza attiva
@@ -1025,11 +1027,28 @@ function renderBottomComposer() {
     .map(m => `<option value="${m}" ${state.schedMin === m ? 'selected' : ''}>${m}</option>`).join('');
 
   let html = '';
+  const transPopoverHtml = state.bcTransOpen ? renderTranslationPopoverHtml(conv, draftVal, hasText) : '';
+  const isCustomTrans = Boolean(hasText && state.customTranslations && state.customTranslations[conv.id]);
+  const langPillHtml = `
+    <button
+      type="button"
+      class="bc-lang-pill ${hasText ? 'has-text' : ''} ${state.bcTransOpen ? 'active' : ''} ${isCustomTrans ? 'is-edited' : ''}"
+      onclick="toggleTranslationPopover(event)"
+      title="${hasText ? `Clicca per vedere e modificare la traduzione in ${conv.langName}` : `Anteprima traduzione in ${conv.langName}`}"
+      aria-label="Traduzione in ${conv.langName}"
+    >
+      <span class="bc-lang-flag">${getLangFlagSvg(conv.langCode)}</span>
+      <span class="bc-lang-name">${conv.langName}</span>
+      ${hasText ? `<span class="bc-lang-status-dot ${isCustomTrans ? 'edited' : ''}" title="${isCustomTrans ? 'Traduzione modificata manualmente' : 'Traduzione pronta'}"></span>` : ''}
+      <span class="bc-chevron-blue ${state.bcTransOpen ? 'open' : ''}">${ICONS.chevronDown}</span>
+    </button>
+  `;
 
   if (!state.composerExpanded) {
     // COLLAPSED MODE (selettore canale e lingua a sinistra di Invia; 2 righe mobile-first su schermi mobile)
     html = `
       <div class="bc-collapsed">
+        ${transPopoverHtml}
         <div class="bc-collapsed-input-row">
           <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
             ${ICONS.paperclip16}
@@ -1069,19 +1088,7 @@ function renderBottomComposer() {
           </div>
 
           <!-- Language Pill (left of Invia) -->
-          <div class="bc-lang-pill" title="Lingua di traduzione automatica in uscita">
-            <span class="bc-lang-flag">${getLangFlagSvg(conv.langCode)}</span>
-            <span class="bc-lang-name">${conv.langName}</span>
-            <span class="bc-chevron-blue">${ICONS.chevronDown}</span>
-            <select class="bc-select-overlay" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
-              <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
-              <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
-              <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
-              <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
-              <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
-              <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
-            </select>
-          </div>
+          ${langPillHtml}
 
           <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()" title="Invia" aria-label="Invia">
             ${ICONS.sendHoriz}
@@ -1094,6 +1101,7 @@ function renderBottomComposer() {
     html = `
       <div class="bc-expanded">
         <!-- Popovers anchored above the composer -->
+        ${transPopoverHtml}
         ${state.bcMoreOpen ? `
           <div class="bc-floating-popover more-pop">
             <div class="bc-pop-header">
@@ -1320,19 +1328,7 @@ function renderBottomComposer() {
               </div>
 
               <!-- Language Pill (in basso a sinistra di Invia) -->
-              <div class="bc-lang-pill" title="Lingua di traduzione automatica in uscita">
-                <span class="bc-lang-flag">${getLangFlagSvg(conv.langCode)}</span>
-                <span class="bc-lang-name">${conv.langName}</span>
-                <span class="bc-chevron-blue">${ICONS.chevronDown}</span>
-                <select class="bc-select-overlay" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
-                  <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
-                  <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
-                  <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
-                  <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
-                  <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
-                  <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
-                </select>
-              </div>
+              ${langPillHtml}
 
               <button type="button" class="bc-send-btn expanded ${hasText ? 'ready' : ''}" onclick="sendReplyNow()" title="Invia" aria-label="Invia">
                 ${ICONS.sendHoriz}
@@ -1364,6 +1360,261 @@ function autoResizeTextarea(el) {
 
 function autoResizeAllDraftTextareas() {
   document.querySelectorAll('.testo-bozza-it').forEach(autoResizeTextarea);
+}
+
+function translateDraftToLang(italianText, langCode, conv) {
+  const raw = (italianText || '').trim();
+  if (!raw) return '';
+  const firstName = (conv?.name || 'Adam').replace('↳ ', '').split(' ')[0];
+  const room = conv?.stay?.room || 'Suite 14';
+  const nuki = conv?.stay?.nukiCode || '000000';
+
+  if (langCode === 'IT') return raw;
+
+  const norm = raw.toLowerCase();
+
+  // Risposte note (AI / parcheggio / check-in / wifi)
+  if (norm.includes('posto auto') || norm.includes('parcheggio') || norm.includes('garage')) {
+    const isDiscount = norm.includes('10€');
+    const price = isDiscount ? '10€' : '15€';
+    if (langCode === 'PL') {
+      return `Cześć ${firstName}! Potwierdzam, że kryte miejsce parkingowe nr 14 (zarezerwowane dla ${room}) jest dostępne w naszym wewnętrznym garażu w cenie ${price}/doba. Wjazd otworzysz bezpośrednio swoim kodem Nuki ${nuki}. Daj znać, jeśli chcesz je zarezerwować!`;
+    }
+    if (langCode === 'EN') {
+      return `Hi ${firstName}! I can confirm that covered parking spot #14 (reserved for ${room}) is available in our indoor garage for ${price}/night. You can open the gate directly with your Nuki code ${nuki}. Let me know if you'd like to book it!`;
+    }
+    if (langCode === 'ES') {
+      return `¡Hola ${firstName}! Te confirmo que la plaza de parking cubierta n.º 14 (reservada para la ${room}) está disponible en nuestro garaje interior por ${price}/noche. Puedes abrir el acceso directamente con tu código Nuki ${nuki}. ¡Avísame si deseas confirmarla!`;
+    }
+    if (langCode === 'DE') {
+      return `Hallo ${firstName}! Ich bestätige dir gerne, dass der überdachte Parkplatz Nr. 14 (reserviert für ${room}) in unserer Tiefgarage für ${price}/Nacht verfügbar ist. Du kannst die Einfahrt direkt mit deinem Nuki-Code ${nuki} öffnen.`;
+    }
+    if (langCode === 'FR') {
+      return `Bonjour ${firstName} ! Je vous confirme que la place de parking couverte n° 14 (réservée pour la ${room}) est disponible dans notre garage intérieur à ${price}/nuit. Vous pouvez ouvrir l'accès avec votre code Nuki ${nuki}.`;
+    }
+  }
+
+  if (norm.includes('wi-fi') || norm.includes('wifi') || norm.includes('colazione')) {
+    if (langCode === 'PL') {
+      return `Cześć ${firstName}! Oto dane Wi-Fi dla Twojego apartamentu (${room}): sieć "CasaAurora_Guest", hasło "AuroraGuest2026". Przypominamy również, że śniadanie serwowane jest w godzinach 07:00–10:30 na parterze.`;
+    }
+    if (langCode === 'EN') {
+      return `Hi ${firstName}! Here are the Wi-Fi credentials for your ${room}: network "CasaAurora_Guest", password "AuroraGuest2026". Breakfast is served from 07:00 to 10:30 in the ground floor lounge.`;
+    }
+    if (langCode === 'ES') {
+      return `¡Hola ${firstName}! Aquí tienes las credenciales Wi-Fi para tu ${room}: red "CasaAurora_Guest", contraseña "AuroraGuest2026". El desayuno se sirve de 07:00 a 10:30 en la planta baja.`;
+    }
+  }
+
+  if (norm.includes('check-out') || norm.includes('checkout') || norm.includes('11:00')) {
+    if (langCode === 'PL') {
+      return `Cześć ${firstName}, przypominamy, że wymeldowanie dla ${room} odbywa się do godziny 11:00. Możesz zostawić kartę na stole w pokoju, a przechowalnia bagażu na parterze jest bezpłatna przez cały dzień!`;
+    }
+    if (langCode === 'EN') {
+      return `Hi ${firstName}, just a friendly reminder that check-out for ${room} is by 11:00 AM. You can leave the key card on the table inside the room; luggage storage on the ground floor is free all day!`;
+    }
+    if (langCode === 'ES') {
+      return `Hola ${firstName}, te recordamos que el check-out para la ${room} es hasta las 11:00. Puedes dejar la llave sobre la mesa; ¡la consigna de equipaje en planta baja es gratuita todo el día!`;
+    }
+  }
+
+  // Traduzione dinamica frasi libere digitate dall'utente nel composer
+  if (langCode === 'PL') {
+    let pl = raw
+      .replace(/\bciao\b/gi, 'Cześć')
+      .replace(/\bbuongiorno\b/gi, 'Dzień dobry')
+      .replace(/\bbuonasera\b/gi, 'Dobry wieczór')
+      .replace(/\bgrazie mille\b/gi, 'bardzo dziękuję')
+      .replace(/\bgrazie\b/gi, 'dziękuję')
+      .replace(/\bprego\b/gi, 'proszę bardzo')
+      .replace(/\bsì\b|\bsi\b/gi, 'tak')
+      .replace(/\bno\b/gi, 'nie')
+      .replace(/\bconfermo\b/gi, 'potwierdzam')
+      .replace(/\bdisponibile\b/gi, 'dostępne')
+      .replace(/\ba notte\b/gi, 'za dobę')
+      .replace(/\bcamera\b/gi, 'pokój')
+      .replace(/\bappartamento\b/gi, 'apartament')
+      .replace(/\bcodice\b/gi, 'kod')
+      .replace(/\ba presto\b/gi, 'do zobaczenia wkrótce')
+      .replace(/\bbuon soggiorno\b/gi, 'miłego pobytu');
+    if (pl === raw) {
+      return `Cześć ${firstName}! ${raw} (tłumaczenie PL)`;
+    }
+    return pl;
+  }
+
+  if (langCode === 'EN') {
+    let en = raw
+      .replace(/\bciao\b/gi, 'Hi')
+      .replace(/\bbuongiorno\b/gi, 'Good morning')
+      .replace(/\bbuonasera\b/gi, 'Good evening')
+      .replace(/\bgrazie mille\b/gi, 'thank you very much')
+      .replace(/\bgrazie\b/gi, 'thank you')
+      .replace(/\bconfermo\b/gi, 'I confirm')
+      .replace(/\bdisponibile\b/gi, 'available')
+      .replace(/\ba notte\b/gi, 'per night');
+    return en === raw ? `Hi ${firstName}! ${raw}` : en;
+  }
+
+  if (langCode === 'ES') {
+    let es = raw
+      .replace(/\bciao\b/gi, 'Hola')
+      .replace(/\bbuongiorno\b/gi, 'Buenos días')
+      .replace(/\bbuonasera\b/gi, 'Buenas tardes')
+      .replace(/\bgrazie\b/gi, 'gracias')
+      .replace(/\bconfermo\b/gi, 'confirmo')
+      .replace(/\bdisponibile\b/gi, 'disponible');
+    return es === raw ? `¡Hola ${firstName}! ${raw}` : es;
+  }
+
+  if (langCode === 'DE') {
+    return `Hallo ${firstName}! ${raw}`;
+  }
+
+  if (langCode === 'FR') {
+    return `Bonjour ${firstName} ! ${raw}`;
+  }
+
+  return raw;
+}
+
+function getEffectiveTranslatedDraft(conv, draftVal) {
+  const custom = state.customTranslations && state.customTranslations[conv.id];
+  if (typeof custom === 'string' && custom.trim().length > 0) {
+    return custom;
+  }
+  return translateDraftToLang(draftVal, conv.langCode, conv);
+}
+
+function renderTranslationPopoverHtml(conv, draftVal, hasText) {
+  const isCustom = Boolean(hasText && state.customTranslations && state.customTranslations[conv.id]);
+  const translatedText = hasText ? getEffectiveTranslatedDraft(conv, draftVal) : '';
+
+  return `
+    <div class="bc-trans-popover" onclick="event.stopPropagation()">
+      <div class="bc-trans-header">
+        <div class="bc-trans-title-wrap">
+          <span class="bc-trans-flag">${getLangFlagSvg(conv.langCode)}</span>
+          <span class="bc-trans-title">Traduzione in ${conv.langName}</span>
+          ${hasText ? `
+            <span class="bc-trans-badge ${isCustom ? 'edited' : 'auto'}" id="bcTransStatusBadge">
+              ${isCustom ? '✏️ Modificata' : `${ICONS.sparkles12} Auto AI`}
+            </span>
+          ` : ''}
+        </div>
+        <div class="bc-trans-header-actions">
+          ${hasText ? `
+            <button type="button" class="bc-trans-reset-btn" id="bcTransResetBtn" onclick="resetCustomTranslation(event)" title="Rigenera traduzione automatica AI" style="${isCustom ? '' : 'display:none;'}">
+              ${ICONS.refresh}
+              <span>Rigenera</span>
+            </button>
+          ` : ''}
+          <button type="button" class="bc-pop-close" onclick="toggleTranslationPopover(event, false)" title="Chiudi" aria-label="Chiudi">
+            ${ICONS.close12}
+          </button>
+        </div>
+      </div>
+
+      ${hasText ? `
+        <div class="bc-trans-body">
+          <textarea
+            id="bcTransTextarea"
+            class="bc-trans-textarea"
+            rows="3"
+            placeholder="Scrivi o modifica la traduzione in ${conv.langName}..."
+            oninput="updateCustomTranslation(this.value)"
+          >${translatedText}</textarea>
+        </div>
+        <div class="bc-trans-footer">
+          <span class="bc-trans-hint">L'ospite riceverà questo testo · clicca dentro per modificarlo</span>
+          <button type="button" class="bc-trans-confirm-btn" onclick="toggleTranslationPopover(event, false)">
+            ${ICONS.check12}
+            <span>Conferma</span>
+          </button>
+        </div>
+      ` : `
+        <div class="bc-trans-empty">
+          <p class="bc-trans-empty-text">Scrivi un messaggio nel campo qui sotto per vedere e modificare in tempo reale la traduzione in <strong>${conv.langName}</strong>.</p>
+          <button type="button" class="bc-trans-demo-btn" onclick="fillSampleDraftForTranslation(event)">
+            ${ICONS.sparkles12}
+            <span>Prova con un testo di esempio</span>
+          </button>
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function toggleTranslationPopover(event, forceState) {
+  if (event) event.stopPropagation();
+  const next = typeof forceState === 'boolean' ? forceState : !state.bcTransOpen;
+  state.bcTransOpen = next;
+  if (next) {
+    state.bcTemplateOpen = false;
+    state.bcTagsOpen = false;
+    state.bcToneOpen = false;
+    state.bcMoreOpen = false;
+    state.schedulePopoverOpen = false;
+  }
+  renderBottomComposer();
+  if (next) {
+    setTimeout(() => {
+      const ta = document.getElementById('bcTransTextarea');
+      if (ta) {
+        ta.focus();
+        ta.setSelectionRange(ta.value.length, ta.value.length);
+      }
+    }, 40);
+  }
+}
+
+function updateCustomTranslation(val) {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  state.customTranslations = state.customTranslations || {};
+  state.customTranslations[conv.id] = val;
+
+  // Aggiorna badge e pill senza perdere il focus della textarea
+  const badge = document.getElementById('bcTransStatusBadge');
+  if (badge) {
+    badge.className = 'bc-trans-badge edited';
+    badge.innerHTML = '✏️ Modificata';
+  }
+  const resetBtn = document.getElementById('bcTransResetBtn');
+  if (resetBtn) {
+    resetBtn.style.display = 'inline-flex';
+  }
+  document.querySelectorAll('.bc-lang-pill').forEach(pill => {
+    pill.classList.add('is-edited');
+    const dot = pill.querySelector('.bc-lang-status-dot');
+    if (dot) dot.classList.add('edited');
+  });
+}
+
+function resetCustomTranslation(event) {
+  if (event) event.stopPropagation();
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  if (state.customTranslations) {
+    delete state.customTranslations[conv.id];
+  }
+  renderBottomComposer();
+  showToast(`Traduzione in ${conv.langName} rigenerata con AI`);
+}
+
+function fillSampleDraftForTranslation(event) {
+  if (event) event.stopPropagation();
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const firstName = conv.name.replace('↳ ', '').split(' ')[0];
+  const sampleIt = `Ciao ${firstName}! Ti confermo che il posto auto coperto #14 è riservato per la tua ${conv.stay?.room || 'Suite 14'} a 15€ a notte. Puoi accedere con il codice Nuki ${conv.stay?.nukiCode || '000000'}.`;
+  state.draftOpen = true;
+  state.drafts[conv.id] = sampleIt;
+  if (state.customTranslations) delete state.customTranslations[conv.id];
+  state.bcTransOpen = true;
+  renderConversationLists();
+  renderBottomComposer();
+  setTimeout(() => {
+    const ta = document.getElementById('bcTransTextarea');
+    if (ta) ta.focus();
+  }, 40);
 }
 
 // =========================================================================
@@ -1398,17 +1649,73 @@ function toggleBcPopover(which) {
   state.bcTagsOpen = which === 'tags' ? !state.bcTagsOpen : false;
   state.bcToneOpen = which === 'tone' ? !state.bcToneOpen : false;
   state.bcMoreOpen = which === 'more' ? !state.bcMoreOpen : false;
-  if (which) state.schedulePopoverOpen = false;
+  if (which) {
+    state.schedulePopoverOpen = false;
+    state.bcTransOpen = false;
+  }
   renderBottomComposer();
+}
+
+function syncLiveTranslationUI(val) {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const hasText = val.trim().length > 0;
+
+  // Se l'utente modifica il testo italiano originale, riallinea la traduzione AI
+  if (state.customTranslations && state.customTranslations[conv.id]) {
+    delete state.customTranslations[conv.id];
+  }
+
+  document.querySelectorAll('.bc-send-btn').forEach(btn => {
+    btn.classList.toggle('ready', hasText);
+  });
+
+  document.querySelectorAll('.bc-lang-pill').forEach(pill => {
+    pill.classList.toggle('has-text', hasText);
+    pill.classList.remove('is-edited');
+    let dot = pill.querySelector('.bc-lang-status-dot');
+    if (hasText && !dot) {
+      dot = document.createElement('span');
+      dot.className = 'bc-lang-status-dot';
+      dot.title = 'Traduzione pronta';
+      const chev = pill.querySelector('.bc-chevron-blue');
+      if (chev) pill.insertBefore(dot, chev);
+      else pill.appendChild(dot);
+    } else if (!hasText && dot) {
+      dot.remove();
+    } else if (dot) {
+      dot.classList.remove('edited');
+    }
+  });
+
+  if (state.bcTransOpen) {
+    const transTa = document.getElementById('bcTransTextarea');
+    if (hasText && transTa) {
+      transTa.value = translateDraftToLang(val, conv.langCode, conv);
+      const badge = document.getElementById('bcTransStatusBadge');
+      if (badge) {
+        badge.className = 'bc-trans-badge auto';
+        badge.innerHTML = `${ICONS.sparkles12} Auto AI`;
+      }
+      const resetBtn = document.getElementById('bcTransResetBtn');
+      if (resetBtn) resetBtn.style.display = 'none';
+    } else {
+      // Passaggio tra stato vuoto e stato con testo mentre il tooltip è aperto
+      document.querySelectorAll('.bc-trans-popover').forEach(pop => {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = renderTranslationPopoverHtml(conv, val, hasText).trim();
+        if (wrapper.firstElementChild) {
+          pop.replaceWith(wrapper.firstElementChild);
+        }
+      });
+    }
+  }
 }
 
 function handleComposerInput(val, el) {
   state.draftOpen = val.trim().length > 0;
   state.drafts[state.selectedConvId] = val;
   renderConversationLists();
-  document.querySelectorAll('.bc-send-btn').forEach(btn => {
-    btn.classList.toggle('ready', val.trim().length > 0);
-  });
+  syncLiveTranslationUI(val);
 }
 
 function triggerVoiceDictation() {
@@ -1499,6 +1806,7 @@ function closeDraftEditor() {
   state.bcTagsOpen = false;
   state.bcToneOpen = false;
   state.bcMoreOpen = false;
+  state.bcTransOpen = false;
   renderConversationLists();
   renderSiderAI();
 }
@@ -1523,6 +1831,7 @@ function setMobileTab(tab) {
 
 function selectConversation(id) {
   state.selectedConvId = id;
+  state.bcTransOpen = false;
   const conv = CONVERSATIONS.find(c => c.id === id);
   if (conv) {
     state.outboundChannel = conv.channel;
@@ -1538,6 +1847,7 @@ function cycleVariant() {
   const v = state.variants[state.activeVariantIdx];
   state.activeTone = v.tone;
   state.drafts[state.selectedConvId] = v.text;
+  if (state.customTranslations) delete state.customTranslations[state.selectedConvId];
   renderConversationLists();
   renderSiderAI();
   showToast(`Variante ${state.activeVariantIdx + 1} di 3 (${v.tone})`);
@@ -1547,6 +1857,7 @@ function selectTone(tone, idx) {
   state.activeTone = tone;
   state.activeVariantIdx = idx;
   state.drafts[state.selectedConvId] = state.variants[idx].text;
+  if (state.customTranslations) delete state.customTranslations[state.selectedConvId];
   renderConversationLists();
   renderSiderAI();
   showToast(`Tono impostato su: ${tone}`);
@@ -1557,14 +1868,17 @@ function improveDraftText() {
   state.draftOpen = true;
   state.promptMode = false;
   state.drafts[state.selectedConvId] = `Ciao Adam! Ti confermo con piacere che il posto auto coperto n. 14 (riservato alla Suite 14) è disponibile nel nostro garage interno a 15€/notte. L'accesso è già abilitato con il tuo codice Nuki 000000. Fammi sapere se desideri confermarlo!`;
+  if (state.customTranslations) delete state.customTranslations[state.selectedConvId];
   renderConversationLists();
   renderSiderAI();
   showToast('Testo migliorato con AI e pronto per l\'invio');
 }
 
 function updateDraftText(val, el) {
+  state.draftOpen = val.trim().length > 0;
   state.drafts[state.selectedConvId] = val;
   renderConversationLists();
+  syncLiveTranslationUI(val);
   if (el) {
     autoResizeTextarea(el);
   } else {
@@ -1961,6 +2275,7 @@ function setOutboundLanguage(langCode) {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
   conv.langCode = langCode;
   conv.langName = LANG_LABELS[langCode] || 'Inglese';
+  if (state.customTranslations) delete state.customTranslations[conv.id];
   renderThread();
   renderSiderAI();
   showToast(`Lingua di invio impostata su: ${conv.langName}`);
@@ -2109,6 +2424,10 @@ function closeHeaderMoreMenu() {
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.hdr-more-wrap')) {
     closeHeaderMoreMenu();
+  }
+  if (state.bcTransOpen && !e.target.closest('.bc-trans-popover') && !e.target.closest('.bc-lang-pill')) {
+    state.bcTransOpen = false;
+    renderBottomComposer();
   }
 });
 
