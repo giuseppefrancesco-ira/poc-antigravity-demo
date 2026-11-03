@@ -902,30 +902,49 @@ function renderSiderAI() {
         </div>
       </div>
 
-      <!-- 2. Griglia 4 Box KPI (CHECK-IN, CHECK-OUT, CAMERA, OSPITI) -->
-      <div class="gs-kpi-grid">
-        <div class="gs-kpi-box">
-          <span class="gs-kpi-label">CHECK-IN</span>
-          <span class="gs-kpi-value">${m.checkin}</span>
+      <!-- 2. Riepilogo Soggiorno (5 elementi ottimizzati con Camera a larghezza piena) -->
+      <div class="gs-stay-summary">
+        <div class="gs-kpi-grid-3">
+          <div class="gs-kpi-box">
+            <span class="gs-kpi-label">CHECK-IN</span>
+            <span class="gs-kpi-value">${m.checkin}</span>
+          </div>
+          <div class="gs-kpi-box">
+            <span class="gs-kpi-label">CHECK-OUT</span>
+            <span class="gs-kpi-value">${m.checkout}</span>
+          </div>
+          <div class="gs-kpi-box">
+            <span class="gs-kpi-label">OSPITI</span>
+            <span class="gs-kpi-value">${m.guestsShort}</span>
+          </div>
         </div>
-        <div class="gs-kpi-box">
-          <span class="gs-kpi-label">CHECK-OUT</span>
-          <span class="gs-kpi-value">${m.checkout}</span>
-        </div>
-        <div class="gs-kpi-box">
-          <span class="gs-kpi-label">CAMERA</span>
-          <span class="gs-kpi-value">${conv.stay.room}</span>
-        </div>
-        <div class="gs-kpi-box">
-          <span class="gs-kpi-label">OSPITI</span>
-          <span class="gs-kpi-value">${m.guestsShort}</span>
-        </div>
-      </div>
 
-      <!-- 3. Barra Trattamento & Prezzo -->
-      <div class="gs-treatment-bar">
-        <span class="gs-treatment-text" style="display:inline-flex;align-items:center;gap:6px;"><span style="color:#64748B;display:inline-flex;">${ICONS.utensils14}</span> <span>Trattamento: <strong>${m.treatment}</strong></span></span>
-        <span class="gs-treatment-price">${m.price}</span>
+        <div class="gs-room-bar">
+          <div class="gs-room-icon-box">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>
+            </svg>
+          </div>
+          <div class="gs-room-content">
+            <span class="gs-kpi-label">CAMERA / ALLOGGIO</span>
+            <span class="gs-room-value">${conv.stay.room} · ${conv.propertyLabel || 'Casa Aurora (Appartamento Superior)'}</span>
+          </div>
+        </div>
+
+        <!-- 3. Barra Trattamento & Prezzo -->
+        <div class="gs-treatment-bar">
+          <div class="gs-treatment-left">
+            <span class="gs-treatment-icon">${ICONS.utensils14}</span>
+            <div class="gs-treatment-texts">
+              <span class="gs-kpi-label">TRATTAMENTO</span>
+              <span class="gs-treatment-val">${m.treatment}</span>
+            </div>
+          </div>
+          <div class="gs-treatment-right">
+            <span class="gs-kpi-label" style="text-align:right;">TOTALE</span>
+            <span class="gs-treatment-price">${m.price}</span>
+          </div>
+        </div>
       </div>
 
       <!-- 5. Card Note Turno & Handover -->

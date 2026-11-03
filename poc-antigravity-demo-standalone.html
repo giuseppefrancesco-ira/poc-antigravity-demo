@@ -5368,116 +5368,147 @@ button, input, textarea {
   font-weight: 500;
 }
 
-/* 4 KPI Boxes */
-.gs-kpi-grid {
+/* Riepilogo Soggiorno (5 elementi ottimizzati) */
+.gs-stay-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gs-kpi-grid-3 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
 
 .gs-kpi-box {
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  padding: 11px 6px;
+  border-radius: 12px;
+  padding: 10px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 4px;
+  gap: 3px;
 }
 
 .gs-kpi-label {
   font-size: 9.5px;
-  font-weight: 600;
+  font-weight: 700;
   color: #64748B;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  line-height: 1.2;
 }
 
 .gs-kpi-value {
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 700;
   color: #0F172A;
   line-height: 1.25;
+  white-space: nowrap;
 }
 
-/* Preferenze ospite */
-.gs-pref-card {
-  background: #FFF5F7;
-  border: 1px solid #FCE7F3;
-  border-radius: 16px;
-  padding: 14px 16px;
+/* Box Camera a larghezza piena (supporta testi lunghi su più righe) */
+.gs-room-bar {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 10px 14px;
   display: flex;
-  flex-direction: column;
-  gap: 7px;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
+  align-items: flex-start;
+  gap: 10px;
 }
 
-.gs-pref-card:hover {
-  background: #FDF2F8;
-  border-color: #FBCFE8;
-}
-
-.gs-pref-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.gs-pref-title-wrap {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.gs-pref-title {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: #9D174D;
-}
-
-.gs-pref-chevron {
+.gs-room-icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #EFF6FF;
+  color: #2563EB;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
 }
 
-.gs-pref-body {
+.gs-room-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.gs-room-value {
   font-size: 12.5px;
-  color: #334155;
-  line-height: 1.45;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.38;
+  word-break: break-word;
 }
 
 /* Trattamento & Price Bar */
 .gs-treatment-bar {
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  padding: 13px 16px;
+  border-radius: 12px;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
 
-.gs-treatment-text {
-  font-size: 12.5px;
-  color: #475569;
+.gs-treatment-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
 }
 
-.gs-treatment-text strong {
-  color: #0F172A;
+.gs-treatment-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #F1F5F9;
+  color: #475569;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gs-treatment-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.gs-treatment-val {
+  font-size: 12.5px;
   font-weight: 700;
+  color: #0F172A;
+  line-height: 1.25;
+}
+
+.gs-treatment-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  flex-shrink: 0;
 }
 
 .gs-treatment-price {
   font-size: 15px;
   font-weight: 800;
   color: #2563EB;
+  line-height: 1.2;
 }
 
 /* Note Turno & Handover */
@@ -6937,30 +6968,49 @@ function renderSiderAI() {
         </div>
       </div>
 
-      <!-- 2. Griglia 4 Box KPI (CHECK-IN, CHECK-OUT, CAMERA, OSPITI) -->
-      <div class="gs-kpi-grid">
-        <div class="gs-kpi-box">
-          <span class="gs-kpi-label">CHECK-IN</span>
-          <span class="gs-kpi-value">${m.checkin}</span>
+      <!-- 2. Riepilogo Soggiorno (5 elementi ottimizzati con Camera a larghezza piena) -->
+      <div class="gs-stay-summary">
+        <div class="gs-kpi-grid-3">
+          <div class="gs-kpi-box">
+            <span class="gs-kpi-label">CHECK-IN</span>
+            <span class="gs-kpi-value">${m.checkin}</span>
+          </div>
+          <div class="gs-kpi-box">
+            <span class="gs-kpi-label">CHECK-OUT</span>
+            <span class="gs-kpi-value">${m.checkout}</span>
+          </div>
+          <div class="gs-kpi-box">
+            <span class="gs-kpi-label">OSPITI</span>
+            <span class="gs-kpi-value">${m.guestsShort}</span>
+          </div>
         </div>
-        <div class="gs-kpi-box">
-          <span class="gs-kpi-label">CHECK-OUT</span>
-          <span class="gs-kpi-value">${m.checkout}</span>
-        </div>
-        <div class="gs-kpi-box">
-          <span class="gs-kpi-label">CAMERA</span>
-          <span class="gs-kpi-value">${conv.stay.room}</span>
-        </div>
-        <div class="gs-kpi-box">
-          <span class="gs-kpi-label">OSPITI</span>
-          <span class="gs-kpi-value">${m.guestsShort}</span>
-        </div>
-      </div>
 
-      <!-- 3. Barra Trattamento & Prezzo -->
-      <div class="gs-treatment-bar">
-        <span class="gs-treatment-text" style="display:inline-flex;align-items:center;gap:6px;"><span style="color:#64748B;display:inline-flex;">${ICONS.utensils14}</span> <span>Trattamento: <strong>${m.treatment}</strong></span></span>
-        <span class="gs-treatment-price">${m.price}</span>
+        <div class="gs-room-bar">
+          <div class="gs-room-icon-box">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>
+            </svg>
+          </div>
+          <div class="gs-room-content">
+            <span class="gs-kpi-label">CAMERA / ALLOGGIO</span>
+            <span class="gs-room-value">${conv.stay.room} · ${conv.propertyLabel || 'Casa Aurora (Appartamento Superior)'}</span>
+          </div>
+        </div>
+
+        <!-- 3. Barra Trattamento & Prezzo -->
+        <div class="gs-treatment-bar">
+          <div class="gs-treatment-left">
+            <span class="gs-treatment-icon">${ICONS.utensils14}</span>
+            <div class="gs-treatment-texts">
+              <span class="gs-kpi-label">TRATTAMENTO</span>
+              <span class="gs-treatment-val">${m.treatment}</span>
+            </div>
+          </div>
+          <div class="gs-treatment-right">
+            <span class="gs-kpi-label" style="text-align:right;">TOTALE</span>
+            <span class="gs-treatment-price">${m.price}</span>
+          </div>
+        </div>
       </div>
 
       <!-- 5. Card Note Turno & Handover -->
