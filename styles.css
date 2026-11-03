@@ -3961,6 +3961,597 @@ button, input, textarea {
   background: #1D4ED8;
 }
 
+/* =========================================================
+   BOTTOM MESSAGING COMPOSER (EXPANDED & COLLAPSED MODES 1:1)
+   ========================================================= */
+.bottom-composer-wrap {
+  padding: 12px 18px 16px 18px;
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 20;
+}
+
+.bottom-composer-wrap.mobile {
+  padding: 10px 12px 12px 12px;
+}
+
+/* --- EXPANDED CARD --- */
+.bc-expanded {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.bc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid #F1F5F9;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bc-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bc-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bc-WaitSparkle {
+  color: #2563EB;
+  display: inline-flex;
+  align-items: center;
+}
+
+.bc-title-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+/* Language Pill: [DE Tedesco (ON) v] */
+.bc-lang-pill {
+  position: relative;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #F0F6FF;
+  border: 1px solid #BFDBFE;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.bc-lang-pill:hover {
+  background: #E0EEFF;
+  border-color: #93C5FD;
+}
+
+.bc-lang-code {
+  font-size: 10px;
+  font-weight: 800;
+  color: #1D4ED8;
+  letter-spacing: 0.02em;
+}
+
+.bc-lang-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #2563EB;
+}
+
+.bc-lang-on {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #3B82F6;
+}
+
+.bc-chevron-blue {
+  color: #2563EB;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 1px;
+}
+
+/* Channel Pill: [(green WA) Whatsapp v] */
+.bc-channel-pill {
+  position: relative;
+  height: 28px;
+  padding: 0 10px 0 4px;
+  border-radius: 999px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.bc-channel-pill:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+.bc-ch-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #FFFFFF;
+  font-size: 9.5px;
+  font-weight: 800;
+}
+
+.bc-ch-circle.whatsapp {
+  background: #22C55E;
+}
+
+.bc-ch-circle.airbnb {
+  background: #FF385C;
+}
+
+.bc-ch-circle.booking {
+  background: #003580;
+}
+
+.bc-ch-circle.email {
+  background: #0284C7;
+}
+
+.bc-ch-circle.note {
+  background: #4F46E5;
+}
+
+.bc-channel-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.bc-chevron-muted {
+  color: #94A3B8;
+  display: inline-flex;
+  align-items: center;
+}
+
+.bc-select-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.bc-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bc-collapse-btn {
+  border: none;
+  background: transparent;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.bc-collapse-btn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+/* --- MIDDLE BODY --- */
+.bc-body {
+  padding: 12px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bc-textarea {
+  width: 100%;
+  min-height: 54px;
+  max-height: 150px;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #0F172A;
+  padding: 0;
+}
+
+.bc-textarea::placeholder {
+  color: #94A3B8;
+  font-weight: 400;
+}
+
+.bc-attached-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1E293B;
+  align-self: flex-start;
+}
+
+.bc-attached-remove {
+  border: none;
+  background: transparent;
+  color: #94A3B8;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.bc-ai-feedback-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 6px;
+  border-top: 1px dashed #E2E8F0;
+  font-size: 11.5px;
+  color: #64748B;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bc-ai-rate-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bc-kb-inline-btn {
+  border: none;
+  background: transparent;
+  color: #2563EB;
+  font-size: 11.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.bc-kb-inline-btn:hover {
+  background: #EFF6FF;
+}
+
+/* --- BOTTOM TOOLBAR --- */
+.bc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  border-top: 1px solid #F1F5F9;
+  gap: 10px;
+}
+
+.bc-tools-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.bc-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #64748B;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.bc-icon-btn:hover,
+.bc-icon-btn.active {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+.bc-pill-btn {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.bc-pill-btn.template {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  color: #1E293B;
+}
+
+.bc-pill-btn.template:hover,
+.bc-pill-btn.template.active {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+.bc-pill-btn.ai-tone {
+  background: #FAF5FF;
+  border: 1px solid #E9D5FF;
+  color: #7E22CE;
+  font-weight: 700;
+}
+
+.bc-pill-btn.ai-tone svg {
+  stroke: #7E22CE;
+}
+
+.bc-pill-btn.ai-tone:hover,
+.bc-pill-btn.ai-tone.active {
+  background: #F3E8FF;
+  border-color: #D8B4FE;
+}
+
+/* Send Button */
+.bc-send-btn {
+  height: 34px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: none;
+  font-size: 12.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.bc-send-btn.expanded {
+  background: #F1F5F9;
+  color: #94A3B8;
+}
+
+.bc-send-btn.expanded.ready,
+.bc-send-btn.expanded:hover {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+
+/* --- COLLAPSED PILL BAR (1:1 WITH SCREENSHOT 2) --- */
+.bc-collapsed {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 999px;
+  height: 50px;
+  padding: 0 8px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+}
+
+.bc-collapsed-input {
+  flex: 1;
+  min-width: 100px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  color: #0F172A;
+  padding: 0 4px;
+}
+
+.bc-collapsed-input::placeholder {
+  color: #94A3B8;
+}
+
+.bc-expand-btn {
+  border: none;
+  background: transparent;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.bc-expand-btn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+.bc-send-btn.collapsed {
+  height: 36px;
+  padding: 0 16px;
+  background: #93C5FD;
+  color: #FFFFFF;
+}
+
+.bc-send-btn.collapsed.ready,
+.bc-send-btn.collapsed:hover {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+
+/* --- FLOATING POPOVERS ABOVE COMPOSER --- */
+.bc-floating-popover {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 14px;
+  width: 310px;
+  max-width: calc(100vw - 40px);
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+  padding: 10px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bc-floating-popover.schedule-pop {
+  width: 320px;
+  left: auto;
+  right: 14px;
+}
+
+.bc-pop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 6px 6px 6px;
+  border-bottom: 1px solid #F1F5F9;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.bc-pop-close {
+  border: none;
+  background: transparent;
+  color: #94A3B8;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.bc-pop-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bc-pop-item {
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1E293B;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.bc-pop-item:hover {
+  background: #F8FAFC;
+}
+
+.bc-pop-item.highlight-ai {
+  background: #EEF2FF;
+  color: #2E54E8;
+  font-weight: 600;
+}
+
+.bc-pop-item.highlight-sky {
+  background: #F0F9FF;
+  color: #0284C7;
+  font-weight: 600;
+}
+
+.bc-pop-divider {
+  height: 1px;
+  background: #F1F5F9;
+  margin: 4px 0;
+}
+
+.bc-pop-sublabel {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  padding: 2px 6px;
+}
+
+.bc-tone-pills-row {
+  display: flex;
+  gap: 6px;
+  padding: 2px 4px 4px 4px;
+}
+
+.bc-tone-chip {
+  flex: 1;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  color: #334155;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bc-tone-chip.active,
+.bc-tone-chip:hover {
+  background: #FAF5FF;
+  border-color: #D8B4FE;
+  color: #7E22CE;
+}
+
+
 
 
 

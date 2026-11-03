@@ -41,12 +41,23 @@ const ICONS = {
   info: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
   user: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
   user10: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
-  spinner16: `<svg class="spin-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`
+  spinner16: `<svg class="spin-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`,
+  sendHoriz: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 3 3 9-3 9 19-9Z"/><path d="M6 12h16"/></svg>`,
+  expandDiag: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`,
+  moreHoriz: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>`,
+  smile16: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`,
+  paperclip16: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>`,
+  docTemplate14: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
+  mic16: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>`
 };
 
 // State
 const state = {
-  draftOpen: false,      // false = bottoni iniziali, true = editor bozza attivo
+  composerExpanded: true, // true = modalità espansa, false = modalità ridotta a pillola
+  bcTemplateOpen: false,
+  bcToneOpen: false,
+  bcMoreOpen: false,
+  draftOpen: false,      // false = vuoto iniziale, true = bozza attiva
   promptMode: false,     // true = vista "Scrivi prompt / Istruzione" attiva
   promptGenerating: false,
   promptText: '',
@@ -67,7 +78,7 @@ const state = {
   schedDay: 2,
   schedMonthLabel: 'Novembre 2026',
   schedPreset: null,
-  outboundChannel: 'Airbnb',
+  outboundChannel: 'WhatsApp',
   playingAudio: false,
   hostTradOpen: false,
   guestTradOpen: true,
@@ -699,6 +710,19 @@ function renderSiderAI() {
 
           <div class="div-card"></div>
 
+          <div style="display:flex;gap:6px;">
+            <button class="btn-gen primary" style="height:34px;font-size:12px;flex:1;" onclick="openDraftEditor()">
+              ${ICONS.sparkles16}
+              <span>Genera risposta AI</span>
+            </button>
+            <button class="btn-gen sky" style="height:34px;font-size:12px;flex:1;" onclick="openPromptMode()">
+              ${ICONS.pencil}
+              <span>Scrivi prompt / Istruzione</span>
+            </button>
+          </div>
+
+          <div class="div-card"></div>
+
           <div class="riga-autonomia">
             <div class="autonomia-meta">
               <span class="badge-autonomia-pct">AI 94%</span>
@@ -721,7 +745,7 @@ function renderSiderAI() {
         <div class="icon-badge sm amber">${ICONS.zap16}</div>
         <div class="sec-texts">
           <div class="sec-title">MESSAGGI PRONTI</div>
-          <div class="sec-sub">Tocca una risposta per aggiungerla all'editor</div>
+          <div class="sec-sub">Tocca una risposta per aggiungerla al composer</div>
         </div>
         <span class="pill-conferma" style="height:22px;padding:0 8px;color:#9A5B06;">20</span>
         <span style="color:#9A5B06;display:inline-flex;">${state.acc_mp ? ICONS.chevronUp : ICONS.chevronDown16}</span>
@@ -754,7 +778,7 @@ function renderSiderAI() {
     </div>
 
     <!-- 3. Sezione Tag Disponibili (Dropdown Richiudibile) -->
-    <div class="sider-section">
+    <div class="sider-section" style="border-bottom:1px solid #E2E8F0;">
       <div class="sider-sec-header" onclick="toggleAccordion('tags')">
         <div class="icon-badge sm sky">${ICONS.bookOpen}</div>
         <div class="sec-texts">
@@ -775,380 +799,441 @@ function renderSiderAI() {
         </div>
       ` : ''}
     </div>
-
-    <!-- 4. Sezione Modifica Risposta / Nota Manuale -->
-    <div class="sezione-modifica" style="${!state.acc_modifica ? 'flex:0;border-bottom:1px solid #E2E8F0;' : ''}">
-      <div class="header-modifica">
-        <div class="header-modifica-title" onclick="toggleAccordion('modifica')" title="Apri / Chiudi sezione Composer">
-          <span style="color:${isNoteMode ? '#4F46E5' : (state.draftOpen ? '#2E54E8' : '#64748B')};display:inline-flex;flex-shrink:0;">${isNoteMode ? ICONS.fileText : ICONS.pencil}</span>
-          <span class="lbl-modifica">${headerTitleLabel}</span>
-          ${isNoteMode ? `<span class="info-nota-icon" title="Registra nella conversazione ciò che è successo fuori dai canali collegati (es. telefonata o accordo di persona)" onclick="event.stopPropagation();showToast('Nota manuale: registra telefonate o accordi presi di persona nella timeline della chat')">${ICONS.info}</span>` : ''}
-        </div>
-
-        ${state.acc_modifica && state.draftOpen && !isNoteMode ? `
-          <div class="selettore-varianti" onclick="cycleVariant()" title="Cambia alternativa AI">
-            <span style="color:#64748B;">‹</span>
-            <span>Variante ${state.activeVariantIdx + 1} di 3</span>
-            <span style="color:#64748B;">›</span>
-          </div>
-        ` : ''}
-
-        <span class="chevron-modifica" onclick="toggleAccordion('modifica')" title="Espandi / Comprimi sezione">
-          ${state.acc_modifica ? ICONS.chevronUp : ICONS.chevronDown16}
-        </span>
-      </div>
-
-      ${state.acc_modifica ? `
-        <div class="composer-mode-bar">
-          <div class="composer-mode-switch">
-            <button class="cm-tab ${!isNoteMode ? 'active-reply' : ''}" onclick="setComposerMode('reply')">
-              ${ICONS.send}
-              <span>Risposta ospite</span>
-            </button>
-            <button class="cm-tab ${isNoteMode ? 'active-note' : ''}" onclick="setComposerMode('note')">
-              ${ICONS.fileText}
-              <span>Nota manuale</span>
-            </button>
-          </div>
-        </div>
-      ` : ''}
-
-      ${state.acc_modifica ? (
-        isNoteMode ? `
-          <!-- Stato Editor Nota Manuale (Fuori canale) -->
-          <div class="barra-toni">
-            <div class="toni-left">
-              <button class="btn-tono note-pill ${state.noteType === 'Telefonata' ? 'active' : ''}" onclick="selectNoteType('Telefonata')">Telefonata</button>
-              <button class="btn-tono note-pill ${state.noteType === 'Di persona' ? 'active' : ''}" onclick="selectNoteType('Di persona')">Di persona</button>
-              <button class="btn-tono note-pill ${state.noteType === 'Nota staff' ? 'active' : ''}" onclick="selectNoteType('Nota staff')">Nota staff</button>
-            </div>
-          </div>
-
-          <div class="card-editor-doppia note-mode">
-            <div class="blocco-italiano note-mode">
-              <textarea class="testo-bozza-it note-mode" id="noteTextarea" placeholder="Registra qui cosa è stato detto al telefono o concordato di persona..." oninput="updateNoteDraftText(this.value, this)">${state.noteDraftText}</textarea>
-            </div>
-
-            <div class="barra-allegati-editor" style="padding:10px 14px;gap:8px;">
-              ${state.attachedFile ? `
-                <div class="card-file-allegato">
-                  <div style="display:flex;align-items:center;gap:8px;">
-                    <span style="color:#4F46E5;display:inline-flex;">${ICONS.paperclip}</span>
-                    <span style="font-size:12px;font-weight:600;color:#1E293B;">${state.attachedFile}</span>
-                  </div>
-                  <span style="font-size:14px;font-weight:700;color:#94A3B8;cursor:pointer;" onclick="toggleAttachFile()">×</span>
-                </div>
-              ` : ''}
-
-              <div class="riga-vocale-allegati">
-                <button class="btn-half" style="height:32px;background:#FFFFFF;flex:1;" onclick="toggleAttachFile()">
-                  ${ICONS.paperclip}
-                  <span>${state.attachedFile ? 'Cambia file' : 'Allega file'}</span>
-                </button>
-                <button class="btn-half" style="height:32px;background:#FFFFFF;flex:1;" onclick="triggerOcrExtract()" title="Estrai testo da documento o ricevuta">
-                  ${ICONS.scanText}
-                  <span>Estrai da foto (OCR)</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        ` : state.promptMode && !state.draftOpen ? `
-          <!-- Stato Prompt / Istruzione Iniziale (da "Scrivi prompt / Istruzione") -->
-          <div class="box-prompt-mode">
-            <div class="prompt-mode-banner">
-              Scrivi un'istruzione breve e l'AI prepara il messaggio finale nello stile configurato.
-            </div>
-
-            <textarea
-              class="prompt-mode-textarea"
-              id="initialPromptTextarea"
-              placeholder="Scrivi qui l'istruzione (es. conferma posto auto #14 a 15€/notte)..."
-              oninput="state.promptText = this.value"
-              ${state.promptGenerating ? 'disabled' : ''}
-            >${state.promptText || ''}</textarea>
-
-            <div class="prompt-mode-actions">
-              <button
-                type="button"
-                class="btn-prompt-generate ${state.promptGenerating ? 'loading' : ''}"
-                onclick="generateFromPromptMode()"
-                ${state.promptGenerating ? 'disabled' : ''}
-              >
-                ${state.promptGenerating ? ICONS.spinner16 : ICONS.sparkles16}
-                <span>Genera da prompt</span>
-              </button>
-              <button
-                type="button"
-                class="btn-prompt-cancel"
-                onclick="cancelPromptMode()"
-                ${state.promptGenerating ? 'disabled' : ''}
-              >
-                Annulla
-              </button>
-            </div>
-          </div>
-        ` : !state.draftOpen ? `
-          <!-- Stato Iniziale: Bottoni di generazione / scrittura -->
-          <div class="box-azioni-gen">
-            <div class="icon-badge indigo">${ICONS.sparkles16}</div>
-            <div class="desc-gen">Genera una risposta AI basata sul messaggio dell'ospite</div>
-
-            <button class="btn-gen primary" onclick="openDraftEditor()">
-              ${ICONS.sparkles16}
-              <span>Genera risposta AI</span>
-            </button>
-
-            <button class="btn-gen sky" onclick="openPromptMode()">
-              ${ICONS.pencil}
-              <span>Scrivi prompt / Istruzione</span>
-            </button>
-
-            <button class="btn-gen outline" onclick="openDraftEditor(false, true)">
-              ${ICONS.pencil}
-              <span>Scrivi manualmente</span>
-            </button>
-
-            <div class="riga-vocale-allegati">
-              <button class="btn-half" style="flex:1;" onclick="toggleAttachFile();openDraftEditor()">
-                ${ICONS.paperclip}
-                <span>Allega file</span>
-              </button>
-              <button class="btn-half" style="flex:1;" onclick="triggerOcrExtract()" title="Estrai testo da screenshot / foto ospite">
-                ${ICONS.scanText}
-                <span>Estrai da foto (OCR)</span>
-              </button>
-            </div>
-          </div>
-        ` : `
-          <!-- Stato Editor Bozza Attivo -->
-          <div class="card-editor-doppia">
-            <div class="blocco-italiano">
-              <textarea class="testo-bozza-it" id="draftTextarea" oninput="updateDraftText(this.value, this)">${currentDraft}</textarea>
-
-              <div class="riga-fonti-kb">
-                <span class="txt-fonte-kb">${state.aiRating === 'up' ? 'Risposta AI valutata utile' : state.aiRating === 'down' ? 'Risposta AI segnalata da migliorare' : 'Valuta risposta AI'}</span>
-                <div class="kb-actions-right">
-                  <button class="btn-rate-ai rate-up ${state.aiRating === 'up' ? 'active' : ''}" onclick="rateAiSuggestion('up')" title="Risposta AI utile">${ICONS.thumbsUp}</button>
-                  <button class="btn-rate-ai rate-down ${state.aiRating === 'down' ? 'active' : ''}" onclick="rateAiSuggestion('down')" title="Segnala risposta AI da migliorare">${ICONS.thumbsDown}</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="barra-allegati-editor" style="padding:10px 14px;gap:8px;">
-              ${state.attachedFile ? `
-                <div class="card-file-allegato">
-                  <div style="display:flex;align-items:center;gap:8px;">
-                    <span style="color:#2E54E8;display:inline-flex;">${ICONS.paperclip}</span>
-                    <span style="font-size:12px;font-weight:600;color:#1E293B;">${state.attachedFile}</span>
-                  </div>
-                  <span style="font-size:14px;font-weight:700;color:#94A3B8;cursor:pointer;" onclick="toggleAttachFile()">×</span>
-                </div>
-              ` : ''}
-
-              <div class="riga-vocale-allegati">
-                <button class="btn-half" style="height:32px;background:#FFFFFF;flex:1;" onclick="toggleAttachFile()">
-                  ${ICONS.paperclip}
-                  <span>${state.attachedFile ? 'Cambia file' : 'Allega file'}</span>
-                </button>
-                <button class="btn-half" style="height:32px;background:#FFFFFF;flex:1;" onclick="triggerOcrExtract()" title="Estrai testo da screenshot / foto ospite">
-                  ${ICONS.scanText}
-                  <span>Estrai da foto (OCR)</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="barra-prompt-ai">
-            <span class="prompt-ai-icon">${ICONS.sparkles16}</span>
-            <input type="text" id="freePromptInput" placeholder="Istruzione AI (es. offri sconto 5€)..." onkeydown="if(event.key==='Enter')applyFreePrompt()" />
-            <button class="btn-rigenera" onclick="applyFreePrompt()">
-              <span>Rigenera</span>
-            </button>
-          </div>
-
-          <div class="barra-salva-kb ${state.saveToKb ? 'active' : ''}" onclick="openCreateKbModal()">
-            <div class="salva-kb-left">
-              <span class="salva-kb-icon">${ICONS.bookmarkPlus}</span>
-              <span>${state.saveToKb ? 'FAQ salvata in Knowledge Base' : 'Crea / Aggiorna FAQ in KB'}</span>
-            </div>
-            <span style="font-size:11px;font-weight:600;color:${state.saveToKb ? '#15803D' : '#2E54E8'};display:inline-flex;align-items:center;gap:4px;">
-              <span>${state.saveToKb ? 'Modifica scheda' : 'Apri scheda'}</span>
-              ${ICONS.arrowRight}
-            </span>
-          </div>
-        `
-      ) : ''}
-    </div>
-
-    <!-- 5. Footer Invio e Selettore Canale -->
-    ${isNoteMode ? `
-      <div class="footer-sider">
-        <div class="card-canale-invio note-mode">
-          <div class="header-canale-invio">
-            <div class="icon-plane-badge" style="background:#EEF2FF;color:#4F46E5;">${ICONS.user}</div>
-            <span class="lbl-canale-invio" style="color:#334155;">Operatore</span>
-          </div>
-          <select class="select-canale-box" onchange="setNoteAuthor(this.value)">
-            <option value="Sara M. (Reception)" ${state.noteAuthor === 'Sara M. (Reception)' ? 'selected' : ''}>Sara M. (Reception)</option>
-            <option value="Marco T. (Front Office)" ${state.noteAuthor === 'Marco T. (Front Office)' ? 'selected' : ''}>Marco T. (Front Office)</option>
-            <option value="Giulia R. (Guest Relations)" ${state.noteAuthor === 'Giulia R. (Guest Relations)' ? 'selected' : ''}>Giulia R. (Guest Relations)</option>
-          </select>
-        </div>
-
-        <button class="btn-salva-nota-sider" onclick="saveManualNoteFromComposer()">
-          ${ICONS.fileText}
-          <span>Registra nota manuale nella chat</span>
-        </button>
-      </div>
-    ` : state.draftOpen ? `
-      <div class="footer-sider">
-        <div class="avviso-conflitto">
-          ${ICONS.alertTriangle}
-          <span>Conflitto con messaggio 11:30 · Posticipa o sostituisci</span>
-        </div>
-
-        <!-- Barra Selettore Lingua di Invio -->
-        <div class="barra-lingua-invio">
-          <div class="lingua-invio-left">
-            <span class="lingua-invio-icon">${ICONS.languages}</span>
-            <span class="lingua-invio-text">Invio in <strong>${conv.langName}</strong></span>
-          </div>
-          <select class="select-lingua-invio" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
-            <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
-            <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
-            <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
-            <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
-            <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
-            <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
-          </select>
-        </div>
-
-        <!-- Card Selettore Canale di Invio -->
-        <div class="card-canale-invio">
-          <div class="header-canale-invio">
-            <div class="icon-plane-badge">${ICONS.send}</div>
-            <span class="lbl-canale-invio">Canale di invio · <strong>${state.outboundChannel}</strong></span>
-          </div>
-          <select class="select-canale-box" onchange="setOutboundChannel(this.value)">
-            <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
-            <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>WhatsApp</option>
-            <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
-            <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
-            <option value="Nota interna" ${state.outboundChannel === 'Nota interna' ? 'selected' : ''}>Nota interna (Solo staff)</option>
-          </select>
-        </div>
-
-        ${state.schedulePopoverOpen ? `
-          <div class="card-quando-inviarlo">
-            <div class="qi-header">
-              <span class="qi-title">Quando inviarlo</span>
-              <button class="qi-close" onclick="toggleSchedulePopover()" title="Chiudi">✕</button>
-            </div>
-
-            <div class="qi-presets">
-              <button class="qi-pill ${state.schedPreset === '1h' ? 'active' : ''}" onclick="applySchedPreset('1h', 2, '12', '00')">Tra un'ora</button>
-              <button class="qi-pill ${state.schedPreset === '18' ? 'active' : ''}" onclick="applySchedPreset('18', 2, '18', '00')">Oggi 18:00</button>
-              <button class="qi-pill ${state.schedPreset === 'dom9' ? 'active' : ''}" onclick="applySchedPreset('dom9', 3, '09', '00')">Domani 9:00</button>
-            </div>
-
-            <div class="qi-month-nav">
-              <button class="qi-nav-arrow" onclick="cycleSchedMonth(-1)">‹</button>
-              <span class="qi-month-label">${state.schedMonthLabel}</span>
-              <button class="qi-nav-arrow" onclick="cycleSchedMonth(1)">›</button>
-            </div>
-
-            <div class="qi-weekdays">
-              <span>L</span><span>M</span><span>M</span><span>G</span><span>V</span><span>S</span><span>D</span>
-            </div>
-
-            <div class="qi-days-grid">
-              ${calCells.map(c => !c.d
-                ? `<span class="qi-day empty"></span>`
-                : `<button class="qi-day ${c.muted ? 'muted' : ''} ${c.highlight && state.schedDay !== c.d ? 'soft-bg' : ''} ${state.schedDay === c.d && !c.muted ? 'selected' : ''}" onclick="selectSchedDay(${c.d})">${c.d}</button>`
-              ).join('')}
-            </div>
-
-            <div class="qi-time-row">
-              <span class="qi-clock-icon">${ICONS.clock}</span>
-              <select class="qi-time-select" onchange="updateSchedHour(this.value)">${hourOptions}</select>
-              <span class="qi-time-colon">:</span>
-              <select class="qi-time-select" onchange="updateSchedMin(this.value)">${minOptions}</select>
-            </div>
-
-            ${isNightHour ? `
-              <div class="qi-night-warning" style="display:flex;align-items:center;gap:6px;">
-                ${ICONS.moon}
-                <span>Orario notturno (22:00–08:00): consigliato posticipare al mattino.</span>
-              </div>
-            ` : ''}
-
-            <label class="qi-autocancel-row" onclick="toggleAutoCancelRule()">
-              <input type="checkbox" ${state.autoCancelScheduled ? 'checked' : ''} onclick="event.stopPropagation();toggleAutoCancelRule()" />
-              <span>Annulla se l'ospite risponde prima</span>
-            </label>
-
-            <div class="qi-actions">
-              <button class="qi-btn-cancel" onclick="toggleSchedulePopover()">Annulla</button>
-              <button class="qi-btn-confirm" onclick="confirmScheduledSend()">
-                ${ICONS.sendWhite}
-                <span>Programma</span>
-              </button>
-            </div>
-          </div>
-        ` : ''}
-
-        <div class="riga-bottoni-invio">
-          <button class="btn-programma" onclick="toggleSchedulePopover()">
-            ${ICONS.clock}
-            <span>Programma</span>
-            ${ICONS.chevronDown}
-          </button>
-          <button class="btn-invia-ora" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;" onclick="sendReplyNow()">
-            ${ICONS.arrowRight}
-            <span>${state.outboundChannel === 'Nota interna' ? 'Salva Nota interna' : `Invia su ${state.outboundChannel}`}</span>
-          </button>
-        </div>
-      </div>
-    ` : `
-      <div class="footer-sider">
-        <div class="barra-lingua-invio">
-          <div class="lingua-invio-left">
-            <span class="lingua-invio-icon">${ICONS.languages}</span>
-            <span class="lingua-invio-text">Invio in <strong>${conv.langName}</strong></span>
-          </div>
-          <select class="select-lingua-invio" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
-            <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
-            <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
-            <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
-            <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
-            <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
-            <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
-          </select>
-        </div>
-
-        <div class="card-canale-invio">
-          <div class="header-canale-invio">
-            <div class="icon-plane-badge">${ICONS.send}</div>
-            <div style="display:flex;flex-direction:column;">
-              <span class="lbl-canale-invio">Canale di invio · <strong>${state.outboundChannel}</strong></span>
-              <span style="font-size:10.5px;font-weight:500;color:#D97706;">1 invio programmato oggi (11:30)</span>
-            </div>
-          </div>
-          <select class="select-canale-box" onchange="setOutboundChannel(this.value)">
-            <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
-            <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>WhatsApp</option>
-            <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
-            <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
-            <option value="Nota interna" ${state.outboundChannel === 'Nota interna' ? 'selected' : ''}>Nota interna (Solo staff)</option>
-          </select>
-        </div>
-      </div>
-    `}
   `;
 
   if (deskSider) deskSider.innerHTML = html;
   if (mobSider) mobSider.innerHTML = html;
-  requestAnimationFrame(autoResizeAllDraftTextareas);
+  renderBottomComposer();
+}
+
+function getChannelBadgeHtml(channel) {
+  const ch = (channel || 'WhatsApp').toLowerCase();
+  if (ch.includes('whatsapp')) {
+    return `<span class="bc-ch-circle whatsapp"><svg width="11" height="11" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.82 14.01c-.24.68-1.41 1.3-1.95 1.38-.5.08-1.13.11-1.83-.11-.42-.13-.97-.31-1.67-.61-2.95-1.27-4.88-4.25-5.03-4.45-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37.2 0 .4.01.57.01.18 0 .43-.07.67.51.24.59.82 2.01.89 2.16.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.02 1.12.99 2.06 1.3 2.36 1.45.3.15.47.12.64-.07.17-.2.74-.86.94-1.16.2-.3.4-.25.67-.15.27.1 1.71.81 2 .96.3.15.49.22.57.34.07.13.07.72-.17 1.4z"/></svg></span>`;
+  }
+  if (ch.includes('airbnb')) {
+    return `<span class="bc-ch-circle airbnb"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.3"><path d="M12 3c-3.5 5-7 9.5-7 13a7 7 0 0 0 14 0c0-3.5-3.5-8-7-13z"/></svg></span>`;
+  }
+  if (ch.includes('booking')) {
+    return `<span class="bc-ch-circle booking">B.</span>`;
+  }
+  if (ch.includes('email')) {
+    return `<span class="bc-ch-circle email"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>`;
+  }
+  return `<span class="bc-ch-circle note"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>`;
+}
+
+function getChannelDisplayLabel(channel) {
+  if (!channel || channel === 'WhatsApp') return 'Whatsapp';
+  return channel;
+}
+
+// Render Bottom Messaging Composer (Expanded & Collapsed modes 1:1 with reference screenshots)
+function renderBottomComposer() {
+  const deskComp = document.getElementById('desktopBottomComposer');
+  const mobComp = document.getElementById('mobileBottomComposer');
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const draftVal = state.draftOpen ? (state.drafts[conv.id] || '') : '';
+  const hasText = draftVal.trim().length > 0 || (state.composerMode === 'note' && (state.noteDraftText || '').trim().length > 0);
+  const channelLabel = getChannelDisplayLabel(state.outboundChannel);
+  const channelBadge = getChannelBadgeHtml(state.outboundChannel);
+  const isNoteMode = state.composerMode === 'note';
+
+  const isNightHour = (() => {
+    const hr = parseInt(state.schedHour || '10', 10);
+    return hr >= 22 || hr < 8;
+  })();
+
+  const calCells = [
+    { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: 1, muted: true },
+    { d: 2 }, { d: 3 }, { d: 4 }, { d: 5 }, { d: 6 }, { d: 7 }, { d: 8 },
+    { d: 9 }, { d: 10 }, { d: 11 }, { d: 12 }, { d: 13 }, { d: 14 }, { d: 15 },
+    { d: 16 }, { d: 17, highlight: true }, { d: 18 }, { d: 19 }, { d: 20 }, { d: 21 }, { d: 22 },
+    { d: 23 }, { d: 24 }, { d: 25 }, { d: 26 }, { d: 27 }, { d: 28 }, { d: 29 },
+    { d: 30 }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }
+  ];
+
+  const hourOptions = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
+    .map(h => `<option value="${h}" ${state.schedHour === h ? 'selected' : ''}>${h}</option>`).join('');
+  const minOptions = ['00', '15', '30', '45']
+    .map(m => `<option value="${m}" ${state.schedMin === m ? 'selected' : ''}>${m}</option>`).join('');
+
+  let html = '';
+
+  if (!state.composerExpanded) {
+    // COLLAPSED MODE (1:1 with screenshot 2)
+    html = `
+      <div class="bc-collapsed">
+        <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
+          ${ICONS.paperclip16}
+        </button>
+
+        <div class="bc-channel-pill" title="Cambia canale di invio">
+          ${channelBadge}
+          <span class="bc-channel-name">${channelLabel}</span>
+          <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
+          <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
+            <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>Whatsapp</option>
+            <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
+            <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
+            <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
+            <option value="Nota interna" ${state.outboundChannel === 'Nota interna' ? 'selected' : ''}>Nota interna</option>
+          </select>
+        </div>
+
+        <input
+          type="text"
+          class="bc-collapsed-input"
+          placeholder="Scrivi un messaggio o chiedi all'AI..."
+          value="${draftVal.replace(/"/g, '&quot;').replace(/\n/g, ' ')}"
+          oninput="handleComposerInput(this.value)"
+          onkeydown="if(event.key==='Enter')sendReplyNow()"
+        />
+
+        <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
+          ${ICONS.mic16}
+        </button>
+
+        <button type="button" class="bc-expand-btn" onclick="toggleComposerExpand(true)" title="Espandi composer">
+          ${ICONS.expandDiag}
+          <span>Espandi</span>
+        </button>
+
+        <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()">
+          ${ICONS.sendHoriz}
+          <span>Invia</span>
+        </button>
+      </div>
+    `;
+  } else {
+    // EXPANDED MODE (1:1 with screenshot 1)
+    html = `
+      <div class="bc-expanded">
+        <!-- Popovers anchored above the composer -->
+        ${state.bcTemplateOpen ? `
+          <div class="bc-floating-popover template-pop">
+            <div class="bc-pop-header">
+              <span>Messaggi pronti (Template)</span>
+              <button type="button" class="bc-pop-close" onclick="toggleBcPopover(null)">✕</button>
+            </div>
+            <div class="bc-pop-list">
+              <button type="button" class="bc-pop-item" onclick="insertCannedReply('1. Accesso + Omaggio (Ok)');toggleBcPopover(null);">
+                <span class="dot-amber"></span>
+                <span>1. Accesso + Omaggio (Ok)</span>
+              </button>
+              <button type="button" class="bc-pop-item" onclick="insertCannedReply('1. Come funziona il Check-In (OK)');toggleBcPopover(null);">
+                <span class="dot-amber"></span>
+                <span>1. Come funziona il Check-In (OK)</span>
+              </button>
+              <button type="button" class="bc-pop-item" onclick="insertCannedReply('2. Check-In Online Obbligato + Omaggio (OK)');toggleBcPopover(null);">
+                <span class="dot-amber"></span>
+                <span>2. Check-In Online Obbligato + Omaggio (OK)</span>
+              </button>
+              <button type="button" class="bc-pop-item" onclick="insertCannedReply('3. Benvenuto a Catania - Tax (OK)');toggleBcPopover(null);">
+                <span class="dot-amber"></span>
+                <span>3. Benvenuto a Catania - Tax (OK)</span>
+              </button>
+              <button type="button" class="bc-pop-item" onclick="insertCannedReply('4. Info Parcheggio Garage Suite 14 (15€/notte)');toggleBcPopover(null);">
+                <span class="dot-amber"></span>
+                <span>4. Info Parcheggio Garage Suite 14 (15€/notte)</span>
+              </button>
+            </div>
+          </div>
+        ` : ''}
+
+        ${state.bcToneOpen ? `
+          <div class="bc-floating-popover tone-pop">
+            <div class="bc-pop-header">
+              <span>AI Copilot & Tono di voce</span>
+              <button type="button" class="bc-pop-close" onclick="toggleBcPopover(null)">✕</button>
+            </div>
+            <div class="bc-pop-list">
+              <button type="button" class="bc-pop-item highlight-ai" onclick="openDraftEditor();toggleBcPopover(null);">
+                ${ICONS.sparkles}
+                <span>Genera risposta AI completa</span>
+              </button>
+              <button type="button" class="bc-pop-item highlight-sky" onclick="openPromptMode();toggleBcPopover(null);">
+                ${ICONS.pencil}
+                <span>Scrivi prompt / Istruzione...</span>
+              </button>
+              <div class="bc-pop-divider"></div>
+              <div class="bc-pop-sublabel">Cambia tono della bozza</div>
+              <div class="bc-tone-pills-row">
+                <button type="button" class="bc-tone-chip ${state.activeTone === 'Cordiale' ? 'active' : ''}" onclick="state.draftOpen=true;selectTone('Cordiale', 0);toggleBcPopover(null);">😊 Cordiale</button>
+                <button type="button" class="bc-tone-chip ${state.activeTone === 'Formale' ? 'active' : ''}" onclick="state.draftOpen=true;selectTone('Formale', 1);toggleBcPopover(null);">👔 Formale</button>
+                <button type="button" class="bc-tone-chip ${state.activeTone === 'Più breve' ? 'active' : ''}" onclick="state.draftOpen=true;selectTone('Più breve', 2);toggleBcPopover(null);">⚡ Più breve</button>
+              </div>
+              <button type="button" class="bc-pop-item" onclick="state.draftOpen=true;improveDraftText();toggleBcPopover(null);">
+                ${ICONS.wand}
+                <span>Migliora chiarezza e cortesia</span>
+              </button>
+            </div>
+          </div>
+        ` : ''}
+
+        ${state.bcMoreOpen ? `
+          <div class="bc-floating-popover more-pop">
+            <div class="bc-pop-header">
+              <span>Azioni aggiuntive</span>
+              <button type="button" class="bc-pop-close" onclick="toggleBcPopover(null)">✕</button>
+            </div>
+            <div class="bc-pop-list">
+              <button type="button" class="bc-pop-item" onclick="toggleBcPopover(null);toggleSchedulePopover();">
+                ${ICONS.clock}
+                <span>Programma invio (${state.schedHour}:${state.schedMin})</span>
+              </button>
+              <button type="button" class="bc-pop-item" onclick="toggleBcPopover(null);triggerOcrExtract();">
+                ${ICONS.scanText}
+                <span>Estrai testo da foto (OCR)</span>
+              </button>
+              <button type="button" class="bc-pop-item" onclick="toggleBcPopover(null);openCreateKbModal();">
+                ${ICONS.bookmarkPlus}
+                <span>Crea / Aggiorna FAQ in Knowledge Base</span>
+              </button>
+              <button type="button" class="bc-pop-item" onclick="toggleBcPopover(null);setComposerMode(state.composerMode === 'note' ? 'reply' : 'note');">
+                ${ICONS.fileText}
+                <span>${isNoteMode ? 'Torna a Risposta ospite' : 'Passa a Nota manuale (Solo staff)'}</span>
+              </button>
+            </div>
+          </div>
+        ` : ''}
+
+        ${state.schedulePopoverOpen ? `
+          <div class="bc-floating-popover schedule-pop">
+            <div class="card-quando-inviarlo" style="margin:0;border:none;box-shadow:none;">
+              <div class="qi-header">
+                <span class="qi-title">Quando inviarlo</span>
+                <button class="qi-close" onclick="toggleSchedulePopover()" title="Chiudi">✕</button>
+              </div>
+              <div class="qi-presets">
+                <button class="qi-pill ${state.schedPreset === '1h' ? 'active' : ''}" onclick="applySchedPreset('1h', 2, '12', '00')">Tra un'ora</button>
+                <button class="qi-pill ${state.schedPreset === '18' ? 'active' : ''}" onclick="applySchedPreset('18', 2, '18', '00')">Oggi 18:00</button>
+                <button class="qi-pill ${state.schedPreset === 'dom9' ? 'active' : ''}" onclick="applySchedPreset('dom9', 3, '09', '00')">Domani 9:00</button>
+              </div>
+              <div class="qi-month-nav">
+                <button class="qi-nav-arrow" onclick="cycleSchedMonth(-1)">‹</button>
+                <span class="qi-month-label">${state.schedMonthLabel}</span>
+                <button class="qi-nav-arrow" onclick="cycleSchedMonth(1)">›</button>
+              </div>
+              <div class="qi-weekdays">
+                <span>L</span><span>M</span><span>M</span><span>G</span><span>V</span><span>S</span><span>D</span>
+              </div>
+              <div class="qi-days-grid">
+                ${calCells.map(c => !c.d
+                  ? `<span class="qi-day empty"></span>`
+                  : `<button class="qi-day ${c.muted ? 'muted' : ''} ${c.highlight && state.schedDay !== c.d ? 'soft-bg' : ''} ${state.schedDay === c.d && !c.muted ? 'selected' : ''}" onclick="selectSchedDay(${c.d})">${c.d}</button>`
+                ).join('')}
+              </div>
+              <div class="qi-time-row">
+                <span class="qi-clock-icon">${ICONS.clock}</span>
+                <select class="qi-time-select" onchange="updateSchedHour(this.value)">${hourOptions}</select>
+                <span class="qi-time-colon">:</span>
+                <select class="qi-time-select" onchange="updateSchedMin(this.value)">${minOptions}</select>
+              </div>
+              ${isNightHour ? `
+                <div class="qi-night-warning" style="display:flex;align-items:center;gap:6px;">
+                  ${ICONS.moon}
+                  <span>Orario notturno (22:00–08:00): consigliato posticipare al mattino.</span>
+                </div>
+              ` : ''}
+              <label class="qi-autocancel-row" onclick="toggleAutoCancelRule()">
+                <input type="checkbox" ${state.autoCancelScheduled ? 'checked' : ''} onclick="event.stopPropagation();toggleAutoCancelRule()" />
+                <span>Annulla se l'ospite risponde prima</span>
+              </label>
+              <div class="qi-actions">
+                <button class="qi-btn-cancel" onclick="toggleSchedulePopover()">Annulla</button>
+                <button class="qi-btn-confirm" onclick="confirmScheduledSend()">
+                  ${ICONS.sendWhite}
+                  <span>Programma</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- 1. Top Header Bar -->
+        <div class="bc-header">
+          <div class="bc-header-left">
+            <span class="bc-title-wrap">
+              <span class="bc-WaitSparkle">${ICONS.sparkles16}</span>
+              <span class="bc-title-text">${isNoteMode ? 'Nota manuale (Staff)' : 'Componi risposta'}</span>
+            </span>
+
+            ${!isNoteMode ? `
+              <!-- Language Pill -->
+              <div class="bc-lang-pill" title="Lingua di traduzione automatica in uscita">
+                <span class="bc-lang-code">${conv.langCode}</span>
+                <span class="bc-lang-name">${conv.langName}</span>
+                <span class="bc-lang-on">(ON)</span>
+                <span class="bc-chevron-blue">${ICONS.chevronDown}</span>
+                <select class="bc-select-overlay" onchange="setOutboundLanguage(this.value)" aria-label="Lingua di invio">
+                  <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>DE Tedesco (ON)</option>
+                  <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>PL Polacco (ON)</option>
+                  <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>EN Inglese (ON)</option>
+                  <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>ES Spagnolo (ON)</option>
+                  <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>FR Francese (ON)</option>
+                  <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>IT Italiano (ON)</option>
+                </select>
+              </div>
+
+              <!-- Channel Pill -->
+              <div class="bc-channel-pill" title="Canale di invio">
+                ${channelBadge}
+                <span class="bc-channel-name">${channelLabel}</span>
+                <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
+                <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
+                  <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>Whatsapp</option>
+                  <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
+                  <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
+                  <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
+                  <option value="Nota interna" ${state.outboundChannel === 'Nota interna' ? 'selected' : ''}>Nota interna (Solo staff)</option>
+                </select>
+              </div>
+            ` : `
+              <div class="toni-left" style="display:inline-flex;gap:4px;">
+                <button class="btn-tono note-pill ${state.noteType === 'Telefonata' ? 'active' : ''}" onclick="selectNoteType('Telefonata')">Telefonata</button>
+                <button class="btn-tono note-pill ${state.noteType === 'Di persona' ? 'active' : ''}" onclick="selectNoteType('Di persona')">Di persona</button>
+                <button class="btn-tono note-pill ${state.noteType === 'Nota staff' ? 'active' : ''}" onclick="selectNoteType('Nota staff')">Nota staff</button>
+              </div>
+            `}
+          </div>
+
+          <div class="bc-header-right">
+            ${state.draftOpen && !isNoteMode ? `
+              <div class="selettore-varianti" onclick="cycleVariant()" title="Cambia alternativa AI">
+                <span style="color:#64748B;">‹</span>
+                <span>Variante ${state.activeVariantIdx + 1} di 3</span>
+                <span style="color:#64748B;">›</span>
+              </div>
+            ` : ''}
+
+            <button type="button" class="bc-collapse-btn" onclick="toggleComposerExpand(false)" title="Riduci a barra compatta">
+              ${ICONS.chevronDown}
+              <span>Riduci</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. Middle Body Area -->
+        <div class="bc-body">
+          ${state.promptMode ? `
+            <div class="box-prompt-mode" style="padding:0;">
+              <div class="prompt-mode-banner">
+                Scrivi un'istruzione breve e l'AI prepara il messaggio finale nello stile configurato.
+              </div>
+              <textarea
+                class="prompt-mode-textarea"
+                id="initialPromptTextarea"
+                placeholder="Scrivi qui l'istruzione (es. conferma posto auto #14 a 15€/notte)..."
+                oninput="state.promptText = this.value"
+                ${state.promptGenerating ? 'disabled' : ''}
+              >${state.promptText || ''}</textarea>
+              <div class="prompt-mode-actions">
+                <button
+                  type="button"
+                  class="btn-prompt-generate ${state.promptGenerating ? 'loading' : ''}"
+                  onclick="generateFromPromptMode()"
+                  ${state.promptGenerating ? 'disabled' : ''}
+                >
+                  ${state.promptGenerating ? ICONS.spinner16 : ICONS.sparkles16}
+                  <span>Genera da prompt</span>
+                </button>
+                <button
+                  type="button"
+                  class="btn-prompt-cancel"
+                  onclick="cancelPromptMode()"
+                  ${state.promptGenerating ? 'disabled' : ''}
+                >
+                  Annulla
+                </button>
+              </div>
+            </div>
+          ` : isNoteMode ? `
+            <textarea
+              class="bc-textarea"
+              id="noteTextarea"
+              placeholder="Registra qui cosa è stato detto al telefono o concordato di persona..."
+              oninput="updateNoteDraftText(this.value, this)"
+            >${state.noteDraftText}</textarea>
+          ` : `
+            <textarea
+              class="bc-textarea"
+              id="draftTextarea"
+              placeholder="Scrivi un messaggio in italiano..."
+              oninput="handleComposerInput(this.value, this)"
+            >${draftVal}</textarea>
+          `}
+
+          ${state.attachedFile ? `
+            <div class="bc-attached-chip">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="color:#2563EB;display:inline-flex;">${ICONS.paperclip}</span>
+                <span>${state.attachedFile}</span>
+              </div>
+              <button type="button" class="bc-attached-remove" onclick="toggleAttachFile()">×</button>
+            </div>
+          ` : ''}
+
+          ${state.draftOpen && !state.promptMode && !isNoteMode ? `
+            <div class="bc-ai-feedback-row">
+              <div class="bc-ai-rate-left">
+                <span>${state.aiRating === 'up' ? 'Risposta AI valutata utile' : state.aiRating === 'down' ? 'Risposta AI segnalata da migliorare' : 'Valuta risposta AI'}</span>
+                <button type="button" class="btn-rate-ai rate-up ${state.aiRating === 'up' ? 'active' : ''}" onclick="rateAiSuggestion('up')" title="Risposta AI utile">${ICONS.thumbsUp}</button>
+                <button type="button" class="btn-rate-ai rate-down ${state.aiRating === 'down' ? 'active' : ''}" onclick="rateAiSuggestion('down')" title="Segnala risposta AI da migliorare">${ICONS.thumbsDown}</button>
+              </div>
+              <button type="button" class="bc-kb-inline-btn" onclick="openCreateKbModal()">
+                ${ICONS.bookmarkPlus}
+                <span>${state.saveToKb ? 'FAQ salvata in KB' : 'Salva come FAQ in KB'}</span>
+              </button>
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- 3. Bottom Toolbar -->
+        <div class="bc-footer">
+          <div class="bc-tools-left">
+            <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
+              ${ICONS.paperclip16}
+            </button>
+            <button type="button" class="bc-icon-btn" onclick="insertTagPMS('😊')" title="Inserisci emoji">
+              ${ICONS.smile16}
+            </button>
+            <button type="button" class="bc-pill-btn template ${state.bcTemplateOpen ? 'active' : ''}" onclick="toggleBcPopover('template')">
+              ${ICONS.docTemplate14}
+              <span>Template</span>
+            </button>
+            <button type="button" class="bc-pill-btn ai-tone ${state.bcToneOpen ? 'active' : ''}" onclick="toggleBcPopover('tone')">
+              ${ICONS.sparkles}
+              <span>AI Tono</span>
+            </button>
+            <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
+              ${ICONS.mic16}
+            </button>
+            <button type="button" class="bc-icon-btn ${state.bcMoreOpen ? 'active' : ''}" onclick="toggleBcPopover('more')" title="Altre opzioni (Programma invio, OCR, FAQ, Nota manuale)">
+              ${ICONS.moreHoriz}
+            </button>
+          </div>
+
+          <div class="bc-tools-right">
+            ${isNoteMode ? `
+              <button type="button" class="bc-send-btn expanded ready" onclick="saveManualNoteFromComposer()">
+                ${ICONS.sendHoriz}
+                <span>Salva nota</span>
+              </button>
+            ` : `
+              <button type="button" class="bc-send-btn expanded ${hasText ? 'ready' : ''}" onclick="sendReplyNow()">
+                ${ICONS.sendHoriz}
+                <span>Invia</span>
+              </button>
+            `}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (deskComp) deskComp.innerHTML = html;
+  if (mobComp) mobComp.innerHTML = html;
 }
 
 function autoResizeTextarea(el) {
@@ -1181,12 +1266,50 @@ function toggleAccordion(key) {
   renderSiderAI();
 }
 
+function toggleComposerExpand(expanded) {
+  state.composerExpanded = typeof expanded === 'boolean' ? expanded : !state.composerExpanded;
+  state.bcTemplateOpen = false;
+  state.bcToneOpen = false;
+  state.bcMoreOpen = false;
+  renderBottomComposer();
+}
+
+function toggleBcPopover(which) {
+  state.bcTemplateOpen = which === 'template' ? !state.bcTemplateOpen : false;
+  state.bcToneOpen = which === 'tone' ? !state.bcToneOpen : false;
+  state.bcMoreOpen = which === 'more' ? !state.bcMoreOpen : false;
+  if (which) state.schedulePopoverOpen = false;
+  renderBottomComposer();
+}
+
+function handleComposerInput(val, el) {
+  state.draftOpen = val.trim().length > 0;
+  state.drafts[state.selectedConvId] = val;
+  renderConversationLists();
+  document.querySelectorAll('.bc-send-btn').forEach(btn => {
+    btn.classList.toggle('ready', val.trim().length > 0);
+  });
+}
+
+function triggerVoiceDictation() {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const firstName = conv.name.replace('↳ ', '').split(' ')[0];
+  state.composerExpanded = true;
+  state.draftOpen = true;
+  state.drafts[conv.id] = `Ciao ${firstName}, ti confermo che il posto auto coperto #14 è riservato per te a 15€ a notte!`;
+  renderConversationLists();
+  renderSiderAI();
+  showToast('Messaggio trascritto da dettatura vocale');
+}
+
 function openPromptMode() {
+  state.composerExpanded = true;
   state.promptMode = true;
   state.promptGenerating = false;
   state.draftOpen = false;
-  state.acc_modifica = true;
-  state.acc_consegne = false;
+  state.bcTemplateOpen = false;
+  state.bcToneOpen = false;
+  state.bcMoreOpen = false;
   renderSiderAI();
   setTimeout(() => document.getElementById('initialPromptTextarea')?.focus(), 50);
 }
@@ -1194,7 +1317,6 @@ function openPromptMode() {
 function cancelPromptMode() {
   state.promptMode = false;
   state.promptGenerating = false;
-  state.acc_consegne = true;
   renderSiderAI();
 }
 
@@ -1219,21 +1341,23 @@ function generateFromPromptMode() {
     state.promptGenerating = false;
     state.promptMode = false;
     state.draftOpen = true;
-    state.acc_modifica = true;
-    state.acc_consegne = false;
+    state.composerExpanded = true;
     renderConversationLists();
     renderSiderAI();
-    showToast('Risposta ospite generata dal prompt e pronta nell\'editor');
+    showToast('Risposta ospite generata dal prompt e pronta nel composer');
   }, 650);
 }
 
 function openDraftEditor(focusPrompt = false, focusTextarea = false) {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  state.composerExpanded = true;
   state.promptMode = false;
   state.promptGenerating = false;
   state.draftOpen = true;
+  if (!state.drafts[conv.id]) {
+    state.drafts[conv.id] = state.variants[0].text;
+  }
   state.replyTab = 'risposta';
-  state.acc_modifica = true;
-  state.acc_consegne = false;
   renderConversationLists();
   renderSiderAI();
   if (focusPrompt) {
@@ -1250,7 +1374,9 @@ function closeDraftEditor() {
   state.promptMode = false;
   state.promptGenerating = false;
   state.schedulePopoverOpen = false;
-  state.acc_consegne = true;
+  state.bcTemplateOpen = false;
+  state.bcToneOpen = false;
+  state.bcMoreOpen = false;
   renderConversationLists();
   renderSiderAI();
 }
@@ -1331,23 +1457,25 @@ function applyFreePrompt() {
 }
 
 function insertCannedReply(title) {
+  const cur = state.draftOpen ? (state.drafts[state.selectedConvId] || '') : '';
+  state.composerExpanded = true;
   state.draftOpen = true;
   state.replyTab = 'risposta';
-  state.acc_modifica = true;
-  state.drafts[state.selectedConvId] = (state.drafts[state.selectedConvId] + `\n\n[Info rapida: ${title}]`).trim();
+  state.drafts[state.selectedConvId] = (cur ? `${cur}\n\n[Info rapida: ${title}]` : `[Info rapida: ${title}]`).trim();
   renderConversationLists();
   renderSiderAI();
-  showToast(`Messaggio pronto aggiunto alla bozza`);
+  showToast(`Messaggio pronto aggiunto al composer`);
 }
 
 function insertTagPMS(val) {
+  const cur = state.draftOpen ? (state.drafts[state.selectedConvId] || '') : '';
+  state.composerExpanded = true;
   state.draftOpen = true;
   state.replyTab = 'risposta';
-  state.acc_modifica = true;
-  state.drafts[state.selectedConvId] = (state.drafts[state.selectedConvId] + ` ${val}`).trim();
+  state.drafts[state.selectedConvId] = (cur ? `${cur} ${val}` : `${val}`).trim();
   renderConversationLists();
   renderSiderAI();
-  showToast(`Tag PMS risolto (${val}) inserito nella bozza`);
+  showToast(`Inserito nel composer: ${val}`);
 }
 
 function toggleHostTrad() {
