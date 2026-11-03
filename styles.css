@@ -6191,8 +6191,8 @@ button, input, textarea {
 /* Mobile-First 2-Row Composer (Zero Overflow, Thumb-Friendly) */
 .bottom-composer-wrap.mobile {
   padding: 8px 10px 10px 10px;
-  background: #F8FAFC;
-  border-top: 1px solid #E2E8F0;
+  background: transparent;
+  border-top: none;
 }
 
 .bottom-composer-wrap.mobile .bc-collapsed {
