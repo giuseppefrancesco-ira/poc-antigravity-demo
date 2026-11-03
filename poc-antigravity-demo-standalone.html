@@ -837,12 +837,173 @@ button, input, textarea {
 .bolla-blu-host {
   width: clamp(400px, 56%, 560px);
   max-width: 82%;
-  padding: 11px 15px;
+  padding: 12px 16px;
   background: #2E54E8;
   color: #FFFFFF;
   font-size: 13px;
-  line-height: 1.45;
+  line-height: 1.48;
   border-radius: 14px 0px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bubble-main-text {
+  font-size: 13px;
+  line-height: 1.48;
+}
+
+/* Barra Traduzione Interna alla Bubble (Ospite / Host / Programmato) */
+.bubble-trad-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 8px;
+  font-size: 11.5px;
+  line-height: 1.2;
+}
+
+.bubble-trad-bar.guest,
+.bubble-trad-bar.sched {
+  border-bottom: 1px solid #F1F5F9;
+  color: #64748B;
+}
+
+.bubble-trad-bar.host {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.bubble-trad-bar-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  min-width: 0;
+}
+
+.bubble-trad-sparkle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bubble-trad-sparkle.guest {
+  color: #2E54E8;
+}
+
+.bubble-trad-bar.host .bubble-trad-sparkle {
+  color: #FFFFFF;
+}
+
+.bubble-trad-bar-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.bubble-trad-lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bubble-trad-lang-btn.guest {
+  color: #2E54E8;
+}
+
+.bubble-trad-lang-btn.host {
+  color: #FFFFFF;
+  opacity: 0.92;
+}
+
+.bubble-trad-lang-btn:hover {
+  text-decoration: underline;
+}
+
+.bubble-trad-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.bubble-trad-toggle-btn.guest {
+  color: #475569;
+}
+
+.bubble-trad-toggle-btn.guest:hover {
+  color: #0F172A;
+}
+
+.bubble-trad-toggle-btn.host {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.bubble-trad-toggle-btn.host:hover {
+  color: #FFFFFF;
+}
+
+/* Box interno Testo Originale / Traduzione dentro la Bubble */
+.bubble-trad-box {
+  border-radius: 10px;
+  padding: 9px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bubble-trad-box.guest {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+}
+
+.bubble-trad-box.host {
+  background: rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.bubble-trad-box-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.bubble-trad-box.guest .bubble-trad-box-lbl {
+  color: #94A3B8;
+}
+
+.bubble-trad-box.host .bubble-trad-box-lbl {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.bubble-trad-box-txt {
+  font-size: 12.5px;
+  line-height: 1.45;
+  font-style: italic;
+}
+
+.bubble-trad-box.guest .bubble-trad-box-txt {
+  color: #475569;
+}
+
+.bubble-trad-box.host .bubble-trad-box-txt {
+  color: rgba(255, 255, 255, 0.95);
 }
 
 /* Card Allegato Host */
@@ -907,61 +1068,17 @@ button, input, textarea {
   flex-shrink: 0;
 }
 
-/* Card Traduzione Richiudibile Host */
-.card-trad-host {
-  width: clamp(400px, 56%, 560px);
-  max-width: 82%;
-  padding: 8px 12px;
-  background: #EEF2FF;
-  border: 1px solid #C7D2FE;
-  border-radius: 9px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.header-trad {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-}
-
-.lbl-trad-host {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: #2E54E8;
-  flex: 1;
-}
-
-.toggle-trad-host {
-  padding: 2px;
-  background: transparent;
-  color: #2E54E8;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  cursor: pointer;
-}
-
-.testo-trad-host {
-  font-size: 12px;
-  color: #334155;
-  line-height: 1.42;
-}
-
 /* Bolla Bianca Ospite */
 .bolla-bianca-ospite {
   width: clamp(400px, 56%, 560px);
   max-width: 82%;
-  padding: 11px 15px;
+  padding: 12px 16px;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 0px 14px 14px 14px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
 }
 
 .player-audio {
@@ -1035,68 +1152,20 @@ button, input, textarea {
   line-height: 1.48;
 }
 
-/* Card Traduzione Richiudibile Ospite */
-.card-trad-ospite {
-  width: clamp(400px, 56%, 560px);
-  max-width: 82%;
-  padding: 8px 12px;
-  background: #FFFBEB;
-  border: 1px solid #FDE68A;
-  border-radius: 9px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.lbl-trad-ospite {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: #B45309;
-  flex: 1;
-}
-
-.toggle-trad-ospite {
-  padding: 2px;
-  background: transparent;
-  color: #B45309;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  cursor: pointer;
-}
-
-.testo-trad-ospite {
-  font-size: 12px;
-  color: #92400E;
-  line-height: 1.42;
-}
-
 /* Blocco Msg 3 Programmato */
 .bolla-programmata {
   width: clamp(400px, 56%, 560px);
   max-width: 82%;
-  padding: 11px 15px;
+  padding: 12px 16px;
   background: #FFFFFF;
   border: 1px solid #C7D2FE;
   border-radius: 14px 0px 14px 14px;
   font-size: 13px;
   color: #1E293B;
-  line-height: 1.45;
-}
-
-.barra-trad-chiusa {
-  width: clamp(400px, 56%, 560px);
-  max-width: 82%;
-  height: 30px;
-  padding: 0 12px;
-  background: #EEF2FF;
-  border: 1px solid #C7D2FE;
-  border-radius: 8px;
+  line-height: 1.48;
   display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .msg-bottom-actions {
@@ -6471,6 +6540,12 @@ function renderThread() {
   `).join('');
 
   const needsTranslation = conv.langCode !== 'IT';
+  const guestOrigText = conv.id === 'adam'
+    ? 'Cześć! Dziękuję za powitanie. Kod działa poprawnie. Mam jeszcze pytanie o parking: czy jest miejsce zarezerwowane dla gości i jaka jest cena za dobę?'
+    : conv.preview.replace(/^[↗↙]\s*/, '');
+  const guestItText = conv.id === 'adam'
+    ? "Ciao! Grazie per il benvenuto. Il codice funziona correttamente. Ho ancora una domanda sul parcheggio: c'è un posto riservato agli ospiti e qual è il prezzo a notte?"
+    : "Ciao! Grazie mille per le informazioni, il soggiorno procede benissimo!";
 
   const messagesHtml = `
     <!-- Blocco Msg 1 Host (312:7429) -->
@@ -6482,7 +6557,35 @@ function renderThread() {
       </div>
 
       <div class="bolla-blu-host">
-        Ciao ${conv.name.replace('↳ ', '').split(' ')[0]}, benvenuto a Casa Aurora! Ecco le informazioni utili per il tuo appartamento (${conv.stay.room}): all'ingresso trovi il tastierino numerico, il tuo codice Nuki è 000000. Ti auguriamo un piacevole soggiorno!
+        ${needsTranslation ? `
+          <div class="bubble-trad-bar host">
+            <div class="bubble-trad-bar-left">
+              <span class="bubble-trad-sparkle">${ICONS.sparkles}</span>
+              <span>Tradotto in ${conv.langName} con AI</span>
+            </div>
+            <div class="bubble-trad-bar-right">
+              <button type="button" class="bubble-trad-lang-btn host" onclick="showToast('Traduzione automatica AI: Italiano → ${conv.langName}')">
+                ${ICONS.globe}
+                <span>Lingue</span>
+              </button>
+              <button type="button" class="bubble-trad-toggle-btn host" onclick="toggleHostTrad()">
+                <span>${state.hostTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}</span>
+                ${state.hostTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
+              </button>
+            </div>
+          </div>
+        ` : ''}
+        <div class="bubble-main-text">
+          Ciao ${conv.name.replace('↳ ', '').split(' ')[0]}, benvenuto a Casa Aurora! Ecco le informazioni utili per il tuo appartamento (${conv.stay.room}): all'ingresso trovi il tastierino numerico, il tuo codice Nuki è 000000. Ti auguriamo un piacevole soggiorno!
+        </div>
+        ${needsTranslation && state.hostTradOpen ? `
+          <div class="bubble-trad-box host">
+            <div class="bubble-trad-box-lbl">TRADUZIONE INVIATA (${conv.langName.toUpperCase()})</div>
+            <div class="bubble-trad-box-txt">
+              Cześć Adam, witaj w Casa Aurora! Oto przydatne informacje o apartamencie (Suite 14): przy wejściu znajduje się klawiatura numeryczna, kod Nuki to 000000. Życzymy miłego pobytu!
+            </div>
+          </div>
+        ` : ''}
       </div>
 
       <!-- Card Allegato Host (315:7879) -->
@@ -6493,24 +6596,6 @@ function renderThread() {
           <span class="meta-file">PDF · 420 KB</span>
         </div>
       </div>
-
-      ${needsTranslation ? `
-      <!-- Card Traduzione Richiudibile Host (312:7436) -->
-      <div class="card-trad-host">
-        <div class="header-trad" onclick="toggleHostTrad()">
-          <span style="color:#2E54E8;display:inline-flex;">${ICONS.globe}</span>
-          <span class="lbl-trad-host">TRADUZIONE INVIATA (${conv.langName.toUpperCase()})</span>
-          <button class="toggle-trad-host" aria-label="Espandi o comprimi traduzione">
-            ${state.hostTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
-          </button>
-        </div>
-        ${state.hostTradOpen ? `
-          <div class="testo-trad-host">
-            Cześć Adam, witaj w Casa Aurora! Oto przydatne informacje o apartamencie (Suite 14): przy wejściu znajduje się klawiatura numeryczna, kod Nuki to 000000. Życzymy miłego pobytu!
-          </div>
-        ` : ''}
-      </div>
-      ` : ''}
 
       <div class="msg-bottom-actions">
         <button class="btn-msg-action copy" onclick="copyThreadMessage('host')" title="Copia messaggio" aria-label="Copia messaggio">
@@ -6532,32 +6617,34 @@ function renderThread() {
 
       <!-- Bolla Bianca Ospite (312:7451) -->
       <div class="bolla-bianca-ospite">
+        ${needsTranslation ? `
+          <div class="bubble-trad-bar guest">
+            <div class="bubble-trad-bar-left">
+              <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
+              <span>Tradotto dal ${conv.langName} con AI</span>
+            </div>
+            <div class="bubble-trad-bar-right">
+              <button type="button" class="bubble-trad-lang-btn guest" onclick="showToast('Traduzione automatica AI: ${conv.langName} → Italiano')">
+                ${ICONS.globe}
+                <span>Lingue</span>
+              </button>
+              <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleGuestTrad()">
+                <span>${state.guestTradOpen ? 'Nascondi originale' : 'Mostra originale'}</span>
+                ${state.guestTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
+              </button>
+            </div>
+          </div>
+        ` : ''}
         <div class="testo-ospite-orig">
-          ${conv.id === 'adam'
-            ? 'Cześć! Dziękuję za powitanie. Kod działa poprawnie. Mam jeszcze pytanie o parking: czy jest miejsce zarezerwowane dla gości i jaka jest cena za dobę?'
-            : conv.preview.replace(/^[↗↙]\s*/, '')}
+          ${needsTranslation ? guestItText : guestOrigText}
         </div>
-      </div>
-
-      ${needsTranslation ? `
-      <!-- Card Traduzione Richiudibile Ospite (312:7453) -->
-      <div class="card-trad-ospite">
-        <div class="header-trad" onclick="toggleGuestTrad()">
-          <span style="color:#B45309;display:inline-flex;">${ICONS.globe}</span>
-          <span class="lbl-trad-ospite">TRADUZIONE IN ITALIANO</span>
-          <button class="toggle-trad-ospite" aria-label="Espandi o comprimi traduzione">
-            ${state.guestTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
-          </button>
-        </div>
-        ${state.guestTradOpen ? `
-          <div class="testo-trad-ospite">
-            ${conv.id === 'adam'
-              ? "Ciao! Grazie per il benvenuto. Il codice funziona correttamente. Ho ancora una domanda sul parcheggio: c'è un posto riservato agli ospiti e qual è il prezzo a notte?"
-              : "Ciao! Grazie mille per le informazioni, il soggiorno procede benissimo!"}
+        ${needsTranslation && state.guestTradOpen ? `
+          <div class="bubble-trad-box guest">
+            <div class="bubble-trad-box-lbl">TESTO ORIGINALE (${conv.langName.toUpperCase()})</div>
+            <div class="bubble-trad-box-txt">${guestOrigText}</div>
           </div>
         ` : ''}
       </div>
-      ` : ''}
 
       <div class="msg-bottom-actions">
         <button class="btn-msg-action copy" onclick="copyThreadMessage('guest')" title="Copia messaggio" aria-label="Copia messaggio">
@@ -6579,23 +6666,36 @@ function renderThread() {
       </div>
 
       <div class="bolla-programmata">
-        Ciao ${conv.name.replace('↳ ', '').split(' ')[0]}, come sta andando il tuo soggiorno? Sul tavolo trovi una breve guida alla raccolta differenziata e alcuni consigli sul quartiere.
-      </div>
-
-      ${needsTranslation ? `
-      <div class="barra-trad-chiusa" onclick="toggleSchedTrad()">
-        <span style="color:#2E54E8;display:inline-flex;">${ICONS.globe}</span>
-        <span style="font-size:11px;font-weight:600;color:#2E54E8;flex:1;">TRADUZIONE PROGRAMMATA (${conv.langName.toUpperCase()})</span>
-        <span style="color:#2E54E8;display:inline-flex;">${state.schedTradOpen ? ICONS.chevronUp : ICONS.chevronDown}</span>
-      </div>
-      ${state.schedTradOpen ? `
-        <div class="card-trad-host" style="margin-top:2px;">
-          <div class="testo-trad-host">
-            Cześć Adam, jak mija pobyt? Na stole znajdziesz krótki przewodnik dotyczący segregacji odpadów oraz kilka wskazówek o okolicy.
+        ${needsTranslation ? `
+          <div class="bubble-trad-bar sched">
+            <div class="bubble-trad-bar-left">
+              <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
+              <span>Tradotto in ${conv.langName} con AI</span>
+            </div>
+            <div class="bubble-trad-bar-right">
+              <button type="button" class="bubble-trad-lang-btn guest" onclick="showToast('Traduzione programmata AI: Italiano → ${conv.langName}')">
+                ${ICONS.globe}
+                <span>Lingue</span>
+              </button>
+              <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleSchedTrad()">
+                <span>${state.schedTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}</span>
+                ${state.schedTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
+              </button>
+            </div>
           </div>
+        ` : ''}
+        <div class="bubble-main-text">
+          Ciao ${conv.name.replace('↳ ', '').split(' ')[0]}, come sta andando il tuo soggiorno? Sul tavolo trovi una breve guida alla raccolta differenziata e alcuni consigli sul quartiere.
         </div>
-      ` : ''}
-      ` : ''}
+        ${needsTranslation && state.schedTradOpen ? `
+          <div class="bubble-trad-box guest">
+            <div class="bubble-trad-box-lbl">TRADUZIONE PROGRAMMATA (${conv.langName.toUpperCase()})</div>
+            <div class="bubble-trad-box-txt">
+              Cześć Adam, jak mija pobyt? Na stole znajdziesz krótki przewodnik dotyczący segregacji odpadów oraz kilka wskazówek o okolicy.
+            </div>
+          </div>
+        ` : ''}
+      </div>
 
       <div class="msg-bottom-actions">
         <button class="btn-msg-action copy" onclick="copyThreadMessage('sched')" title="Copia messaggio" aria-label="Copia messaggio">

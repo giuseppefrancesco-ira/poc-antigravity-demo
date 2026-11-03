@@ -827,12 +827,173 @@ button, input, textarea {
 .bolla-blu-host {
   width: clamp(400px, 56%, 560px);
   max-width: 82%;
-  padding: 11px 15px;
+  padding: 12px 16px;
   background: #2E54E8;
   color: #FFFFFF;
   font-size: 13px;
-  line-height: 1.45;
+  line-height: 1.48;
   border-radius: 14px 0px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bubble-main-text {
+  font-size: 13px;
+  line-height: 1.48;
+}
+
+/* Barra Traduzione Interna alla Bubble (Ospite / Host / Programmato) */
+.bubble-trad-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 8px;
+  font-size: 11.5px;
+  line-height: 1.2;
+}
+
+.bubble-trad-bar.guest,
+.bubble-trad-bar.sched {
+  border-bottom: 1px solid #F1F5F9;
+  color: #64748B;
+}
+
+.bubble-trad-bar.host {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.bubble-trad-bar-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  min-width: 0;
+}
+
+.bubble-trad-sparkle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bubble-trad-sparkle.guest {
+  color: #2E54E8;
+}
+
+.bubble-trad-bar.host .bubble-trad-sparkle {
+  color: #FFFFFF;
+}
+
+.bubble-trad-bar-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.bubble-trad-lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bubble-trad-lang-btn.guest {
+  color: #2E54E8;
+}
+
+.bubble-trad-lang-btn.host {
+  color: #FFFFFF;
+  opacity: 0.92;
+}
+
+.bubble-trad-lang-btn:hover {
+  text-decoration: underline;
+}
+
+.bubble-trad-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.bubble-trad-toggle-btn.guest {
+  color: #475569;
+}
+
+.bubble-trad-toggle-btn.guest:hover {
+  color: #0F172A;
+}
+
+.bubble-trad-toggle-btn.host {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.bubble-trad-toggle-btn.host:hover {
+  color: #FFFFFF;
+}
+
+/* Box interno Testo Originale / Traduzione dentro la Bubble */
+.bubble-trad-box {
+  border-radius: 10px;
+  padding: 9px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bubble-trad-box.guest {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+}
+
+.bubble-trad-box.host {
+  background: rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.bubble-trad-box-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.bubble-trad-box.guest .bubble-trad-box-lbl {
+  color: #94A3B8;
+}
+
+.bubble-trad-box.host .bubble-trad-box-lbl {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.bubble-trad-box-txt {
+  font-size: 12.5px;
+  line-height: 1.45;
+  font-style: italic;
+}
+
+.bubble-trad-box.guest .bubble-trad-box-txt {
+  color: #475569;
+}
+
+.bubble-trad-box.host .bubble-trad-box-txt {
+  color: rgba(255, 255, 255, 0.95);
 }
 
 /* Card Allegato Host */
@@ -897,61 +1058,17 @@ button, input, textarea {
   flex-shrink: 0;
 }
 
-/* Card Traduzione Richiudibile Host */
-.card-trad-host {
-  width: clamp(400px, 56%, 560px);
-  max-width: 82%;
-  padding: 8px 12px;
-  background: #EEF2FF;
-  border: 1px solid #C7D2FE;
-  border-radius: 9px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.header-trad {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-}
-
-.lbl-trad-host {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: #2E54E8;
-  flex: 1;
-}
-
-.toggle-trad-host {
-  padding: 2px;
-  background: transparent;
-  color: #2E54E8;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  cursor: pointer;
-}
-
-.testo-trad-host {
-  font-size: 12px;
-  color: #334155;
-  line-height: 1.42;
-}
-
 /* Bolla Bianca Ospite */
 .bolla-bianca-ospite {
   width: clamp(400px, 56%, 560px);
   max-width: 82%;
-  padding: 11px 15px;
+  padding: 12px 16px;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 0px 14px 14px 14px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
 }
 
 .player-audio {
@@ -1025,68 +1142,20 @@ button, input, textarea {
   line-height: 1.48;
 }
 
-/* Card Traduzione Richiudibile Ospite */
-.card-trad-ospite {
-  width: clamp(400px, 56%, 560px);
-  max-width: 82%;
-  padding: 8px 12px;
-  background: #FFFBEB;
-  border: 1px solid #FDE68A;
-  border-radius: 9px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.lbl-trad-ospite {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: #B45309;
-  flex: 1;
-}
-
-.toggle-trad-ospite {
-  padding: 2px;
-  background: transparent;
-  color: #B45309;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  cursor: pointer;
-}
-
-.testo-trad-ospite {
-  font-size: 12px;
-  color: #92400E;
-  line-height: 1.42;
-}
-
 /* Blocco Msg 3 Programmato */
 .bolla-programmata {
   width: clamp(400px, 56%, 560px);
   max-width: 82%;
-  padding: 11px 15px;
+  padding: 12px 16px;
   background: #FFFFFF;
   border: 1px solid #C7D2FE;
   border-radius: 14px 0px 14px 14px;
   font-size: 13px;
   color: #1E293B;
-  line-height: 1.45;
-}
-
-.barra-trad-chiusa {
-  width: clamp(400px, 56%, 560px);
-  max-width: 82%;
-  height: 30px;
-  padding: 0 12px;
-  background: #EEF2FF;
-  border: 1px solid #C7D2FE;
-  border-radius: 8px;
+  line-height: 1.48;
   display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .msg-bottom-actions {

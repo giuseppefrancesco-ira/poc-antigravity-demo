@@ -505,6 +505,12 @@ function renderThread() {
   `).join('');
 
   const needsTranslation = conv.langCode !== 'IT';
+  const guestOrigText = conv.id === 'adam'
+    ? 'Cześć! Dziękuję za powitanie. Kod działa poprawnie. Mam jeszcze pytanie o parking: czy jest miejsce zarezerwowane dla gości i jaka jest cena za dobę?'
+    : conv.preview.replace(/^[↗↙]\s*/, '');
+  const guestItText = conv.id === 'adam'
+    ? "Ciao! Grazie per il benvenuto. Il codice funziona correttamente. Ho ancora una domanda sul parcheggio: c'è un posto riservato agli ospiti e qual è il prezzo a notte?"
+    : "Ciao! Grazie mille per le informazioni, il soggiorno procede benissimo!";
 
   const messagesHtml = `
     <!-- Blocco Msg 1 Host (312:7429) -->
@@ -516,7 +522,35 @@ function renderThread() {
       </div>
 
       <div class="bolla-blu-host">
-        Ciao ${conv.name.replace('↳ ', '').split(' ')[0]}, benvenuto a Casa Aurora! Ecco le informazioni utili per il tuo appartamento (${conv.stay.room}): all'ingresso trovi il tastierino numerico, il tuo codice Nuki è 000000. Ti auguriamo un piacevole soggiorno!
+        ${needsTranslation ? `
+          <div class="bubble-trad-bar host">
+            <div class="bubble-trad-bar-left">
+              <span class="bubble-trad-sparkle">${ICONS.sparkles}</span>
+              <span>Tradotto in ${conv.langName} con AI</span>
+            </div>
+            <div class="bubble-trad-bar-right">
+              <button type="button" class="bubble-trad-lang-btn host" onclick="showToast('Traduzione automatica AI: Italiano → ${conv.langName}')">
+                ${ICONS.globe}
+                <span>Lingue</span>
+              </button>
+              <button type="button" class="bubble-trad-toggle-btn host" onclick="toggleHostTrad()">
+                <span>${state.hostTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}</span>
+                ${state.hostTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
+              </button>
+            </div>
+          </div>
+        ` : ''}
+        <div class="bubble-main-text">
+          Ciao ${conv.name.replace('↳ ', '').split(' ')[0]}, benvenuto a Casa Aurora! Ecco le informazioni utili per il tuo appartamento (${conv.stay.room}): all'ingresso trovi il tastierino numerico, il tuo codice Nuki è 000000. Ti auguriamo un piacevole soggiorno!
+        </div>
+        ${needsTranslation && state.hostTradOpen ? `
+          <div class="bubble-trad-box host">
+            <div class="bubble-trad-box-lbl">TRADUZIONE INVIATA (${conv.langName.toUpperCase()})</div>
+            <div class="bubble-trad-box-txt">
+              Cześć Adam, witaj w Casa Aurora! Oto przydatne informacje o apartamencie (Suite 14): przy wejściu znajduje się klawiatura numeryczna, kod Nuki to 000000. Życzymy miłego pobytu!
+            </div>
+          </div>
+        ` : ''}
       </div>
 
       <!-- Card Allegato Host (315:7879) -->
@@ -527,24 +561,6 @@ function renderThread() {
           <span class="meta-file">PDF · 420 KB</span>
         </div>
       </div>
-
-      ${needsTranslation ? `
-      <!-- Card Traduzione Richiudibile Host (312:7436) -->
-      <div class="card-trad-host">
-        <div class="header-trad" onclick="toggleHostTrad()">
-          <span style="color:#2E54E8;display:inline-flex;">${ICONS.globe}</span>
-          <span class="lbl-trad-host">TRADUZIONE INVIATA (${conv.langName.toUpperCase()})</span>
-          <button class="toggle-trad-host" aria-label="Espandi o comprimi traduzione">
-            ${state.hostTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
-          </button>
-        </div>
-        ${state.hostTradOpen ? `
-          <div class="testo-trad-host">
-            Cześć Adam, witaj w Casa Aurora! Oto przydatne informacje o apartamencie (Suite 14): przy wejściu znajduje się klawiatura numeryczna, kod Nuki to 000000. Życzymy miłego pobytu!
-          </div>
-        ` : ''}
-      </div>
-      ` : ''}
 
       <div class="msg-bottom-actions">
         <button class="btn-msg-action copy" onclick="copyThreadMessage('host')" title="Copia messaggio" aria-label="Copia messaggio">
@@ -566,32 +582,34 @@ function renderThread() {
 
       <!-- Bolla Bianca Ospite (312:7451) -->
       <div class="bolla-bianca-ospite">
+        ${needsTranslation ? `
+          <div class="bubble-trad-bar guest">
+            <div class="bubble-trad-bar-left">
+              <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
+              <span>Tradotto dal ${conv.langName} con AI</span>
+            </div>
+            <div class="bubble-trad-bar-right">
+              <button type="button" class="bubble-trad-lang-btn guest" onclick="showToast('Traduzione automatica AI: ${conv.langName} → Italiano')">
+                ${ICONS.globe}
+                <span>Lingue</span>
+              </button>
+              <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleGuestTrad()">
+                <span>${state.guestTradOpen ? 'Nascondi originale' : 'Mostra originale'}</span>
+                ${state.guestTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
+              </button>
+            </div>
+          </div>
+        ` : ''}
         <div class="testo-ospite-orig">
-          ${conv.id === 'adam'
-            ? 'Cześć! Dziękuję za powitanie. Kod działa poprawnie. Mam jeszcze pytanie o parking: czy jest miejsce zarezerwowane dla gości i jaka jest cena za dobę?'
-            : conv.preview.replace(/^[↗↙]\s*/, '')}
+          ${needsTranslation ? guestItText : guestOrigText}
         </div>
-      </div>
-
-      ${needsTranslation ? `
-      <!-- Card Traduzione Richiudibile Ospite (312:7453) -->
-      <div class="card-trad-ospite">
-        <div class="header-trad" onclick="toggleGuestTrad()">
-          <span style="color:#B45309;display:inline-flex;">${ICONS.globe}</span>
-          <span class="lbl-trad-ospite">TRADUZIONE IN ITALIANO</span>
-          <button class="toggle-trad-ospite" aria-label="Espandi o comprimi traduzione">
-            ${state.guestTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
-          </button>
-        </div>
-        ${state.guestTradOpen ? `
-          <div class="testo-trad-ospite">
-            ${conv.id === 'adam'
-              ? "Ciao! Grazie per il benvenuto. Il codice funziona correttamente. Ho ancora una domanda sul parcheggio: c'è un posto riservato agli ospiti e qual è il prezzo a notte?"
-              : "Ciao! Grazie mille per le informazioni, il soggiorno procede benissimo!"}
+        ${needsTranslation && state.guestTradOpen ? `
+          <div class="bubble-trad-box guest">
+            <div class="bubble-trad-box-lbl">TESTO ORIGINALE (${conv.langName.toUpperCase()})</div>
+            <div class="bubble-trad-box-txt">${guestOrigText}</div>
           </div>
         ` : ''}
       </div>
-      ` : ''}
 
       <div class="msg-bottom-actions">
         <button class="btn-msg-action copy" onclick="copyThreadMessage('guest')" title="Copia messaggio" aria-label="Copia messaggio">
@@ -613,23 +631,36 @@ function renderThread() {
       </div>
 
       <div class="bolla-programmata">
-        Ciao ${conv.name.replace('↳ ', '').split(' ')[0]}, come sta andando il tuo soggiorno? Sul tavolo trovi una breve guida alla raccolta differenziata e alcuni consigli sul quartiere.
-      </div>
-
-      ${needsTranslation ? `
-      <div class="barra-trad-chiusa" onclick="toggleSchedTrad()">
-        <span style="color:#2E54E8;display:inline-flex;">${ICONS.globe}</span>
-        <span style="font-size:11px;font-weight:600;color:#2E54E8;flex:1;">TRADUZIONE PROGRAMMATA (${conv.langName.toUpperCase()})</span>
-        <span style="color:#2E54E8;display:inline-flex;">${state.schedTradOpen ? ICONS.chevronUp : ICONS.chevronDown}</span>
-      </div>
-      ${state.schedTradOpen ? `
-        <div class="card-trad-host" style="margin-top:2px;">
-          <div class="testo-trad-host">
-            Cześć Adam, jak mija pobyt? Na stole znajdziesz krótki przewodnik dotyczący segregacji odpadów oraz kilka wskazówek o okolicy.
+        ${needsTranslation ? `
+          <div class="bubble-trad-bar sched">
+            <div class="bubble-trad-bar-left">
+              <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
+              <span>Tradotto in ${conv.langName} con AI</span>
+            </div>
+            <div class="bubble-trad-bar-right">
+              <button type="button" class="bubble-trad-lang-btn guest" onclick="showToast('Traduzione programmata AI: Italiano → ${conv.langName}')">
+                ${ICONS.globe}
+                <span>Lingue</span>
+              </button>
+              <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleSchedTrad()">
+                <span>${state.schedTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}</span>
+                ${state.schedTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
+              </button>
+            </div>
           </div>
+        ` : ''}
+        <div class="bubble-main-text">
+          Ciao ${conv.name.replace('↳ ', '').split(' ')[0]}, come sta andando il tuo soggiorno? Sul tavolo trovi una breve guida alla raccolta differenziata e alcuni consigli sul quartiere.
         </div>
-      ` : ''}
-      ` : ''}
+        ${needsTranslation && state.schedTradOpen ? `
+          <div class="bubble-trad-box guest">
+            <div class="bubble-trad-box-lbl">TRADUZIONE PROGRAMMATA (${conv.langName.toUpperCase()})</div>
+            <div class="bubble-trad-box-txt">
+              Cześć Adam, jak mija pobyt? Na stole znajdziesz krótki przewodnik dotyczący segregacji odpadów oraz kilka wskazówek o okolicy.
+            </div>
+          </div>
+        ` : ''}
+      </div>
 
       <div class="msg-bottom-actions">
         <button class="btn-msg-action copy" onclick="copyThreadMessage('sched')" title="Copia messaggio" aria-label="Copia messaggio">
