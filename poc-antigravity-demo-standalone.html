@@ -510,17 +510,51 @@ button, input, textarea {
 .conv-top {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
+}
+
+.conv-nome-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
 }
 
 .conv-nome {
   font-size: 14px;
   font-weight: 700;
   color: #FFFFFF;
-  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.conv-sent-face {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #4ADE80;
+  flex-shrink: 0;
+}
+
+.conv-sent-face svg {
+  width: 14px;
+  height: 14px;
+}
+
+.hdr-sentiment-face {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #16A34A;
+  flex-shrink: 0;
+}
+
+.hdr-sentiment-face svg {
+  width: 15px;
+  height: 15px;
 }
 
 .conv-item.linked .conv-nome {
@@ -6641,9 +6675,8 @@ button, input, textarea {
             <div class="mob-chat-title-col">
               <div class="mob-chat-name-row">
                 <span class="mob-chat-guest-name" id="mobChatGuestName">Adam Nowak</span>
-                <span class="pill-header sent mob-chat-sent-pill">
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#15703D" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-                  Positivo
+                <span class="hdr-sentiment-face" title="Sentiment: Positivo">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
                 </span>
               </div>
               <div class="mob-chat-subinfo" id="mobChatSubInfo">Suite 14 · In soggiorno</div>
@@ -7190,13 +7223,15 @@ function renderConversationLists() {
         ${c.dagestire ? '<div class="barra-accento gialla"></div>' : (isSel ? '<div class="barra-accento"></div>' : '')}
         <div class="conv-body">
           <div class="conv-top">
-            <span class="conv-nome">${c.name}</span>
+            <div class="conv-nome-wrap">
+              <span class="conv-nome">${c.name}</span>
+              ${(c.positivo || c.headerSentiment) ? `<span class="conv-sent-face" title="Sentiment: ${c.headerSentiment || 'Positivo'}">${ICONS.smile16}</span>` : ''}
+            </div>
             <span class="conv-data">${c.date}</span>
           </div>
           <div class="conv-badges">
             ${c.dateBadge ? `<span class="pill date">${ICONS.calendar} ${c.dateBadge}</span>` : ''}
             ${c.checkin ? `<span class="pill checkin">${ICONS.calendar} In corso</span>` : ''}
-            ${c.positivo ? `<span class="pill checkin">${ICONS.smile} Positivo</span>` : ''}
           </div>
           <div class="conv-prev">${prevHtml}</div>
           ${c.dagestire ? `<div class="conv-attesa-row"><span class="pill-attesa-risposta">DA GESTIRE</span></div>` : ''}
@@ -7220,7 +7255,7 @@ function renderThread() {
     headerLeft.innerHTML = `
       <span class="titolo-messaggi">Messaggi</span>
       <span class="contatore-msg">${ICONS.msgSquare} ${conv.msgCount}</span>
-      <span class="pill-header sent">${ICONS.smile} ${conv.headerSentiment}</span>
+      <span class="hdr-sentiment-face" title="Sentiment: ${conv.headerSentiment}">${ICONS.smile16}</span>
     `;
   }
 

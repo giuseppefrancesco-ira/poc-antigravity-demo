@@ -432,13 +432,15 @@ function renderConversationLists() {
         ${c.dagestire ? '<div class="barra-accento gialla"></div>' : (isSel ? '<div class="barra-accento"></div>' : '')}
         <div class="conv-body">
           <div class="conv-top">
-            <span class="conv-nome">${c.name}</span>
+            <div class="conv-nome-wrap">
+              <span class="conv-nome">${c.name}</span>
+              ${(c.positivo || c.headerSentiment) ? `<span class="conv-sent-face" title="Sentiment: ${c.headerSentiment || 'Positivo'}">${ICONS.smile16}</span>` : ''}
+            </div>
             <span class="conv-data">${c.date}</span>
           </div>
           <div class="conv-badges">
             ${c.dateBadge ? `<span class="pill date">${ICONS.calendar} ${c.dateBadge}</span>` : ''}
             ${c.checkin ? `<span class="pill checkin">${ICONS.calendar} In corso</span>` : ''}
-            ${c.positivo ? `<span class="pill checkin">${ICONS.smile} Positivo</span>` : ''}
           </div>
           <div class="conv-prev">${prevHtml}</div>
           ${c.dagestire ? `<div class="conv-attesa-row"><span class="pill-attesa-risposta">DA GESTIRE</span></div>` : ''}
@@ -462,7 +464,7 @@ function renderThread() {
     headerLeft.innerHTML = `
       <span class="titolo-messaggi">Messaggi</span>
       <span class="contatore-msg">${ICONS.msgSquare} ${conv.msgCount}</span>
-      <span class="pill-header sent">${ICONS.smile} ${conv.headerSentiment}</span>
+      <span class="hdr-sentiment-face" title="Sentiment: ${conv.headerSentiment}">${ICONS.smile16}</span>
     `;
   }
 

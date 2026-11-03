@@ -500,17 +500,51 @@ button, input, textarea {
 .conv-top {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
+}
+
+.conv-nome-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
 }
 
 .conv-nome {
   font-size: 14px;
   font-weight: 700;
   color: #FFFFFF;
-  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.conv-sent-face {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #4ADE80;
+  flex-shrink: 0;
+}
+
+.conv-sent-face svg {
+  width: 14px;
+  height: 14px;
+}
+
+.hdr-sentiment-face {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #16A34A;
+  flex-shrink: 0;
+}
+
+.hdr-sentiment-face svg {
+  width: 15px;
+  height: 15px;
 }
 
 .conv-item.linked .conv-nome {
