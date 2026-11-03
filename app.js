@@ -87,6 +87,7 @@ const state = {
   promptText: '',
   composerMode: 'reply',
   guestNoteDrafts: {},
+  editingGuestNote: false,
   mobileTab: 'chat',     // 'inbox', 'chat', 'ai'
   selectedConvId: 'adam',
   quickFilter: 'all',    // 'all', 'unread', 'Airbnb', 'Booking'
@@ -914,36 +915,48 @@ function renderSiderAI() {
         </div>
       </div>
 
-      <!-- 4. Note Ospite + Piccolo Form di Modifica -->
+      <!-- 4. Note Ospite (singola nota con tastino matita per modificare e bottone per salvare) -->
       <div class="gs-card gs-note-card" id="gsGuestNoteSection">
         <div class="gs-note-head">
           <div class="gs-note-title-row">
             <span class="gs-note-icon">${ICONS.stickyNote14}</span>
             <span class="gs-note-title">Note ospite</span>
           </div>
-          <span class="gs-note-time">${currentNoteObj.author} · ${currentNoteObj.time}</span>
-        </div>
-
-        <div class="gs-note-display" onclick="focusGuestNoteForm()" title="Clicca per modificare la nota">
-          ${currentNoteObj.text || 'Nessuna nota presente per questo ospite.'}
-        </div>
-
-        <form class="gs-note-form" onsubmit="event.preventDefault();saveGuestDetailNote();">
-          <label class="gs-note-form-lbl" for="guestDetailNoteInput">Modifica nota</label>
-          <textarea
-            id="guestDetailNoteInput"
-            class="gs-note-textarea"
-            rows="2"
-            placeholder="Scrivi o modifica la nota per questo ospite..."
-            oninput="updateGuestDetailNoteDraft(this.value)"
-          >${currentNoteDraft}</textarea>
-          <div class="gs-note-form-actions">
-            <button type="submit" class="gs-note-save-btn">
-              ${ICONS.save14}
-              <span>Salva nota</span>
+          <div class="gs-note-head-right">
+            <span class="gs-note-time">${currentNoteObj.author} · ${currentNoteObj.time}</span>
+            <button
+              type="button"
+              class="gs-note-edit-btn ${state.editingGuestNote ? 'active' : ''}"
+              onclick="toggleGuestNoteEdit()"
+              title="${state.editingGuestNote ? 'Annulla modifica' : 'Modifica nota ospite'}"
+              aria-label="${state.editingGuestNote ? 'Annulla modifica' : 'Modifica nota ospite'}"
+            >
+              ${ICONS.pencil}
             </button>
           </div>
-        </form>
+        </div>
+
+        ${state.editingGuestNote ? `
+          <form class="gs-note-form" onsubmit="event.preventDefault();saveGuestDetailNote();">
+            <textarea
+              id="guestDetailNoteInput"
+              class="gs-note-textarea"
+              rows="3"
+              placeholder="Scrivi o modifica la nota per questo ospite..."
+              oninput="updateGuestDetailNoteDraft(this.value)"
+            >${currentNoteDraft}</textarea>
+            <div class="gs-note-form-actions">
+              <button type="submit" class="gs-note-save-btn">
+                ${ICONS.save14}
+                <span>Salva nota</span>
+              </button>
+            </div>
+          </form>
+        ` : `
+          <div class="gs-note-display ${!currentNoteObj.text ? 'empty' : ''}">
+            ${currentNoteObj.text || 'Nessuna nota presente per questo ospite.'}
+          </div>
+        `}
       </div>
 
     </div>
@@ -1832,6 +1845,7 @@ function setMobileTab(tab) {
 function selectConversation(id) {
   state.selectedConvId = id;
   state.bcTransOpen = false;
+  state.editingGuestNote = false;
   const conv = CONVERSATIONS.find(c => c.id === id);
   if (conv) {
     state.outboundChannel = conv.channel;
@@ -2823,6 +2837,30 @@ function sendReplyNow() {
   closeDraftEditor();
 }
 
+function toggleGuestNoteEdit(forceState) {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const m = getConvPmsMeta(conv);
+  const currentNoteObj = (conv.internalNotes && conv.internalNotes[0]) || {
+    author: 'Sara M. (Reception)',
+    time: '11:15',
+    text: m.handoverNote || ''
+  };
+  const next = typeof forceState === 'boolean' ? forceState : !state.editingGuestNote;
+  state.editingGuestNote = next;
+  state.guestNoteDrafts = state.guestNoteDrafts || {};
+  state.guestNoteDrafts[conv.id] = currentNoteObj.text || '';
+  renderSiderAI();
+  if (next) {
+    setTimeout(() => {
+      const ta = document.getElementById('guestDetailNoteInput');
+      if (ta) {
+        ta.focus();
+        ta.setSelectionRange(ta.value.length, ta.value.length);
+      }
+    }, 40);
+  }
+}
+
 function updateGuestDetailNoteDraft(val) {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
   state.guestNoteDrafts = state.guestNoteDrafts || {};
@@ -2831,11 +2869,19 @@ function updateGuestDetailNoteDraft(val) {
 
 function saveGuestDetailNote() {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const m = getConvPmsMeta(conv);
   state.guestNoteDrafts = state.guestNoteDrafts || {};
-  const currentNote = (conv.internalNotes && conv.internalNotes.length > 0) ? conv.internalNotes[conv.internalNotes.length - 1].text : '';
-  const text = (state.guestNoteDrafts[conv.id] !== undefined ? state.guestNoteDrafts[conv.id] : currentNote).trim();
+  const fallbackNote = (conv.internalNotes && conv.internalNotes.length > 0)
+    ? conv.internalNotes[conv.internalNotes.length - 1].text
+    : (m.handoverNote || '');
+  const text = (state.guestNoteDrafts[conv.id] !== undefined ? state.guestNoteDrafts[conv.id] : fallbackNote).trim();
+  state.editingGuestNote = false;
   if (!text) {
-    conv.internalNotes = [];
+    conv.internalNotes = [{
+      author: 'Sara M. (Reception)',
+      time: '11:15',
+      text: ''
+    }];
     state.guestNoteDrafts[conv.id] = '';
     renderSiderAI();
     showToast('Nota ospite rimossa');
@@ -2844,23 +2890,31 @@ function saveGuestDetailNote() {
   const now = new Date();
   const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
   conv.internalNotes = [{
+    author: 'Sara M. (Reception)',
     time: timeStr,
     text
   }];
   state.guestNoteDrafts[conv.id] = text;
   renderSiderAI();
-  showToast('Nota ospite aggiornata nei dettagli ospite');
+  showToast('Nota ospite salvata');
 }
 
 function focusGuestNoteForm() {
   if (state.viewport === 'mobile') {
     setMobileTab('ai');
   }
+  if (state.siderCollapsed) {
+    state.siderCollapsed = false;
+  }
+  toggleGuestNoteEdit(true);
   setTimeout(() => {
     const section = document.getElementById('gsGuestNoteSection');
     if (section) section.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    const ta = document.getElementById('gsGuestNoteTextarea');
-    if (ta) ta.focus();
+    const ta = document.getElementById('guestDetailNoteInput');
+    if (ta) {
+      ta.focus();
+      ta.setSelectionRange(ta.value.length, ta.value.length);
+    }
   }, 60);
 }
 
