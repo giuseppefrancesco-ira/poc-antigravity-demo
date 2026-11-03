@@ -713,19 +713,6 @@ function renderSiderAI() {
 
           <div class="div-card"></div>
 
-          <div style="display:flex;gap:6px;">
-            <button class="btn-gen primary" style="height:34px;font-size:12px;flex:1;" onclick="openDraftEditor()">
-              ${ICONS.sparkles16}
-              <span>Genera risposta AI</span>
-            </button>
-            <button class="btn-gen sky" style="height:34px;font-size:12px;flex:1;" onclick="openPromptMode()">
-              ${ICONS.pencil}
-              <span>Scrivi prompt / Istruzione</span>
-            </button>
-          </div>
-
-          <div class="div-card"></div>
-
           <div class="riga-autonomia">
             <div class="autonomia-meta">
               <span class="badge-autonomia-pct">AI 94%</span>
@@ -818,6 +805,15 @@ function renderBottomComposer() {
           oninput="handleComposerInput(this.value)"
           onkeydown="if(event.key==='Enter')sendReplyNow()"
         />
+
+        <button type="button" class="bc-generate-ai-btn collapsed" onclick="openDraftEditor()" title="Genera con AI" data-tooltip="Genera con AI" aria-label="Genera con AI">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 14 4 9 9 4"/>
+            <path d="M20 20v-7a4 4 0 0 0-4-4H4"/>
+            <path d="M18.5 2 19.5 4.8 22.3 5.8 19.5 6.8 18.5 9.6 17.5 6.8 14.7 5.8 17.5 4.8 18.5 2Z" fill="currentColor" stroke="none"/>
+          </svg>
+          <span>AI</span>
+        </button>
 
         <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
           ${ICONS.mic16}
@@ -1006,39 +1002,7 @@ function renderBottomComposer() {
 
         <!-- 2. Middle Body Area -->
         <div class="bc-body">
-          ${state.promptMode ? `
-            <div class="box-prompt-mode" style="padding:0;">
-              <div class="prompt-mode-banner">
-                Scrivi un'istruzione breve e l'AI prepara il messaggio finale nello stile configurato.
-              </div>
-              <textarea
-                class="prompt-mode-textarea"
-                id="initialPromptTextarea"
-                placeholder="Scrivi qui l'istruzione (es. conferma posto auto #14 a 15€/notte)..."
-                oninput="state.promptText = this.value"
-                ${state.promptGenerating ? 'disabled' : ''}
-              >${state.promptText || ''}</textarea>
-              <div class="prompt-mode-actions">
-                <button
-                  type="button"
-                  class="btn-prompt-generate ${state.promptGenerating ? 'loading' : ''}"
-                  onclick="generateFromPromptMode()"
-                  ${state.promptGenerating ? 'disabled' : ''}
-                >
-                  ${state.promptGenerating ? ICONS.spinner16 : ICONS.sparkles16}
-                  <span>Genera da prompt</span>
-                </button>
-                <button
-                  type="button"
-                  class="btn-prompt-cancel"
-                  onclick="cancelPromptMode()"
-                  ${state.promptGenerating ? 'disabled' : ''}
-                >
-                  Annulla
-                </button>
-              </div>
-            </div>
-          ` : isNoteMode ? `
+          ${isNoteMode ? `
             <textarea
               class="bc-textarea"
               id="noteTextarea"
@@ -1046,12 +1010,29 @@ function renderBottomComposer() {
               oninput="updateNoteDraftText(this.value, this)"
             >${state.noteDraftText}</textarea>
           ` : `
-            <textarea
-              class="bc-textarea"
-              id="draftTextarea"
-              placeholder="Scrivi un messaggio in italiano..."
-              oninput="handleComposerInput(this.value, this)"
-            >${draftVal}</textarea>
+            <div class="bc-textarea-wrap">
+              <textarea
+                class="bc-textarea"
+                id="draftTextarea"
+                placeholder="Scrivi un messaggio in italiano..."
+                oninput="handleComposerInput(this.value, this)"
+              >${draftVal}</textarea>
+              <button
+                type="button"
+                class="bc-generate-ai-btn"
+                onclick="openDraftEditor(false, true)"
+                title="Genera con AI"
+                data-tooltip="Genera con AI"
+                aria-label="Genera con AI"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 14 4 9 9 4"/>
+                  <path d="M20 20v-7a4 4 0 0 0-4-4H4"/>
+                  <path d="M18.5 2 19.5 4.8 22.3 5.8 19.5 6.8 18.5 9.6 17.5 6.8 14.7 5.8 17.5 4.8 18.5 2Z" fill="currentColor" stroke="none"/>
+                </svg>
+                <span>AI</span>
+              </button>
+            </div>
           `}
 
           ${state.attachedFile ? `
@@ -1064,7 +1045,7 @@ function renderBottomComposer() {
             </div>
           ` : ''}
 
-          ${state.draftOpen && !state.promptMode && !isNoteMode ? `
+          ${state.draftOpen && !isNoteMode ? `
             <div class="bc-ai-feedback-row">
               <div class="bc-ai-rate-left">
                 <span>${state.aiRating === 'up' ? 'Risposta AI valutata utile' : state.aiRating === 'down' ? 'Risposta AI segnalata da migliorare' : 'Valuta risposta AI'}</span>
@@ -1275,17 +1256,17 @@ function openDraftEditor(focusPrompt = false, focusTextarea = false) {
   state.draftOpen = true;
   if (!state.drafts[conv.id]) {
     state.drafts[conv.id] = state.variants[0].text;
+  } else if (focusTextarea) {
+    state.variantIdx = ((state.variantIdx || 0) + 1) % state.variants.length;
+    state.drafts[conv.id] = state.variants[state.variantIdx].text;
   }
   state.replyTab = 'risposta';
   renderConversationLists();
   renderSiderAI();
-  if (focusPrompt) {
-    setTimeout(() => document.getElementById('freePromptInput')?.focus(), 60);
-  } else if (focusTextarea) {
+  if (focusTextarea) {
     setTimeout(() => document.getElementById('draftTextarea')?.focus(), 60);
-  } else {
-    showToast('Bozza AI generata in Italiano con traduzione pronta');
   }
+  showToast('Risposta generata con AI');
 }
 
 function closeDraftEditor() {

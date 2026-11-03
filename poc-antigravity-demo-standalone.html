@@ -4188,7 +4188,16 @@ button, input, textarea {
   gap: 8px;
 }
 
+.bc-textarea-wrap {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+}
+
 .bc-textarea {
+  flex: 1;
   width: 100%;
   min-height: 54px;
   max-height: 150px;
@@ -4200,7 +4209,66 @@ button, input, textarea {
   font-size: 13.5px;
   line-height: 1.5;
   color: #0F172A;
-  padding: 0;
+  padding: 0 4px 0 0;
+}
+
+.bc-generate-ai-btn {
+  position: relative;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid #C7D2FE;
+  background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%);
+  color: #2457E6;
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(36, 87, 230, 0.08);
+  transition: all 0.15s ease;
+}
+
+.bc-generate-ai-btn:hover {
+  background: linear-gradient(135deg, #E0E7FF 0%, #EDE9FE 100%);
+  border-color: #818CF8;
+  color: #1D4ED8;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(36, 87, 230, 0.16);
+}
+
+.bc-generate-ai-btn:active {
+  transform: translateY(0);
+}
+
+.bc-generate-ai-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 7px);
+  right: 0;
+  background: #0F172A;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
+  z-index: 60;
+}
+
+.bc-generate-ai-btn:hover::after {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .bc-textarea::placeholder {
@@ -6014,19 +6082,6 @@ function renderSiderAI() {
 
           <div class="div-card"></div>
 
-          <div style="display:flex;gap:6px;">
-            <button class="btn-gen primary" style="height:34px;font-size:12px;flex:1;" onclick="openDraftEditor()">
-              ${ICONS.sparkles16}
-              <span>Genera risposta AI</span>
-            </button>
-            <button class="btn-gen sky" style="height:34px;font-size:12px;flex:1;" onclick="openPromptMode()">
-              ${ICONS.pencil}
-              <span>Scrivi prompt / Istruzione</span>
-            </button>
-          </div>
-
-          <div class="div-card"></div>
-
           <div class="riga-autonomia">
             <div class="autonomia-meta">
               <span class="badge-autonomia-pct">AI 94%</span>
@@ -6119,6 +6174,15 @@ function renderBottomComposer() {
           oninput="handleComposerInput(this.value)"
           onkeydown="if(event.key==='Enter')sendReplyNow()"
         />
+
+        <button type="button" class="bc-generate-ai-btn collapsed" onclick="openDraftEditor()" title="Genera con AI" data-tooltip="Genera con AI" aria-label="Genera con AI">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 14 4 9 9 4"/>
+            <path d="M20 20v-7a4 4 0 0 0-4-4H4"/>
+            <path d="M18.5 2 19.5 4.8 22.3 5.8 19.5 6.8 18.5 9.6 17.5 6.8 14.7 5.8 17.5 4.8 18.5 2Z" fill="currentColor" stroke="none"/>
+          </svg>
+          <span>AI</span>
+        </button>
 
         <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
           ${ICONS.mic16}
@@ -6307,39 +6371,7 @@ function renderBottomComposer() {
 
         <!-- 2. Middle Body Area -->
         <div class="bc-body">
-          ${state.promptMode ? `
-            <div class="box-prompt-mode" style="padding:0;">
-              <div class="prompt-mode-banner">
-                Scrivi un'istruzione breve e l'AI prepara il messaggio finale nello stile configurato.
-              </div>
-              <textarea
-                class="prompt-mode-textarea"
-                id="initialPromptTextarea"
-                placeholder="Scrivi qui l'istruzione (es. conferma posto auto #14 a 15€/notte)..."
-                oninput="state.promptText = this.value"
-                ${state.promptGenerating ? 'disabled' : ''}
-              >${state.promptText || ''}</textarea>
-              <div class="prompt-mode-actions">
-                <button
-                  type="button"
-                  class="btn-prompt-generate ${state.promptGenerating ? 'loading' : ''}"
-                  onclick="generateFromPromptMode()"
-                  ${state.promptGenerating ? 'disabled' : ''}
-                >
-                  ${state.promptGenerating ? ICONS.spinner16 : ICONS.sparkles16}
-                  <span>Genera da prompt</span>
-                </button>
-                <button
-                  type="button"
-                  class="btn-prompt-cancel"
-                  onclick="cancelPromptMode()"
-                  ${state.promptGenerating ? 'disabled' : ''}
-                >
-                  Annulla
-                </button>
-              </div>
-            </div>
-          ` : isNoteMode ? `
+          ${isNoteMode ? `
             <textarea
               class="bc-textarea"
               id="noteTextarea"
@@ -6347,12 +6379,29 @@ function renderBottomComposer() {
               oninput="updateNoteDraftText(this.value, this)"
             >${state.noteDraftText}</textarea>
           ` : `
-            <textarea
-              class="bc-textarea"
-              id="draftTextarea"
-              placeholder="Scrivi un messaggio in italiano..."
-              oninput="handleComposerInput(this.value, this)"
-            >${draftVal}</textarea>
+            <div class="bc-textarea-wrap">
+              <textarea
+                class="bc-textarea"
+                id="draftTextarea"
+                placeholder="Scrivi un messaggio in italiano..."
+                oninput="handleComposerInput(this.value, this)"
+              >${draftVal}</textarea>
+              <button
+                type="button"
+                class="bc-generate-ai-btn"
+                onclick="openDraftEditor(false, true)"
+                title="Genera con AI"
+                data-tooltip="Genera con AI"
+                aria-label="Genera con AI"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 14 4 9 9 4"/>
+                  <path d="M20 20v-7a4 4 0 0 0-4-4H4"/>
+                  <path d="M18.5 2 19.5 4.8 22.3 5.8 19.5 6.8 18.5 9.6 17.5 6.8 14.7 5.8 17.5 4.8 18.5 2Z" fill="currentColor" stroke="none"/>
+                </svg>
+                <span>AI</span>
+              </button>
+            </div>
           `}
 
           ${state.attachedFile ? `
@@ -6365,7 +6414,7 @@ function renderBottomComposer() {
             </div>
           ` : ''}
 
-          ${state.draftOpen && !state.promptMode && !isNoteMode ? `
+          ${state.draftOpen && !isNoteMode ? `
             <div class="bc-ai-feedback-row">
               <div class="bc-ai-rate-left">
                 <span>${state.aiRating === 'up' ? 'Risposta AI valutata utile' : state.aiRating === 'down' ? 'Risposta AI segnalata da migliorare' : 'Valuta risposta AI'}</span>
@@ -6576,17 +6625,17 @@ function openDraftEditor(focusPrompt = false, focusTextarea = false) {
   state.draftOpen = true;
   if (!state.drafts[conv.id]) {
     state.drafts[conv.id] = state.variants[0].text;
+  } else if (focusTextarea) {
+    state.variantIdx = ((state.variantIdx || 0) + 1) % state.variants.length;
+    state.drafts[conv.id] = state.variants[state.variantIdx].text;
   }
   state.replyTab = 'risposta';
   renderConversationLists();
   renderSiderAI();
-  if (focusPrompt) {
-    setTimeout(() => document.getElementById('freePromptInput')?.focus(), 60);
-  } else if (focusTextarea) {
+  if (focusTextarea) {
     setTimeout(() => document.getElementById('draftTextarea')?.focus(), 60);
-  } else {
-    showToast('Bozza AI generata in Italiano con traduzione pronta');
   }
+  showToast('Risposta generata con AI');
 }
 
 function closeDraftEditor() {
