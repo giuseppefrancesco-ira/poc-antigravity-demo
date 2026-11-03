@@ -116,14 +116,14 @@ const CONVERSATIONS = [
     checkin: true,
     dagestire: true,
     positivo: false,
-    priorityBadge: 'Priorità Media · Upsell',
+    priorityBadge: null,
     reviewBadge: null,
-    preview: '↗ Cześć! Dziękuję za powitanie. Mam pytanie o parking...',
+    preview: '↙ Cześć! Dziękuję za powitanie. Mam pytanie o parking...',
     langCode: 'PL',
     langName: 'Polacco',
     msgCount: 12,
     headerSentiment: 'Positivo',
-    headerPriority: 'Priorità Media',
+    headerPriority: null,
     stay: {
       room: 'Suite 14',
       bookingCode: '#DEMO-1048',
@@ -135,7 +135,7 @@ const CONVERSATIONS = [
       pmsVerified: true
     },
     systemEvent: 'Prenotazione #DEMO-1048 sincronizzata da Airbnb · Codice smart lock Nuki (000000) generato e inviato · 11:05',
-    systemEvent2: 'Lingua Polacco (PL) rilevata · Tag automatico "Parcheggio" e Priorità Media assegnati · 11:20',
+    systemEvent2: 'Lingua Polacco (PL) rilevata automaticamente · 11:20',
     internalNotes: [
       {
         author: 'Sara M. (Reception)',
@@ -364,13 +364,23 @@ function renderConversationLists() {
     return !query || c.name.toLowerCase().includes(query) || c.preview.toLowerCase().includes(query) || (c.dateBadge && c.dateBadge.toLowerCase().includes(query));
   });
 
+  const formatPreviewArrow = (text) => {
+    if (text.startsWith('↙')) {
+      return `<span class="prev-arrow in">↙</span> ${text.replace(/^↙\s*/, '')}`;
+    }
+    if (text.startsWith('↗')) {
+      return `<span class="prev-arrow out">↗</span> ${text.replace(/^↗\s*/, '')}`;
+    }
+    return text;
+  };
+
   const html = filtered.map(c => {
     const isSel = c.id === state.selectedConvId;
     const showBozzaBadge = (c.id === state.selectedConvId && state.draftOpen);
-    const rawDraftText = (state.drafts[c.id] || c.preview.replace(/^↗\s*/, '')).replace(/\s+/g, ' ').trim();
+    const rawDraftText = (state.drafts[c.id] || c.preview.replace(/^[↗↙]\s*/, '')).replace(/\s+/g, ' ').trim();
     const prevHtml = showBozzaBadge
       ? `<span class="bozza-prefix">Bozza:</span> <span class="bozza-preview-text">${rawDraftText}</span>`
-      : c.preview;
+      : formatPreviewArrow(c.preview);
 
     if (c.linked) {
       return `
@@ -400,15 +410,10 @@ function renderConversationLists() {
           </div>
           <div class="conv-badges">
             ${c.dateBadge ? `<span class="pill date">${ICONS.calendar} ${c.dateBadge}</span>` : ''}
-            ${c.checkin ? `<span class="pill checkin">Check-in</span>` : ''}
+            ${c.checkin ? `<span class="pill checkin">${ICONS.calendar} In corso</span>` : ''}
             ${c.dagestire ? `<span class="pill dagestire">Da gestire</span>` : ''}
             ${c.positivo ? `<span class="pill checkin">${ICONS.smile} Positivo</span>` : ''}
           </div>
-          ${c.priorityBadge ? `
-            <div class="conv-badges">
-              <span class="pill prio">${ICONS.zap} ${c.priorityBadge}</span>
-            </div>
-          ` : ''}
           <div class="conv-prev">${prevHtml}</div>
         </div>
       </div>
@@ -431,7 +436,6 @@ function renderThread() {
       <span class="titolo-messaggi">Messaggi</span>
       <span class="contatore-msg">${ICONS.msgSquare} ${conv.msgCount}</span>
       <span class="pill-header sent">${ICONS.smile} ${conv.headerSentiment}</span>
-      <span class="pill-header prio">${ICONS.zap} ${conv.headerPriority}</span>
     `;
   }
 
@@ -545,9 +549,6 @@ function renderThread() {
     <div class="blocco-msg guest">
       <div class="meta-row">
         <span class="meta-ospite">OSPITE · 11:20</span>
-        <span class="pill-msg tag-ai" title="Tag assegnato dall'AI">${ICONS.sparkles} <span>Parcheggio</span></span>
-        ${manualTagsHtml}
-        <span class="pill-msg add-tag" onclick="addManualTagPrompt()">+ Tag</span>
       </div>
 
       <!-- Bolla Bianca Ospite (312:7451) -->
@@ -555,7 +556,7 @@ function renderThread() {
         <div class="testo-ospite-orig">
           ${conv.id === 'adam'
             ? 'Cześć! Dziękuję za powitanie. Kod działa poprawnie. Mam jeszcze pytanie o parking: czy jest miejsce zarezerwowane dla gości i jaka jest cena za dobę?'
-            : conv.preview.replace('↗ ', '')}
+            : conv.preview.replace(/^[↗↙]\s*/, '')}
         </div>
       </div>
 
@@ -1812,13 +1813,13 @@ function addManualTagPrompt() {
 }
 
 function setFolderFilter(folder) {
-  showToast(folder === 'incorso' ? 'Filtro: Soggiorno in corso (3)' : 'Filtro: Archiviate / Gestite (42)');
+  showToast(folder === 'incorso' ? 'Filtro: Soggiorno in corso (3)' : 'Filtro: Archiviate (42)');
 }
 
 function cycleSortOrder() {
   const el = document.getElementById('sortLabelDesktop');
   if (!el) return;
-  el.textContent = el.textContent === 'Ultimo messaggio' ? 'Priorità & Soggiorno' : 'Ultimo messaggio';
+  el.textContent = el.textContent === 'Ultimo messaggio' ? 'Data check-in' : 'Ultimo messaggio';
   showToast(`Ordinamento: ${el.textContent}`);
 }
 

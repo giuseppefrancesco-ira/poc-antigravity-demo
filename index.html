@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261102_27" />
+  <link rel="stylesheet" href="styles.css?v=20261103_01" />
 </head>
 <body>
 
@@ -77,17 +77,16 @@
         </button>
       </aside>
 
-      <!-- 2. Lista messaggi (338px, #FFFFFF) -->
+      <!-- 2. Lista messaggi (338px, #192556) -->
       <section class="col-lista">
         <div class="header-lista">
           <div class="titolo-azioni">
             <h1 class="titolo-lista">Messaggi</h1>
-            <!-- Btn Scarica Messaggi (icona download) -->
+            <!-- Btn Scarica / Segna Messaggi -->
             <button class="btn-scarica-msg" title="Scarica messaggi" onclick="showToast('Scarico nuovi messaggi dai canali OTA completato')">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
               </svg>
             </button>
             <!-- Btn Nuovo -->
@@ -100,10 +99,10 @@
           </div>
 
           <div class="ricerca-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
-            <input type="text" id="searchInputDesktop" placeholder="Cerca ospite, codice o testo..." oninput="renderConversationLists()" />
+            <input type="text" id="searchInputDesktop" placeholder="Cerca..." oninput="renderConversationLists()" />
           </div>
 
           <!-- Cartelle Stato (Stacked vertically 1:1 with Figma) -->
@@ -119,14 +118,14 @@
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
               </svg>
-              <span class="cartella-lbl">Archiviate / Gestite</span>
+              <span class="cartella-lbl">Archiviate</span>
               <span class="cartella-pill-orange">42</span>
             </button>
           </div>
 
           <div class="riga-ordina" onclick="cycleSortOrder()" style="cursor:pointer;">
             <span class="lbl-ordina">ORDINA PER</span>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/>
             </svg>
             <span class="val-ordina" id="sortLabelDesktop">Ultimo messaggio</span>
@@ -139,7 +138,7 @@
         <!-- Footer Lista -->
         <div class="footer-lista" onclick="showToast('Filtro struttura: Casa Aurora (Tutte le unità)')" style="cursor:pointer;" title="Selettore struttura">
           <span class="footer-struttura">Casa Aurora, Suite 14</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 12 15 18 9"/>
           </svg>
         </div>
@@ -193,9 +192,9 @@
           <div class="titolo-azioni">
             <h2 class="titolo-lista" style="font-size:18px;">Messaggi</h2>
             <button class="btn-scarica-msg" title="Scarica messaggi" onclick="showToast('Scarico messaggi completato')">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
               </svg>
             </button>
             <button class="btn-nuovo-msg" title="Nuovo messaggio da ricerca prenotazione" onclick="openNewConvModal()">
@@ -205,10 +204,10 @@
             </button>
           </div>
           <div class="ricerca-box" style="height:36px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
-            <input type="text" placeholder="Cerca ospite, codice o testo..." oninput="document.getElementById('searchInputDesktop').value=this.value;renderConversationLists();" />
+            <input type="text" placeholder="Cerca..." oninput="document.getElementById('searchInputDesktop').value=this.value;renderConversationLists();" />
           </div>
           <div class="cartelle-stato">
             <button class="cartella-row in-corso" style="height:36px;" onclick="setFolderFilter('incorso')">
@@ -222,15 +221,15 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
               </svg>
-              <span class="cartella-lbl" style="font-size:12px;">Archiviate / Gestite</span>
+              <span class="cartella-lbl" style="font-size:12px;">Archiviate</span>
               <span class="cartella-pill-orange">42</span>
             </button>
           </div>
         </div>
         <div class="elenco-conv" id="mobileConvList"></div>
-        <div onclick="showToast('Filtro struttura: Casa Aurora (Tutte le unità)')" style="height:34px;padding:0 16px;background:#F4F6FA;border-top:1px solid #E7EAF0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;cursor:pointer;">
-          <span style="font-size:12px;font-weight:500;color:#0E1424;">Casa Aurora, Suite 14</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="footer-lista" onclick="showToast('Filtro struttura: Casa Aurora (Tutte le unità)')" style="height:34px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;cursor:pointer;">
+          <span class="footer-struttura">Casa Aurora, Suite 14</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 12 15 18 9"/>
           </svg>
         </div>
