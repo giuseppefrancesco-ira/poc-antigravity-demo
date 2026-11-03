@@ -5438,6 +5438,66 @@ button, input, textarea {
   font-weight: 500;
 }
 
+.gs-lang-row {
+  justify-content: flex-start;
+  padding-top: 2px;
+}
+
+.gs-lang-row-label {
+  font-size: 12.5px;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.gs-lang-pill-wrap {
+  margin-left: auto;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 9px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.gs-lang-pill-wrap:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+}
+
+.gs-lang-flag-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.gs-lang-quick-select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #0F172A;
+  padding-right: 16px;
+  cursor: pointer;
+  outline: none;
+}
+
+.gs-lang-chevron {
+  position: absolute;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  color: #64748B;
+  pointer-events: none;
+}
+
 /* Riepilogo Soggiorno (5 elementi ottimizzati) */
 .gs-stay-summary {
   display: flex;
@@ -6496,10 +6556,6 @@ button, input, textarea {
               </svg>
               <span>Aggiorna dati</span>
             </button>
-            <button class="btn-top lang" id="desktopLangBadge" onclick="showToast('Lingua rilevata automaticamente dall\'AI')">
-              <span style="font-size:11px;font-weight:700;color:#475569;" id="desktopLangCode">PL</span>
-              <span id="desktopLangName">Polacco</span>
-            </button>
             <button class="btn-top icon-only" id="btnToggleGuestSiderDesk" onclick="toggleDesktopSider()" title="Apri/chiudi Dettagli ospite">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
@@ -6687,9 +6743,6 @@ button, input, textarea {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
               </svg>
-            </button>
-            <button class="btn-top mob-lang-btn" onclick="showToast('Lingua rilevata automaticamente dall\'AI')">
-              <span id="mobLangBadgeLabel" class="mob-lang-badge-inner">PL Polacco</span>
             </button>
             <button class="btn-top icon-only mob-hdr-btn" id="btnToggleGuestSiderMob" title="Apri Dettagli ospite" onclick="setMobileTab('ai')">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -7635,6 +7688,25 @@ function renderSiderAI() {
               </svg>
             </span>
             <span class="gs-contact-val">${conv.stay.email}</span>
+          </div>
+
+          <div class="gs-contact-row gs-lang-row">
+            <span class="gs-mail-icon" style="color:#64748B;">
+              ${ICONS.globe}
+            </span>
+            <span class="gs-lang-row-label">Lingua</span>
+            <div class="gs-lang-pill-wrap">
+              <span class="gs-lang-flag-icon">${getLangFlagSvg(conv.langCode)}</span>
+              <select class="gs-lang-quick-select" onchange="setOutboundLanguage(this.value)" title="Cambia lingua dell'ospite">
+                <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
+                <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
+                <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
+                <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
+                <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
+                <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
+              </select>
+              <span class="gs-lang-chevron">${ICONS.chevronDown}</span>
+            </div>
           </div>
         </div>
       </div>

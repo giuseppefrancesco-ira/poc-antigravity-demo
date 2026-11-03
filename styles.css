@@ -5428,6 +5428,66 @@ button, input, textarea {
   font-weight: 500;
 }
 
+.gs-lang-row {
+  justify-content: flex-start;
+  padding-top: 2px;
+}
+
+.gs-lang-row-label {
+  font-size: 12.5px;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.gs-lang-pill-wrap {
+  margin-left: auto;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 9px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.gs-lang-pill-wrap:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+}
+
+.gs-lang-flag-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.gs-lang-quick-select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #0F172A;
+  padding-right: 16px;
+  cursor: pointer;
+  outline: none;
+}
+
+.gs-lang-chevron {
+  position: absolute;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  color: #64748B;
+  pointer-events: none;
+}
+
 /* Riepilogo Soggiorno (5 elementi ottimizzati) */
 .gs-stay-summary {
   display: flex;

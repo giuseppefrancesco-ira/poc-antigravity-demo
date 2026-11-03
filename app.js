@@ -845,6 +845,25 @@ function renderSiderAI() {
             </span>
             <span class="gs-contact-val">${conv.stay.email}</span>
           </div>
+
+          <div class="gs-contact-row gs-lang-row">
+            <span class="gs-mail-icon" style="color:#64748B;">
+              ${ICONS.globe}
+            </span>
+            <span class="gs-lang-row-label">Lingua</span>
+            <div class="gs-lang-pill-wrap">
+              <span class="gs-lang-flag-icon">${getLangFlagSvg(conv.langCode)}</span>
+              <select class="gs-lang-quick-select" onchange="setOutboundLanguage(this.value)" title="Cambia lingua dell'ospite">
+                <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
+                <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
+                <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
+                <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
+                <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
+                <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
+              </select>
+              <span class="gs-lang-chevron">${ICONS.chevronDown}</span>
+            </div>
+          </div>
         </div>
       </div>
 
