@@ -497,16 +497,6 @@ function renderThread() {
     `<span class="pill-msg tag-man" onclick="removeManualTag(${idx})" title="Rimuovi tag manuale">${ICONS.user10} <span>${t}</span> ${ICONS.close12}</span>`
   ).join('');
 
-  const internalNotesHtml = (conv.internalNotes || []).map(n => `
-    <div class="pill-nota-compatta" onclick="openManualNoteModal()" style="cursor:pointer;" title="Nota manuale registrata nella conversazione (clicca per aggiungerne un'altra)">
-      <div class="pill-nota-header">
-        <span class="pill-nota-badge">${ICONS.fileText} <span><strong>${n.author}</strong> · ${n.channelType || 'Telefonata'}</span></span>
-        <span class="pill-nota-time">${n.time}</span>
-      </div>
-      <div class="pill-nota-body">${n.text}</div>
-    </div>
-  `).join('');
-
   const needsTranslation = conv.langCode !== 'IT';
   const guestOrigText = conv.id === 'adam'
     ? 'Cześć! Dziękuję za powitanie. Kod działa poprawnie. Mam jeszcze pytanie o parking: czy jest miejsce zarezerwowane dla gości i jaka jest cena za dobę?'
@@ -574,8 +564,6 @@ function renderThread() {
         </button>
       </div>
     </div>
-
-    ${internalNotesHtml}
 
     <!-- Blocco Msg 2 Ospite (312:7447) -->
     <div class="blocco-msg guest">
