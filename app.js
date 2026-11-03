@@ -518,7 +518,7 @@ function renderThread() {
       <div class="meta-row">
         <span class="meta-tu">TU</span>
         <span class="meta-ora">· 11:05 ·</span>
-        <span class="meta-ch">${conv.channel.toUpperCase()}</span>
+        <span class="meta-ch" title="${conv.channel}">${getChannelBadgeHtml(conv.channel)}</span>
       </div>
 
       <div class="bolla-blu-host">
@@ -623,7 +623,8 @@ function renderThread() {
     <div class="blocco-msg host">
       <div class="meta-row">
         <span style="color:#D97706;display:inline-flex;">${ICONS.clock}</span>
-        <span style="font-size:11px;font-weight:600;color:#D97706;">PROGRAMMATO OGGI 11:30 · ${conv.channel.toUpperCase()}</span>
+        <span style="font-size:11px;font-weight:600;color:#D97706;">PROGRAMMATO OGGI 11:30 ·</span>
+        <span class="meta-ch" title="${conv.channel}">${getChannelBadgeHtml(conv.channel)}</span>
         <span style="font-size:11px;font-weight:600;color:#2E54E8;cursor:pointer;" onclick="openDraftEditor();showToast('Apertura modifica messaggio programmato')">Modifica</span>
         <span style="font-size:11px;font-weight:600;color:#DC2626;cursor:pointer;" onclick="showToast('Invio programmato delle 11:30 messo in pausa')">Annulla</span>
       </div>
@@ -1078,7 +1079,7 @@ function getChannelBadgeHtml(channel) {
     return `<span class="bc-ch-circle whatsapp"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>`;
   }
   if (ch.includes('airbnb')) {
-    return `<span class="bc-ch-circle airbnb"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3.5 5-7 9.5-7 13a7 7 0 0 0 14 0c0-3.5-3.5-8-7-13z"/></svg></span>`;
+    return `<span class="bc-ch-circle airbnb"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C9.5 6 4 13.5 4 17.5A4.5 4.5 0 0 0 8.5 22c1.8 0 3.4-1.1 3.5-1.2.1.1 1.7 1.2 3.5 1.2a4.5 4.5 0 0 0 4.5-4.5C20 13.5 14.5 6 12 2Z"/><path d="M12 19.5c-1.7-1.6-2.8-3.3-2.8-4.8a2.8 2.8 0 0 1 5.6 0c0 1.5-1.1 3.2-2.8 4.8Z"/></svg></span>`;
   }
   if (ch.includes('booking')) {
     return `<span class="bc-ch-circle booking">${ICONS.bookingIcon}</span>`;
