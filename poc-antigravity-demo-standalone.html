@@ -4019,7 +4019,7 @@ button, input, textarea {
 
 .faq-meta-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
 }
 
@@ -4064,7 +4064,7 @@ button, input, textarea {
 
 .faq-bottom-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 8px;
   padding: 12px 18px;
   border-top: 1px solid #E2E8F0;
@@ -4072,24 +4072,24 @@ button, input, textarea {
 }
 
 .faq-btn-kb {
-  height: 36px;
+  width: 100%;
+  height: 38px;
   border-radius: 8px;
-  border: 1px solid #CBD5E1;
-  background: #FFFFFF;
-  color: #1E293B;
-  font-size: 12.5px;
+  border: none;
+  background: #2B62FF;
+  color: #FFFFFF;
+  font-size: 13px;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background 0.15s;
 }
 
 .faq-btn-kb:hover {
-  background: #F8FAFC;
-  border-color: #94A3B8;
+  background: #1E4FDB;
 }
 
 .faq-btn-publish {
@@ -12943,11 +12943,6 @@ function openCreateKbModal() {
         </div>
 
         <div class="faq-meta-card">
-          <span class="faq-meta-lbl">Lingua</span>
-          <span class="faq-meta-val">${state.faqDraft.lang}</span>
-        </div>
-
-        <div class="faq-meta-card">
           <span class="faq-meta-lbl">Fonte</span>
           <span class="faq-meta-val">${state.faqDraft.source}</span>
         </div>
@@ -12958,10 +12953,6 @@ function openCreateKbModal() {
       <button type="button" class="faq-btn-kb" onclick="saveNewKbEntry('internal')">
         ${bookDarkIcon}
         <span>Salva in KB</span>
-      </button>
-      <button type="button" class="faq-btn-publish" onclick="saveNewKbEntry('publish')">
-        ${sparklesWhiteIcon}
-        <span>Pubblica FAQ</span>
       </button>
     </div>
   `;

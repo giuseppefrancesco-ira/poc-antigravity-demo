@@ -3754,11 +3754,6 @@ function openCreateKbModal() {
         </div>
 
         <div class="faq-meta-card">
-          <span class="faq-meta-lbl">Lingua</span>
-          <span class="faq-meta-val">${state.faqDraft.lang}</span>
-        </div>
-
-        <div class="faq-meta-card">
           <span class="faq-meta-lbl">Fonte</span>
           <span class="faq-meta-val">${state.faqDraft.source}</span>
         </div>
@@ -3769,10 +3764,6 @@ function openCreateKbModal() {
       <button type="button" class="faq-btn-kb" onclick="saveNewKbEntry('internal')">
         ${bookDarkIcon}
         <span>Salva in KB</span>
-      </button>
-      <button type="button" class="faq-btn-publish" onclick="saveNewKbEntry('publish')">
-        ${sparklesWhiteIcon}
-        <span>Pubblica FAQ</span>
       </button>
     </div>
   `;
