@@ -8025,39 +8025,57 @@ button, input, textarea {
    4. Contenuto di Chat e Dettagli Ospite (sfondo, card, liste) chiaro
    ========================================================= */
 
-/* --- 1. HEADER IN BLU SCURO (#1E2C68) CON TITOLO BIANCO SU CHAT E DETTAGLI OSPITE --- */
-.figma-mobile .mob-chat-header {
+/* --- 1. HEADER IN BLU SCURO (#1E2C68) CON TITOLO BIANCO SU CHAT E DETTAGLI OSPITE (DESKTOP & MOBILE) --- */
+.intestazione-thread,
+.figma-mobile .mob-chat-header,
+.gs-topbar {
   background: #1E2C68;
   border-bottom: 1px solid #2E3E7A;
   color: #FFFFFF;
 }
 
+.gs-topbar {
+  height: 64px;
+  border-left: 1px solid #2E3E7A;
+}
+
+.intestazione-thread .titolo-messaggi,
 .figma-mobile .mob-chat-header .titolo-messaggi,
 .figma-mobile .mob-ai-hdr-title,
-.figma-mobile .mob-ai-hdr-title span {
+.figma-mobile .mob-ai-hdr-title span,
+.gs-topbar .gs-topbar-title {
   color: #FFFFFF !important;
 }
 
-.figma-mobile .mob-ai-hdr-title svg {
+.figma-mobile .mob-ai-hdr-title svg,
+.gs-topbar .gs-header-plain-icon,
+.gs-topbar .gs-header-plain-icon svg {
+  color: #CBD5E1 !important;
   stroke: #CBD5E1 !important;
 }
 
+.intestazione-thread .contatore-msg,
 .figma-mobile .mob-chat-header .contatore-msg {
   color: #CBD5E1;
 }
 
+.intestazione-thread .contatore-msg svg,
 .figma-mobile .mob-chat-header .contatore-msg svg {
   stroke: #CBD5E1;
 }
 
+.intestazione-thread .hdr-sentiment-face,
 .figma-mobile .mob-chat-header .hdr-sentiment-face {
   color: #4ADE80;
 }
 
+.intestazione-thread .hdr-sentiment-face svg,
 .figma-mobile .mob-chat-header .hdr-sentiment-face svg {
   stroke: #4ADE80;
 }
 
+.intestazione-thread .btn-top,
+.intestazione-thread .btn-top.ocr-header-btn,
 .figma-mobile .mob-hdr-btn,
 #mobScreenAI .btn-top.icon-only {
   background: rgba(255, 255, 255, 0.1) !important;
@@ -8065,6 +8083,9 @@ button, input, textarea {
   color: #FFFFFF !important;
 }
 
+.intestazione-thread .btn-top:hover,
+.intestazione-thread .btn-top.active,
+.intestazione-thread .btn-top.ocr-header-btn:hover,
 .figma-mobile .mob-hdr-btn:hover,
 .figma-mobile .mob-hdr-btn.active,
 #mobScreenAI .btn-top.icon-only:hover {
@@ -8073,6 +8094,7 @@ button, input, textarea {
   color: #FFFFFF !important;
 }
 
+.intestazione-thread .btn-top svg,
 .figma-mobile .mob-hdr-btn svg,
 #mobScreenAI .btn-top.icon-only svg {
   stroke: #FFFFFF !important;
@@ -8595,7 +8617,7 @@ button, input, textarea {
               <span>Importa da foto (OCR)</span>
             </button>
             <button class="btn-top" onclick="triggerHubSync()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
                 <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
               </svg>
@@ -8608,7 +8630,7 @@ button, input, textarea {
             </button>
             <div class="hdr-more-wrap">
               <button class="btn-top icon-only" id="btnMoreMenuDesk" onclick="toggleHeaderMoreMenu(event, 'desk')" title="Azioni conversazione e dati ospite">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
                 </svg>
               </button>
