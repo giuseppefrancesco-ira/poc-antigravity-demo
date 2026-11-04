@@ -472,7 +472,7 @@ function renderThread() {
   const headerLeftHtml = `
     <span class="titolo-messaggi">${conv.name.replace('↳ ', '')}</span>
     <span class="contatore-msg">${ICONS.msgSquare} ${conv.msgCount}</span>
-    <span class="hdr-sentiment-face" title="Sentiment: ${conv.headerSentiment}">${ICONS.smile16}</span>
+    <span class="hdr-sentiment-face" onclick="focusGuestSentiment()" title="Sentiment conversazione: ${conv.headerSentiment} (clicca per i dettagli)" style="cursor:pointer;">${ICONS.smile16}</span>
   `;
   const headerLeft = document.getElementById('desktopThreadHeaderLeft');
   if (headerLeft) headerLeft.innerHTML = headerLeftHtml;
@@ -738,7 +738,12 @@ function getConvPmsMeta(conv) {
       nukiCode: conv.stay.nukiCode || '000000',
       checkinPin: conv.stay.checkinPin || '238068',
       touristTax: conv.stay.touristTax || '15',
-      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/s14'
+      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/s14',
+      sentimentLabel: 'Positivo',
+      sentimentScore: '94%',
+      sentimentTone: 'Cordiale e collaborativo',
+      sentimentSummary: 'Ospite soddisfatto dell\'accoglienza e del funzionamento del codice Nuki. Sta solo richiedendo informazioni pratiche sul parcheggio coperto.',
+      sentimentSignals: ['Check-in regolare', 'Tono cortese', 'Richiesta info parcheggio']
     },
     olga: {
       checkin: '6 ott 2026',
@@ -760,7 +765,12 @@ function getConvPmsMeta(conv) {
       nukiCode: conv.stay.nukiCode || '000000',
       checkinPin: conv.stay.checkinPin || '238068',
       touristTax: conv.stay.touristTax || '15',
-      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/s14'
+      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/s14',
+      sentimentLabel: 'Positivo',
+      sentimentScore: '96%',
+      sentimentTone: 'Entusiasta e reattiva',
+      sentimentSummary: 'Comunicazione rapida e molto cordiale su WhatsApp. Nessuna criticità segnalata durante l\'accesso alla Suite 14.',
+      sentimentSignals: ['Accesso confermato', 'Risposte rapide', 'Nessun reclamo']
     },
     maria: {
       checkin: '29 ott 2026',
@@ -782,7 +792,12 @@ function getConvPmsMeta(conv) {
       nukiCode: conv.stay.nukiCode || '753293',
       checkinPin: conv.stay.checkinPin || '419022',
       touristTax: conv.stay.touristTax || '12',
-      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/j08'
+      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/j08',
+      sentimentLabel: 'Positivo',
+      sentimentScore: '92%',
+      sentimentTone: 'Tranquillo e propositivo',
+      sentimentSummary: 'L\'ospite apprezza il soggiorno nella Junior Suite 08 e ha fatto domande operative su Wi-Fi e orari della colazione con tono molto gentile.',
+      sentimentSignals: ['Soggiorno sereno', 'Richiesta Wi-Fi', 'Tono amichevole']
     },
     cliff: {
       checkin: '25 ott 2026',
@@ -804,7 +819,12 @@ function getConvPmsMeta(conv) {
       nukiCode: conv.stay.nukiCode || '551920',
       checkinPin: conv.stay.checkinPin || '883104',
       touristTax: conv.stay.touristTax || '9',
-      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/d04'
+      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/d04',
+      sentimentLabel: 'Molto positivo',
+      sentimentScore: '98%',
+      sentimentTone: 'Molto soddisfatto',
+      sentimentSummary: 'Soggiorno business concluso senza intoppi. L\'ospite ha ringraziato per la rapidità del check-out express.',
+      sentimentSignals: ['Check-out express ok', 'Esperienza 5★', 'Feedback ottimo']
     },
     florian: {
       checkin: '22 ott 2026',
@@ -826,7 +846,12 @@ function getConvPmsMeta(conv) {
       nukiCode: conv.stay.nukiCode || '330194',
       checkinPin: conv.stay.checkinPin || '192837',
       touristTax: conv.stay.touristTax || '12',
-      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/s12'
+      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/s12',
+      sentimentLabel: 'Molto positivo',
+      sentimentScore: '99%',
+      sentimentTone: 'Fidelizzato e cordiale',
+      sentimentSummary: 'Ospite ricorrente pienamente soddisfatto dei consigli locali e dell\'autonomia garantita dallo SmartLock.',
+      sentimentSignals: ['Ospite abituale', 'Recensione 5★', 'Tono caloroso']
     }
   };
   return metaByConv[conv.id] || metaByConv.adam;
@@ -937,7 +962,34 @@ function renderSiderAI() {
         </div>
       </div>
 
-      <!-- 2. Prenotazione & Soggiorno -->
+      <!-- 2. Sentiment Conversazione (spiega il significato della faccina verde nell'header) -->
+      <div class="gs-section gs-sentiment-section" id="gsSentimentSection">
+        <div class="gs-sentiment-head">
+          <div class="gs-sentiment-title-row">
+            <span class="gs-sentiment-face-badge">${ICONS.smile16}</span>
+            <div class="gs-sentiment-title-col">
+              <span class="gs-sentiment-title">Sentiment conversazione</span>
+              <span class="gs-sentiment-sub">Analisi su ${conv.msgCount} messaggi · ${m.sentimentTone || 'Cordiale'}</span>
+            </div>
+          </div>
+          <span class="gs-sentiment-pill">
+            <span class="gs-sentiment-dot"></span>
+            ${m.sentimentLabel || 'Positivo'}
+          </span>
+        </div>
+
+        <div class="gs-sentiment-summary">
+          ${m.sentimentSummary || 'Conversazione fluida e cordiale, nessuna criticità rilevata.'}
+        </div>
+
+        <div class="gs-sentiment-tags">
+          ${(m.sentimentSignals || ['Check-in regolare', 'Tono cortese']).map(sig => `
+            <span class="gs-sentiment-tag">${sig}</span>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- 3. Prenotazione & Soggiorno -->
       <div class="gs-section">
         <div class="gs-section-head">
           <span class="gs-section-title">Prenotazione</span>
@@ -1032,6 +1084,24 @@ function renderSiderAI() {
   if (deskSider) deskSider.innerHTML = html;
   if (mobSider) mobSider.innerHTML = html;
   renderBottomComposer();
+}
+
+function focusGuestSentiment() {
+  if (state.viewport === 'mobile') {
+    setMobileScreen('ai');
+  } else if (state.siderCollapsed) {
+    state.siderCollapsed = false;
+    renderSiderAI();
+  }
+  setTimeout(() => {
+    const cards = document.querySelectorAll('.gs-sentiment-section');
+    cards.forEach(card => {
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      card.classList.remove('gs-sentiment-highlight');
+      void card.offsetWidth;
+      card.classList.add('gs-sentiment-highlight');
+    });
+  }, 60);
 }
 
 function getChannelBadgeHtml(channel) {
