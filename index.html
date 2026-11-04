@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261103_46" />
+  <link rel="stylesheet" href="styles.css?v=20261103_47" />
 </head>
 <body>
 
@@ -151,6 +151,12 @@
             <!-- Populated dynamically by app.js -->
           </div>
           <div class="controlli-right">
+            <button class="btn-top ocr-header-btn" onclick="openGuestOcrModal()" title="Importa messaggio ospite da screenshot / foto (OCR)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 8h8"/><path d="M7 12h10"/><path d="M7 16h6"/>
+              </svg>
+              <span>Importa da foto (OCR)</span>
+            </button>
             <button class="btn-top" onclick="triggerHubSync()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
@@ -341,6 +347,11 @@
             </div>
           </div>
           <div class="controlli-right mob-chat-controls">
+            <button class="btn-top icon-only mob-hdr-btn ocr-mob-btn" title="Importa messaggio ospite da foto (OCR)" onclick="openGuestOcrModal()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 8h8"/><path d="M7 12h10"/><path d="M7 16h6"/>
+              </svg>
+            </button>
             <button class="btn-scarica-msg mob-hdr-btn" title="Scarica messaggi" onclick="triggerHubSync()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
@@ -446,6 +457,6 @@
 
   <div class="toast" id="toastBox"></div>
 
-  <script src="app.js?v=20261103_46"></script>
+  <script src="app.js?v=20261103_47"></script>
 </body>
 </html>

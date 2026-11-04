@@ -614,6 +614,54 @@ function renderThread() {
       </div>
     </div>
 
+    ${(conv.importedOcrMessages || []).map((ocrMsg, idx) => `
+      <div class="blocco-msg guest ocr-imported-msg">
+        <div class="meta-row">
+          <span class="meta-ospite">OSPITE · ${ocrMsg.time}</span>
+          <span class="ocr-msg-source-pill">
+            ${ICONS.scanText}
+            <span>Estratto da foto OCR (${ocrMsg.sourceChannel})</span>
+          </span>
+        </div>
+
+        <div class="bolla-bianca-ospite">
+          ${needsTranslation ? `
+            <div class="bubble-trad-bar guest">
+              <div class="bubble-trad-bar-left">
+                <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
+                <span>Estratto da screenshot e tradotto dal ${conv.langName} con AI</span>
+              </div>
+              <div class="bubble-trad-bar-right">
+                <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleOcrMsgOrig(${idx})">
+                  <span>${ocrMsg.showOrig ? 'Nascondi originale' : 'Mostra originale'}</span>
+                  ${ocrMsg.showOrig ? ICONS.chevronUp : ICONS.chevronDown}
+                </button>
+              </div>
+            </div>
+          ` : ''}
+          <div class="testo-ospite-orig">
+            ${ocrMsg.itText}
+          </div>
+          ${needsTranslation && ocrMsg.showOrig ? `
+            <div class="bubble-trad-box guest">
+              <div class="bubble-trad-box-lbl">TESTO ESTRATTO DA FOTO (${conv.langName.toUpperCase()})</div>
+              <div class="bubble-trad-box-txt">${ocrMsg.origText}</div>
+            </div>
+          ` : ''}
+        </div>
+
+        <div class="msg-bottom-actions">
+          <button class="btn-msg-action copy" onclick="navigator.clipboard?.writeText('${ocrMsg.itText.replace(/'/g, "\\'")}');showToast('Testo copiato negli appunti')" title="Copia messaggio">
+            ${ICONS.copy}
+          </button>
+          <span class="btn-msg-action read-pill" style="cursor:default;">
+            ${ICONS.check13}
+            <span>Importato</span>
+          </span>
+        </div>
+      </div>
+    `).join('')}
+
     <!-- Blocco Msg 3 Programmato (312:7464) -->
     <div class="blocco-msg host">
       <div class="meta-row">
@@ -1140,6 +1188,10 @@ function renderBottomComposer() {
             ${ICONS.paperclip16}
           </button>
 
+          <button type="button" class="bc-icon-btn ocr-quick-icon-btn" onclick="openGuestOcrModal()" title="Estrai messaggio ospite da foto / screenshot (OCR)">
+            ${ICONS.scanText}
+          </button>
+
           <input
             type="text"
             class="bc-collapsed-input"
@@ -1197,10 +1249,6 @@ function renderBottomComposer() {
               <button type="button" class="bc-pop-item" onclick="toggleBcPopover(null);toggleSchedulePopover();">
                 ${ICONS.clock}
                 <span>Programma invio (${state.schedHour}:${state.schedMin})</span>
-              </button>
-              <button type="button" class="bc-pop-item" onclick="toggleBcPopover(null);triggerOcrExtract();">
-                ${ICONS.scanText}
-                <span>Estrai testo da foto (OCR)</span>
               </button>
               <button type="button" class="bc-pop-item" onclick="toggleBcPopover(null);openCreateKbModal();">
                 ${ICONS.bookmarkPlus}
@@ -1282,6 +1330,12 @@ function renderBottomComposer() {
               ${AT_SIGN_SVG}
               <span>Tag disponibili</span>
               <span class="bc-chevron-muted ${state.bcTagsOpen ? 'open' : ''}">${ICONS.chevronDown}</span>
+            </button>
+
+            <!-- Estrai da foto OCR Pill (Upper Composer -> apre Modale OCR messaggio ospite) -->
+            <button type="button" class="bc-top-pill ocr-pill" onclick="openGuestOcrModal()" title="Estrai e incolla messaggio dell'ospite da foto o screenshot (OCR)">
+              ${ICONS.scanText}
+              <span>Estrai da foto (OCR)</span>
             </button>
           </div>
 
@@ -3133,11 +3187,20 @@ function openNewConvModal() {
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #E2E8F0;padding-bottom:10px;">
       <div>
         <div style="font-size:15px;font-weight:700;color:#0F172A;">Nuovo Messaggio da Ricerca Zucchetti Hub</div>
-        <div style="font-size:12px;color:#64748B;">Cerca un ospite o una prenotazione per avviare o riaprire il thread</div>
+        <div style="font-size:12px;color:#64748B;">Cerca un ospite o importa direttamente uno screenshot ricevuto dall'ospite</div>
       </div>
       <button type="button" class="faq-close-btn" onclick="closeModal()" aria-label="Chiudi">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
+    </div>
+
+    <div class="new-conv-ocr-banner" onclick="openGuestOcrModal(true)">
+      <div class="new-conv-ocr-icon">${ICONS.scanText}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:700;color:#1E3A8A;">Avvia conversazione da foto / screenshot ospite (OCR)</div>
+        <div style="font-size:11.5px;color:#475569;">Incolla o carica uno screenshot WhatsApp / Booking / Airbnb per estrarre il messaggio dell'ospite e generare subito la risposta</div>
+      </div>
+      <span class="new-conv-ocr-cta">Estrai da foto →</span>
     </div>
 
     <div style="display:flex;flex-direction:column;gap:8px;">
@@ -3149,7 +3212,10 @@ function openNewConvModal() {
             <div style="font-size:13px;font-weight:600;color:#0F172A;">${c.name.replace('↳ ', '')} · <span style="color:#2457E6;">${c.stay.bookingCode}</span></div>
             <div style="font-size:11px;color:#64748B;">${c.stay.room} · ${c.stay.dates} · Canale ${c.channel}</div>
           </div>
-          <span class="pill ${c.channelClass}" style="display:inline-flex;align-items:center;gap:4px;"><span>Apri / Scrivi</span> ${ICONS.arrowRight}</span>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button type="button" class="btn-mini-ocr" onclick="event.stopPropagation();selectConversation('${c.id}');openGuestOcrModal(true);" title="Importa messaggio ospite da foto (OCR)">${ICONS.scanText} <span>OCR</span></button>
+            <span class="pill ${c.channelClass}" style="display:inline-flex;align-items:center;gap:4px;"><span>Apri / Scrivi</span> ${ICONS.arrowRight}</span>
+          </div>
         </div>
       `).join('')}
     </div>
@@ -3298,16 +3364,271 @@ function toggleSaveToKb() {
     : 'Salva in Knowledge Base disattivato');
 }
 
-function triggerOcrExtract() {
+const OCR_GUEST_SCENARIOS = [
+  {
+    id: 'checkin_shuttle',
+    label: 'Screenshot WhatsApp — Orario arrivo e codice accesso',
+    channel: 'WhatsApp',
+    fileName: 'IMG_whatsapp_guest_2026.png',
+    origByLang: {
+      PL: 'Dzień dobry! Nasz lot właśnie wylądował, będziemy na miejscu około 14:30. Czy możemy już wejść do apartamentu i jaki jest kod do drzwi?',
+      DE: 'Hallo! Unser Flug ist gerade gelandet, wir sind gegen 14:30 Uhr da. Können wir schon in die Wohnung und wie lautet der Tür-Code?',
+      FR: 'Bonjour ! Notre vol vient d’atterrir, nous arriverons vers 14h30. Pouvons-nous déjà entrer dans l’appartement et quel est le code de la porte ?'
+    },
+    translatedIt: 'Buongiorno! Il nostro volo è appena atterrato, saremo lì verso le 14:30. Possiamo già entrare nell\'appartamento e qual è il codice della porta?',
+    aiReplyDraft: (conv, first) => `Gentile ${first}, benvenuto! L'appartamento ${conv.stay.room} è già pronto per il vostro arrivo alle 14:30. Potete accedere autonomamente inserendo sul tastierino Nuki il codice ${getConvPmsMeta(conv).nukiCode || '642949'}. A presto!`
+  },
+  {
+    id: 'luggage_checkout',
+    label: 'Screenshot OTA (Booking/Airbnb) — Deposito bagagli',
+    channel: 'Airbnb',
+    fileName: 'screenshot_airbnb_msg.jpg',
+    origByLang: {
+      PL: 'Cześć, w dniu wymeldowania mamy pociąg dopiero o 18:00. Czy możemy zostawić dwie walizki w przechowalni po 10:30?',
+      DE: 'Hallo, am Abreisetag fährt unser Zug erst um 18:00 Uhr. Können wir nach 10:30 Uhr zwei Koffer im Gepäckraum lassen?',
+      FR: 'Bonjour, le jour du départ notre train est seulement à 18h00. Pouvons-nous laisser deux valises à la bagagerie après 10h30 ?'
+    },
+    translatedIt: 'Ciao, il giorno del check-out abbiamo il treno solo alle 18:00. Possiamo lasciare due valigie nel deposito bagagli dopo le 10:30?',
+    aiReplyDraft: (conv, first) => `Gentile ${first}, certamente! Dopo il check-out delle 10:30 potete lasciare gratuitamente le valigie nella nostra Luggage Room al piano terra fino alle 18:00 usando lo stesso codice Nuki ${getConvPmsMeta(conv).nukiCode || '642949'}.`
+  },
+  {
+    id: 'garage_plate',
+    label: 'Foto / Screenshot Ospite — Targa auto per Garage',
+    channel: 'Booking.com',
+    fileName: 'foto_targa_ospite.png',
+    origByLang: {
+      PL: 'Przesyłam zdjęcie tablicy rejestracyjnej do garażu: KR 8492A. Przyjedziemy czarnym SUV-em około 17:00.',
+      DE: 'Ich schicke das Foto des Kennzeichens für die Garage: M-AB 4821. Wir kommen gegen 17:00 Uhr mit einem schwarzen SUV.',
+      FR: 'Je vous envoie la photo de la plaque d’immatriculation pour le garage : GG-492-TX. Nous arriverons vers 17h00 en SUV noir.'
+    },
+    translatedIt: 'Invio la foto della targa per l\'accesso al garage: arriviamo verso le 17:00 con un SUV nero. Qual è il numero del nostro posto auto?',
+    aiReplyDraft: (conv, first) => `Gentile ${first}, grazie! Abbiamo registrato la targa per il vostro arrivo delle 17:00. Il posto auto coperto assegnato a ${conv.stay.room} è il n. 14 al piano -1 (apertura sbarra con codice ${getConvPmsMeta(conv).nukiCode || '642949'}).`
+  }
+];
+
+function openGuestOcrModal(fromNewConv) {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const modal = document.getElementById('modalBackdrop');
+  const content = document.getElementById('modalContent');
+  if (!modal || !content) return;
+
+  state.ocrScenarioIdx = state.ocrScenarioIdx || 0;
+  state.ocrFromNewConv = Boolean(fromNewConv);
+  renderGuestOcrModalContent();
+  modal.classList.add('open');
+}
+
+function renderGuestOcrModalContent() {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const content = document.getElementById('modalContent');
+  if (!content) return;
+
+  const idx = state.ocrScenarioIdx || 0;
+  const scen = OCR_GUEST_SCENARIOS[idx] || OCR_GUEST_SCENARIOS[0];
+  const origText = (scen.origByLang && scen.origByLang[conv.lang]) || scen.origByLang.PL;
+  const cleanName = conv.name.replace('↳ ', '');
+
+  content.className = 'modal-card ocr-guest-modal';
+  content.innerHTML = `
+    <div class="ocr-modal-header">
+      <div class="ocr-modal-title-row">
+        <span class="ocr-modal-badge-icon">${ICONS.scanText}</span>
+        <div>
+          <div class="ocr-modal-title">Estrai messaggio ospite da foto / screenshot (OCR)</div>
+          <div class="ocr-modal-sub">Copia-incolla o importa un messaggio inviato da <strong>${cleanName}</strong> (all'inizio o nel corso della conversazione)</div>
+        </div>
+      </div>
+      <button type="button" class="faq-close-btn" onclick="closeModal()" aria-label="Chiudi">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Dropzone / Paste & Scenario Selector -->
+    <div class="ocr-dropzone" onclick="cycleOcrScenario()">
+      <div class="ocr-dropzone-left">
+        <div class="ocr-dropzone-thumb">
+          ${ICONS.scanText}
+          <span class="ocr-thumb-tag">OCR AI</span>
+        </div>
+        <div style="min-width:0;">
+          <div class="ocr-dropzone-filename">${scen.fileName} · <span style="color:#2563EB;">Rilevato ${conv.langName}</span></div>
+          <div class="ocr-dropzone-hint">Trascina qui uno screenshot, premi <kbd>Ctrl+V</kbd> per incollare oppure clicca per simulare un'altra foto</div>
+        </div>
+      </div>
+      <span class="ocr-dropzone-change-btn">Cambia foto demo</span>
+    </div>
+
+    <!-- Preset pills -->
+    <div class="ocr-preset-bar">
+      <span class="ocr-preset-label">Esempio foto ospite:</span>
+      <div class="ocr-preset-pills">
+        ${OCR_GUEST_SCENARIOS.map((s, i) => `
+          <button type="button" class="ocr-preset-pill ${i === idx ? 'active' : ''}" onclick="selectOcrScenario(${i})">
+            ${s.label.split('—')[1] ? s.label.split('—')[1].trim() : s.label}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- Channel & Extracted fields -->
+    <div class="ocr-fields-grid">
+      <div class="ocr-field-box">
+        <div class="ocr-field-hdr">
+          <span class="ocr-field-title">${ getLangFlagHtml(conv.lang) } TESTO ORIGINALE ESTRATTO DALLA FOTO (${conv.langName.toUpperCase()})</span>
+          <button type="button" class="ocr-mini-copy-btn" onclick="copyOcrTextById('ocrOrigTextarea', 'Testo originale copiato negli appunti')">
+            ${ICONS.copy} <span>Copia originale</span>
+          </button>
+        </div>
+        <textarea id="ocrOrigTextarea" class="ocr-textarea" rows="2">${origText}</textarea>
+      </div>
+
+      <div class="ocr-field-box translated">
+        <div class="ocr-field-hdr">
+          <span class="ocr-field-title">🇮🇹 TRADUZIONE AUTOMATICA IN ITALIANO (PRonta PER LA CHAT)</span>
+          <button type="button" class="ocr-mini-copy-btn" onclick="copyOcrTextById('ocrTransTextarea', 'Traduzione italiana copiata negli appunti')">
+            ${ICONS.copy} <span>Copia traduzione</span>
+          </button>
+        </div>
+        <textarea id="ocrTransTextarea" class="ocr-textarea" rows="2">${scen.translatedIt}</textarea>
+      </div>
+    </div>
+
+    <!-- Option bar: conversation & channel -->
+    <div class="ocr-meta-bar">
+      <div class="ocr-meta-item">
+        <span>Ospite / Conversazione:</span>
+        <select id="ocrTargetConvSelect" class="ocr-meta-select" onchange="changeOcrTargetConv(this.value)">
+          ${CONVERSATIONS.map(c => `<option value="${c.id}" ${c.id === conv.id ? 'selected' : ''}>${c.name.replace('↳ ', '')} (${c.stay.room})</option>`).join('')}
+        </select>
+      </div>
+      <div class="ocr-meta-item">
+        <span>Canale fonte foto:</span>
+        <select id="ocrSourceChannelSelect" class="ocr-meta-select">
+          <option value="WhatsApp" ${scen.channel === 'WhatsApp' ? 'selected' : ''}>WhatsApp</option>
+          <option value="Airbnb" ${scen.channel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
+          <option value="Booking.com" ${scen.channel === 'Booking.com' ? 'selected' : ''}>Booking.com</option>
+          <option value="Screenshot / Foto" ${scen.channel === 'Screenshot / Foto' ? 'selected' : ''}>Screenshot / Foto</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="ocr-modal-footer">
+      <button type="button" class="ocr-btn-secondary" onclick="insertOcrTextIntoComposerOnly()">
+        ${ICONS.copy} <span>Incolla nel campo testo</span>
+      </button>
+      <div class="ocr-footer-right">
+        <button type="button" class="ocr-btn-outline-primary" onclick="insertOcrGuestMsgIntoThread(false)">
+          <span>Aggiungi come messaggio ospite</span>
+        </button>
+        <button type="button" class="ocr-btn-primary" onclick="insertOcrGuestMsgIntoThread(true)">
+          ${ICONS.sparkles} <span>Importa messaggio ospite e genera risposta AI</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function selectOcrScenario(idx) {
+  state.ocrScenarioIdx = idx;
+  renderGuestOcrModalContent();
+}
+
+function cycleOcrScenario() {
+  state.ocrScenarioIdx = ((state.ocrScenarioIdx || 0) + 1) % OCR_GUEST_SCENARIOS.length;
+  renderGuestOcrModalContent();
+  showToast('Simulazione caricamento nuova foto/screenshot ospite');
+}
+
+function changeOcrTargetConv(convId) {
+  state.selectedConvId = convId;
+  renderConversationLists();
+  renderThread();
+  renderSiderAI();
+  renderGuestOcrModalContent();
+}
+
+function copyOcrTextById(elId, toastMsg) {
+  const el = document.getElementById(elId);
+  const val = el ? el.value.trim() : '';
+  if (val && navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(val).catch(() => {});
+  }
+  showToast(toastMsg || 'Testo copiato negli appunti');
+}
+
+function insertOcrTextIntoComposerOnly() {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const transEl = document.getElementById('ocrTransTextarea');
+  const extracted = transEl ? transEl.value.trim() : '';
+  if (!extracted) return;
+
   state.acc_modifica = true;
   state.draftOpen = true;
-  const ocrText = conv.ocrAttachment
-    ? `${state.drafts[conv.id]}\n\n[Da OCR ${conv.ocrAttachment.fileName}: "${conv.ocrAttachment.extractedText}"]`
-    : `${state.drafts[conv.id]}\n\n[Testo estratto da immagine OCR: Targhetta Posto Auto #14 - Livello -1]`;
-  state.drafts[conv.id] = ocrText;
+  const current = (state.drafts[conv.id] || '').trim();
+  state.drafts[conv.id] = current ? `${current}\n${extracted}` : extracted;
+  closeModal();
+  renderThread();
   renderSiderAI();
-  showToast('Testo estratto da immagine (OCR) e inserito nella bozza');
+  showToast('Testo estratto da foto incollato nel compositore');
+}
+
+function insertOcrGuestMsgIntoThread(andGenerateReply) {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const origEl = document.getElementById('ocrOrigTextarea');
+  const transEl = document.getElementById('ocrTransTextarea');
+  const chanEl = document.getElementById('ocrSourceChannelSelect');
+
+  const origText = origEl ? origEl.value.trim() : '';
+  const translatedText = transEl ? transEl.value.trim() : origText;
+  const channel = chanEl ? chanEl.value : conv.channel;
+
+  const now = new Date();
+  const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+  conv.importedOcrMessages = conv.importedOcrMessages || [];
+  conv.importedOcrMessages.push({
+    channel,
+    time: timeStr,
+    origText,
+    translatedText,
+    showOrig: false
+  });
+  conv.preview = translatedText;
+  conv.dagestire = true;
+
+  if (andGenerateReply) {
+    const scen = OCR_GUEST_SCENARIOS[state.ocrScenarioIdx || 0] || OCR_GUEST_SCENARIOS[0];
+    const firstName = conv.name.replace('↳ ', '').split(' ')[0];
+    state.drafts[conv.id] = scen.aiReplyDraft(conv, firstName);
+    state.acc_modifica = true;
+    state.draftOpen = true;
+  }
+
+  closeModal();
+  renderConversationLists();
+  renderThread();
+  renderSiderAI();
+
+  setTimeout(() => {
+    const areaMessaggi = document.getElementById('areaMessaggi');
+    if (areaMessaggi) areaMessaggi.scrollTop = areaMessaggi.scrollHeight;
+  }, 50);
+
+  showToast(andGenerateReply
+    ? 'Messaggio ospite importato da foto (OCR) e bozza risposta AI pronta!'
+    : 'Messaggio ospite estratto da foto aggiunto alla conversazione');
+}
+
+function toggleOcrMsgOrig(idx) {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  if (!conv.importedOcrMessages || !conv.importedOcrMessages[idx]) return;
+  conv.importedOcrMessages[idx].showOrig = !conv.importedOcrMessages[idx].showOrig;
+  renderThread();
+}
+
+function triggerOcrExtract() {
+  openGuestOcrModal(false);
 }
 
 function triggerReviewDraft() {
