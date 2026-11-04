@@ -470,9 +470,7 @@ function renderThread() {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
 
   const headerLeftHtml = `
-    <span class="titolo-messaggi">Messaggi</span>
-    <span class="contatore-msg">${ICONS.msgSquare} ${conv.msgCount}</span>
-    <span class="hdr-sentiment-face" title="Sentiment: ${conv.headerSentiment}">${ICONS.smile16}</span>
+    <span class="titolo-messaggi">${conv.name.replace('↳ ', '')}</span>
   `;
   const headerLeft = document.getElementById('desktopThreadHeaderLeft');
   if (headerLeft) headerLeft.innerHTML = headerLeftHtml;
