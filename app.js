@@ -857,7 +857,14 @@ function getConvPmsMeta(conv) {
   return metaByConv[conv.id] || metaByConv.adam;
 }
 
-// Render Right Sider: Dettagli ospite (senza card PMS, spostata in Modifica dati ospite dal menu ⋮)
+// Toggle collapsible sections in Dettagli ospite
+function toggleGsAccordion(sec) {
+  state.gsAccOpen = state.gsAccOpen || { contatti: true, prenotazione: true, note: true };
+  state.gsAccOpen[sec] = !state.gsAccOpen[sec];
+  renderSiderAI();
+}
+
+// Render Right Sider: Dettagli ospite (compatta per 1080px, info d'azione in alto, sezioni accordion, sentiment su 1 riga con tooltip)
 function renderSiderAI() {
   const deskSider = document.getElementById('desktopSiderAI');
   const mobSider = document.getElementById('mobileSiderAI');
@@ -871,6 +878,8 @@ function renderSiderAI() {
     deskToggleBtn.classList.toggle('active', !state.siderCollapsed);
   }
 
+  state.gsAccOpen = state.gsAccOpen || { contatti: true, prenotazione: true, note: true };
+
   const cleanName = conv.name.replace('↳ ', '').replace(/\s*\(.*?\)\s*/g, '').trim();
   const nameParts = cleanName.split(' ');
   const firstName = nameParts.slice(0, -1).join(' ') || nameParts[0] || 'Ospite';
@@ -878,7 +887,6 @@ function renderSiderAI() {
   const initials = ((firstName[0] || '') + (lastName[0] || firstName[1] || '')).toUpperCase();
 
   const m = getConvPmsMeta(conv);
-  const prefText = conv.customPreferences || m.preferences;
 
   const currentNoteObj = (conv.internalNotes && conv.internalNotes[0]) || {
     author: 'Sara M. (Reception)',
@@ -888,6 +896,13 @@ function renderSiderAI() {
   const currentNoteDraft = typeof state.guestNoteDrafts[conv.id] === 'string'
     ? state.guestNoteDrafts[conv.id]
     : currentNoteObj.text;
+
+  const isContattiOpen = state.gsAccOpen.contatti !== false;
+  const isPrenotazioneOpen = state.gsAccOpen.prenotazione !== false;
+  const isNoteOpen = state.gsAccOpen.note !== false;
+
+  const sentimentTooltipTitle = `Analisi su ${conv.msgCount} messaggi · ${m.sentimentTone || 'Cordiale'}`;
+  const sentimentTooltipText = m.sentimentSummary || 'Conversazione fluida e cordiale, nessuna criticità rilevata.';
 
   const html = `
     <!-- Top Header: Dettagli ospite con icona senza sfondo (visibile solo su Desktop; su Mobile è nell'intestazione-thread in alto) -->
@@ -906,8 +921,8 @@ function renderSiderAI() {
     <!-- Scrollable Content -->
     <div class="gs-scroll-body">
 
-      <!-- 1. Ospite & Contatti -->
-      <div class="gs-section">
+      <!-- 1. HERO ACTION BAR: Identità, Stato e Date Soggiorno sempre in primo piano -->
+      <div class="gs-section gs-hero-section">
         <div class="gs-guest-top">
           <div class="gs-guest-identity">
             <div class="gs-avatar">${initials}</div>
@@ -919,78 +934,7 @@ function renderSiderAI() {
           <span class="gs-status-pill ${m.statusClass}">${m.statusBadge}</span>
         </div>
 
-        <div class="gs-contact-list">
-          <div class="gs-contact-row" onclick="navigator.clipboard?.writeText('${conv.stay.phone}');showToast('Numero copiato negli appunti')" title="Clicca per copiare il telefono" style="cursor:pointer;">
-            <span class="gs-plain-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-              </svg>
-            </span>
-            <span class="gs-contact-label">Telefono</span>
-            <span class="gs-contact-val">${conv.stay.phone}</span>
-          </div>
-
-          <div class="gs-contact-row" onclick="navigator.clipboard?.writeText('${conv.stay.email}');showToast('Email copiata negli appunti')" title="Clicca per copiare l'email" style="cursor:pointer;">
-            <span class="gs-plain-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <rect width="20" height="16" x="2" y="4" rx="2"/>
-                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-              </svg>
-            </span>
-            <span class="gs-contact-label">Email</span>
-            <span class="gs-contact-val">${conv.stay.email}</span>
-          </div>
-
-          <div class="gs-contact-row gs-lang-row">
-            <span class="gs-plain-icon">
-              ${ICONS.globe}
-            </span>
-            <span class="gs-contact-label">Lingua</span>
-            <div class="gs-lang-pill-wrap">
-              <span class="gs-lang-flag-icon">${getLangFlagSvg(conv.langCode)}</span>
-              <select class="gs-lang-quick-select" onchange="setOutboundLanguage(this.value)" title="Cambia lingua dell'ospite">
-                <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
-                <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
-                <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
-                <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
-                <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
-                <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
-              </select>
-              <span class="gs-lang-chevron">${ICONS.chevronDown}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. Sentiment Conversazione (spiega il significato della faccina verde nell'header) -->
-      <div class="gs-section gs-sentiment-section" id="gsSentimentSection">
-        <div class="gs-sentiment-head">
-          <div class="gs-sentiment-title-row">
-            <span class="gs-sentiment-face-badge">${ICONS.smile16}</span>
-            <div class="gs-sentiment-title-col">
-              <span class="gs-sentiment-title">Sentiment conversazione</span>
-              <span class="gs-sentiment-sub">Analisi su ${conv.msgCount} messaggi · ${m.sentimentTone || 'Cordiale'}</span>
-            </div>
-          </div>
-          <span class="gs-sentiment-pill">${m.sentimentLabel || 'Positivo'}</span>
-        </div>
-
-        <div class="gs-sentiment-summary">
-          ${m.sentimentSummary || 'Conversazione fluida e cordiale, nessuna criticità rilevata.'}
-        </div>
-      </div>
-
-      <!-- 3. Prenotazione & Soggiorno -->
-      <div class="gs-section">
-        <div class="gs-section-head">
-          <span class="gs-section-title">Prenotazione</span>
-          <button type="button" class="gs-pms-open-pill" onclick="openEditGuestPmsModal()" title="Modifica dati ospite & PMS">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-            <span>Dati & PMS</span>
-          </button>
-        </div>
-
-        <div class="gs-kpi-mini-grid">
+        <div class="gs-kpi-mini-grid gs-hero-kpi-grid">
           <div class="gs-kpi-mini-box">
             <span class="gs-kpi-mini-label">Arrivo</span>
             <span class="gs-kpi-mini-val">${m.arrShort}</span>
@@ -1008,65 +952,168 @@ function renderSiderAI() {
             <span class="gs-kpi-mini-val">${m.guestsNum}</span>
           </div>
         </div>
-
-        <div class="gs-info-rows">
-          <div class="gs-info-row">
-            <span class="gs-info-label">Alloggio</span>
-            <span class="gs-info-val">${conv.stay.room} · ${conv.propertyLabel || 'Casa Aurora'}</span>
-          </div>
-          <div class="gs-info-row">
-            <span class="gs-info-label">Trattamento</span>
-            <span class="gs-info-val">${m.treatment}</span>
-          </div>
-          <div class="gs-info-row gs-info-row-total">
-            <span class="gs-info-label">Totale soggiorno</span>
-            <span class="gs-info-val gs-info-total-val">${m.price}</span>
-          </div>
-        </div>
       </div>
 
-      <!-- 3. Note Ospite (singola nota con tastino matita per modificare e bottone per salvare) -->
-      <div class="gs-section gs-note-section" id="gsGuestNoteSection">
-        <div class="gs-note-head">
+      <!-- 2. ACCORDION: Contatti & Lingua (aperta di default) -->
+      <div class="gs-section gs-acc-section ${isContattiOpen ? 'is-open' : 'is-collapsed'}">
+        <div class="gs-acc-head" onclick="toggleGsAccordion('contatti')" role="button" tabindex="0" aria-expanded="${isContattiOpen}">
+          <span class="gs-section-title">Contatti & Lingua</span>
+          <div class="gs-acc-head-right">
+            <span class="gs-acc-chevron">${ICONS.chevronDown}</span>
+          </div>
+        </div>
+
+        ${isContattiOpen ? `
+          <div class="gs-acc-body">
+            <div class="gs-contact-list">
+              <div class="gs-contact-row" onclick="navigator.clipboard?.writeText('${conv.stay.phone}');showToast('Numero copiato negli appunti')" title="Clicca per copiare il telefono" style="cursor:pointer;">
+                <span class="gs-plain-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                </span>
+                <span class="gs-contact-label">Telefono</span>
+                <span class="gs-contact-val">${conv.stay.phone}</span>
+              </div>
+
+              <div class="gs-contact-row" onclick="navigator.clipboard?.writeText('${conv.stay.email}');showToast('Email copiata negli appunti')" title="Clicca per copiare l'email" style="cursor:pointer;">
+                <span class="gs-plain-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="16" x="2" y="4" rx="2"/>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                  </svg>
+                </span>
+                <span class="gs-contact-label">Email</span>
+                <span class="gs-contact-val">${conv.stay.email}</span>
+              </div>
+
+              <div class="gs-contact-row gs-lang-row">
+                <span class="gs-plain-icon">
+                  ${ICONS.globe}
+                </span>
+                <span class="gs-contact-label">Lingua</span>
+                <div class="gs-lang-pill-wrap">
+                  <span class="gs-lang-flag-icon">${getLangFlagSvg(conv.langCode)}</span>
+                  <select class="gs-lang-quick-select" onchange="setOutboundLanguage(this.value)" title="Cambia lingua dell'ospite">
+                    <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
+                    <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
+                    <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
+                    <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
+                    <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
+                    <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
+                  </select>
+                  <span class="gs-lang-chevron">${ICONS.chevronDown}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- 3. ACCORDION: Prenotazione & Alloggio (aperta di default) -->
+      <div class="gs-section gs-acc-section ${isPrenotazioneOpen ? 'is-open' : 'is-collapsed'}">
+        <div class="gs-acc-head" onclick="toggleGsAccordion('prenotazione')" role="button" tabindex="0" aria-expanded="${isPrenotazioneOpen}">
+          <span class="gs-section-title">Prenotazione & Alloggio</span>
+          <div class="gs-acc-head-right">
+            <button type="button" class="gs-pms-open-pill" onclick="event.stopPropagation();openEditGuestPmsModal()" title="Modifica dati ospite & PMS">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              <span>Dati & PMS</span>
+            </button>
+            <span class="gs-acc-chevron">${ICONS.chevronDown}</span>
+          </div>
+        </div>
+
+        ${isPrenotazioneOpen ? `
+          <div class="gs-acc-body">
+            <div class="gs-info-rows">
+              <div class="gs-info-row">
+                <span class="gs-info-label">Alloggio</span>
+                <span class="gs-info-val">${conv.stay.room} · ${conv.propertyLabel || 'Casa Aurora'}</span>
+              </div>
+              <div class="gs-info-row">
+                <span class="gs-info-label">Trattamento</span>
+                <span class="gs-info-val">${m.treatment}</span>
+              </div>
+              <div class="gs-info-row gs-info-row-total">
+                <span class="gs-info-label">Totale soggiorno</span>
+                <span class="gs-info-val gs-info-total-val">${m.price}</span>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- 4. ACCORDION: Note Ospite (più in basso, collassabile) -->
+      <div class="gs-section gs-acc-section gs-note-section ${isNoteOpen ? 'is-open' : 'is-collapsed'}" id="gsGuestNoteSection">
+        <div class="gs-acc-head" onclick="toggleGsAccordion('note')" role="button" tabindex="0" aria-expanded="${isNoteOpen}">
           <div class="gs-note-title-row">
             <span class="gs-plain-icon">${ICONS.stickyNote14}</span>
-            <span class="gs-note-title">Note ospite</span>
+            <span class="gs-section-title">Note ospite</span>
           </div>
-          <div class="gs-note-head-right">
+          <div class="gs-acc-head-right">
             <span class="gs-note-time">${currentNoteObj.author} · ${currentNoteObj.time}</span>
             <button
               type="button"
               class="gs-note-edit-btn ${state.editingGuestNote ? 'active' : ''}"
-              onclick="toggleGuestNoteEdit()"
+              onclick="event.stopPropagation();toggleGuestNoteEdit()"
               title="${state.editingGuestNote ? 'Annulla modifica' : 'Modifica nota ospite'}"
               aria-label="${state.editingGuestNote ? 'Annulla modifica' : 'Modifica nota ospite'}"
             >
               ${ICONS.pencil}
             </button>
+            <span class="gs-acc-chevron">${ICONS.chevronDown}</span>
           </div>
         </div>
 
-        ${state.editingGuestNote ? `
-          <form class="gs-note-form" onsubmit="event.preventDefault();saveGuestDetailNote();">
-            <textarea
-              id="guestDetailNoteInput"
-              class="gs-note-textarea"
-              rows="3"
-              placeholder="Scrivi o modifica la nota per questo ospite..."
-              oninput="updateGuestDetailNoteDraft(this.value)"
-            >${currentNoteDraft}</textarea>
-            <div class="gs-note-form-actions">
-              <button type="submit" class="gs-note-save-btn">
-                ${ICONS.save14}
-                <span>Salva nota</span>
-              </button>
-            </div>
-          </form>
-        ` : `
-          <div class="gs-note-display ${!currentNoteObj.text ? 'empty' : ''}">
-            ${currentNoteObj.text || 'Nessuna nota presente per questo ospite.'}
+        ${isNoteOpen ? `
+          <div class="gs-acc-body">
+            ${state.editingGuestNote ? `
+              <form class="gs-note-form" onsubmit="event.preventDefault();saveGuestDetailNote();">
+                <textarea
+                  id="guestDetailNoteInput"
+                  class="gs-note-textarea"
+                  rows="2"
+                  placeholder="Scrivi o modifica la nota per questo ospite..."
+                  oninput="updateGuestDetailNoteDraft(this.value)"
+                >${currentNoteDraft}</textarea>
+                <div class="gs-note-form-actions">
+                  <button type="submit" class="gs-note-save-btn">
+                    ${ICONS.save14}
+                    <span>Salva nota</span>
+                  </button>
+                </div>
+              </form>
+            ` : `
+              <div class="gs-note-display ${!currentNoteObj.text ? 'empty' : ''}">
+                ${currentNoteObj.text || 'Nessuna nota presente per questo ospite.'}
+              </div>
+            `}
           </div>
-        `}
+        ` : ''}
+      </div>
+
+      <!-- 5. SENTIMENT COMPATTO SU 1 RIGA CON BADGE + TOOLTIP -->
+      <div class="gs-section gs-sentiment-section gs-sentiment-compact-row" id="gsSentimentSection">
+        <div class="gs-sentiment-compact-left">
+          <span class="gs-sentiment-face-badge">${ICONS.smile16}</span>
+          <span class="gs-sentiment-title">Sentiment</span>
+        </div>
+        <div class="gs-sentiment-compact-right">
+          <span class="gs-sentiment-pill">${m.sentimentLabel || 'Positivo'}</span>
+          <div class="gs-sentiment-tooltip-wrap" tabindex="0" aria-label="${sentimentTooltipTitle}: ${sentimentTooltipText}">
+            <button type="button" class="gs-sentiment-info-btn" aria-label="Dettagli sentiment">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 16v-4"/>
+                <path d="M12 8h.01"/>
+              </svg>
+            </button>
+            <div class="gs-sentiment-tooltip" role="tooltip">
+              <div class="gs-sentiment-tooltip-hdr">${sentimentTooltipTitle}</div>
+              <div class="gs-sentiment-tooltip-body">${sentimentTooltipText}</div>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -1088,9 +1135,12 @@ function focusGuestSentiment() {
     const cards = document.querySelectorAll('.gs-sentiment-section');
     cards.forEach(card => {
       card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      card.classList.remove('gs-sentiment-highlight');
+      card.classList.remove('gs-sentiment-highlight', 'gs-tooltip-force-show');
       void card.offsetWidth;
-      card.classList.add('gs-sentiment-highlight');
+      card.classList.add('gs-sentiment-highlight', 'gs-tooltip-force-show');
+      setTimeout(() => {
+        card.classList.remove('gs-tooltip-force-show');
+      }, 3200);
     });
   }, 60);
 }
@@ -3404,6 +3454,10 @@ function toggleGuestNoteEdit(forceState) {
   };
   const next = typeof forceState === 'boolean' ? forceState : !state.editingGuestNote;
   state.editingGuestNote = next;
+  if (next) {
+    state.gsAccOpen = state.gsAccOpen || { contatti: true, prenotazione: true, note: true };
+    state.gsAccOpen.note = true;
+  }
   state.guestNoteDrafts = state.guestNoteDrafts || {};
   state.guestNoteDrafts[conv.id] = currentNoteObj.text || '';
   renderSiderAI();

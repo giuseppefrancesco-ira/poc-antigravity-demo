@@ -5536,15 +5536,80 @@ button, input, textarea {
 }
 
 .gs-section {
-  padding: 18px 18px;
+  padding: 13px 16px;
   border-bottom: 1px solid #E2E8F0;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 .gs-section:last-child {
   border-bottom: none;
+}
+
+.gs-hero-section {
+  padding: 14px 16px 13px 16px;
+  gap: 11px;
+  background: #FFFFFF;
+}
+
+.gs-hero-kpi-grid {
+  margin-bottom: 0 !important;
+}
+
+/* Accordion Sections in Dettagli Ospite */
+.gs-acc-section {
+  padding: 0;
+  gap: 0;
+}
+
+.gs-acc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 11px 16px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.14s ease;
+}
+
+.gs-acc-head:hover {
+  background: #F8FAFC;
+}
+
+.gs-acc-head-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+}
+
+.gs-acc-chevron {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748B;
+  transition: transform 0.18s ease, color 0.14s ease;
+  flex-shrink: 0;
+}
+
+.gs-acc-chevron svg {
+  width: 13px;
+  height: 13px;
+}
+
+.gs-acc-section.is-collapsed .gs-acc-chevron {
+  transform: rotate(-90deg);
+}
+
+.gs-acc-body {
+  padding: 0 16px 13px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
 }
 
 .gs-section-head {
@@ -5556,7 +5621,7 @@ button, input, textarea {
 .gs-section-title {
   font-size: 12px;
   font-weight: 600;
-  color: #64748B;
+  color: #475569;
   letter-spacing: 0.01em;
 }
 
@@ -5570,18 +5635,18 @@ button, input, textarea {
 .gs-guest-identity {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 10px;
   min-width: 0;
 }
 
 .gs-avatar {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: #F1F5F9;
   border: 1px solid #E2E8F0;
   color: #334155;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -5592,19 +5657,19 @@ button, input, textarea {
 .gs-name-wrap {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   min-width: 0;
 }
 
 .gs-name {
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 600;
   color: #0F172A;
   line-height: 1.2;
 }
 
 .gs-booking-sub {
-  font-size: 12px;
+  font-size: 11.5px;
   color: #64748B;
 }
 
@@ -5635,20 +5700,20 @@ button, input, textarea {
 .gs-contact-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding-top: 2px;
+  gap: 6px;
+  padding-top: 0;
 }
 
 .gs-contact-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 28px;
+  min-height: 26px;
 }
 
 .gs-plain-icon {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -5657,19 +5722,19 @@ button, input, textarea {
 }
 
 .gs-plain-icon svg {
-  width: 14px;
-  height: 14px;
+  width: 13.5px;
+  height: 13.5px;
 }
 
 .gs-contact-label {
-  font-size: 12.5px;
+  font-size: 12px;
   color: #64748B;
   font-weight: 400;
 }
 
 .gs-contact-val {
   margin-left: auto;
-  font-size: 12.5px;
+  font-size: 12px;
   color: #0F172A;
   font-weight: 500;
   text-align: right;
@@ -5685,8 +5750,8 @@ button, input, textarea {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 28px;
-  padding: 0 9px;
+  height: 26px;
+  padding: 0 8px;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 7px;
@@ -5711,17 +5776,17 @@ button, input, textarea {
   border: none;
   background: transparent;
   font-family: inherit;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 500;
   color: #0F172A;
-  padding-right: 16px;
+  padding-right: 15px;
   cursor: pointer;
   outline: none;
 }
 
 .gs-lang-chevron {
   position: absolute;
-  right: 7px;
+  right: 6px;
   display: inline-flex;
   align-items: center;
   color: #64748B;
@@ -5732,72 +5797,70 @@ button, input, textarea {
 .gs-info-rows {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 7px;
 }
 
 .gs-info-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
 }
 
 .gs-info-label {
-  font-size: 12.5px;
+  font-size: 12px;
   color: #64748B;
   font-weight: 400;
   flex-shrink: 0;
 }
 
 .gs-info-val {
-  font-size: 12.5px;
+  font-size: 12px;
   color: #0F172A;
   font-weight: 500;
   text-align: right;
-  line-height: 1.35;
+  line-height: 1.3;
 }
 
 .gs-info-row-total {
-  padding-top: 9px;
-  margin-top: 2px;
+  padding-top: 7px;
+  margin-top: 1px;
   border-top: 1px solid #F1F5F9;
 }
 
 .gs-info-total-val {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 600;
   color: #0F172A;
 }
 
-/* Sentiment Conversazione (Dettagli Ospite) */
-.gs-sentiment-section {
+/* Sentiment Conversazione Compatto su 1 Riga (con Badge + Tooltip) */
+.gs-sentiment-compact-row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
   gap: 10px;
-  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  background: #FAFAFC;
+  transition: box-shadow 0.25s ease, background 0.25s ease;
 }
 
 .gs-sentiment-section.gs-sentiment-highlight {
-  border-color: #22C55E;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.16);
+  background: #F0FDF4;
+  box-shadow: inset 0 0 0 1.5px #22C55E;
 }
 
-.gs-sentiment-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.gs-sentiment-title-row {
+.gs-sentiment-compact-left {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
+  gap: 8px;
   min-width: 0;
 }
 
 .gs-sentiment-face-badge {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
   background: #DCFCE7;
   color: #16A34A;
   display: inline-flex;
@@ -5807,34 +5870,28 @@ button, input, textarea {
 }
 
 .gs-sentiment-face-badge svg {
-  width: 16px;
-  height: 16px;
-}
-
-.gs-sentiment-title-col {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
+  width: 14px;
+  height: 14px;
 }
 
 .gs-sentiment-title {
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
-  color: #0F172A;
+  color: #475569;
   line-height: 1.2;
 }
 
-.gs-sentiment-sub {
-  font-size: 11px;
-  color: #64748B;
-  line-height: 1.25;
+.gs-sentiment-compact-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .gs-sentiment-pill {
   display: inline-flex;
   align-items: center;
-  padding: 3px 9px;
+  padding: 2px 9px;
   border-radius: 999px;
   background: #DCFCE7;
   color: #15803D;
@@ -5844,26 +5901,90 @@ button, input, textarea {
   flex-shrink: 0;
 }
 
-.gs-sentiment-summary {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
-  padding: 9px 11px;
-  font-size: 12px;
-  line-height: 1.45;
+.gs-sentiment-tooltip-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  outline: none;
+}
+
+.gs-sentiment-info-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #94A3B8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.gs-sentiment-info-btn:hover,
+.gs-sentiment-tooltip-wrap:focus-within .gs-sentiment-info-btn {
   color: #334155;
+  background: #E2E8F0;
+}
+
+.gs-sentiment-tooltip {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  width: 248px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #0F172A;
+  color: #F8FAFC;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.24);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+  z-index: 40;
+}
+
+.gs-sentiment-tooltip::after {
+  content: "";
+  position: absolute;
+  right: 6px;
+  top: 100%;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #0F172A transparent transparent transparent;
+}
+
+.gs-sentiment-tooltip-wrap:hover .gs-sentiment-tooltip,
+.gs-sentiment-tooltip-wrap:focus-within .gs-sentiment-tooltip,
+.gs-sentiment-section.gs-tooltip-force-show .gs-sentiment-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.gs-sentiment-tooltip-hdr {
+  font-size: 11px;
+  font-weight: 700;
+  color: #86EFAC;
+  line-height: 1.25;
+}
+
+.gs-sentiment-tooltip-body {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: #F1F5F9;
+  line-height: 1.4;
 }
 
 /* Note Ospite */
 .gs-note-section {
-  gap: 10px;
-}
-
-.gs-note-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  gap: 0;
 }
 
 .gs-note-title-row {
@@ -5872,27 +5993,15 @@ button, input, textarea {
   gap: 6px;
 }
 
-.gs-note-title {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #0F172A;
-}
-
-.gs-note-head-right {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .gs-note-time {
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 400;
   color: #64748B;
 }
 
 .gs-note-edit-btn {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: 6px;
   border: 1px solid #E2E8F0;
   background: #FFFFFF;
@@ -5906,8 +6015,8 @@ button, input, textarea {
 }
 
 .gs-note-edit-btn svg {
-  width: 13px;
-  height: 13px;
+  width: 12px;
+  height: 12px;
 }
 
 .gs-note-edit-btn:hover {
@@ -5926,9 +6035,9 @@ button, input, textarea {
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
   border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 12.5px;
-  line-height: 1.5;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.45;
   color: #334155;
 }
 
