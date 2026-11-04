@@ -8610,16 +8610,115 @@ button, input, textarea {
   background: #254EDB;
 }
 
+/* =========================================================
+   COMPOSER: ALLINEAMENTO GRIGLIA BOLLE, RAGGIO 12PX E BLU UNIFICATO (#1E2C68)
+   ========================================================= */
 
+/* 1. Allineamento larghezza alla colonna delle bolle (.area-messaggi) */
+.bottom-composer-wrap {
+  padding: 8px 28px 16px 28px;
+}
 
+.bottom-composer-wrap.mobile {
+  padding: 8px 12px 10px 12px;
+}
 
+.bottom-composer-wrap.mobile.is-expanded {
+  padding: 6px 12px 10px 12px;
+}
 
+/* 2. Raggio 12px sul composer (card) e 8px su campo, pill e bottoni interni */
+.bc-collapsed,
+.bc-expanded,
+.bottom-composer-wrap.mobile .bc-collapsed,
+.bottom-composer-wrap.mobile .bc-expanded {
+  border-radius: 12px;
+}
 
+.bc-footer,
+.bottom-composer-wrap.mobile .bc-footer {
+  border-radius: 0 0 12px 12px;
+}
 
+.bc-collapsed-input,
+.bc-expand-btn,
+.bottom-composer-wrap.mobile .bc-expand-btn,
+.bc-collapse-btn,
+.bottom-composer-wrap.mobile .bc-collapse-mobile,
+.bc-channel-pill,
+.bc-lang-pill,
+.bc-top-pill,
+.bc-pill-btn,
+.bc-tone-chip,
+.bc-icon-btn,
+.bc-send-btn,
+.bc-generate-ai-btn {
+  border-radius: 8px;
+}
 
+/* 3. Un solo blu (#1E2C68 dell'header): pulsante invia e stato attivo lingua */
+.bc-send-btn,
+.bc-send-btn.collapsed,
+.bc-send-btn.expanded,
+.bc-send-btn.collapsed.ready,
+.bc-send-btn.expanded.ready {
+  background: #1E2C68;
+  color: #FFFFFF;
+}
 
+.bc-send-btn:hover,
+.bc-send-btn.collapsed:hover,
+.bc-send-btn.expanded:hover,
+.bc-send-btn.collapsed.ready:hover,
+.bc-send-btn.expanded.ready:hover {
+  background: #152050;
+  color: #FFFFFF;
+}
 
+.bc-lang-pill {
+  background: #EEF2FF;
+  border-color: #C7D2FE;
+  color: #1E2C68;
+}
 
+.bc-lang-pill:hover,
+.bc-lang-pill:focus-within {
+  background: #E0E7FF;
+  border-color: #A5B4FC;
+}
 
+.bc-lang-code,
+.bc-lang-name,
+.bc-lang-on,
+.bc-chevron-blue,
+.bc-WaitSparkle,
+.bc-kb-inline-btn {
+  color: #1E2C68;
+}
+
+.bc-top-pill.template.active,
+.bc-top-pill.ocr-pill,
+.bc-icon-btn.ocr-quick-icon-btn {
+  background: #EEF2FF;
+  border-color: #C7D2FE;
+  color: #1E2C68;
+}
+
+.bc-top-pill.ocr-pill:hover,
+.bc-icon-btn.ocr-quick-icon-btn:hover {
+  background: #E0E7FF;
+  border-color: #A5B4FC;
+  color: #152050;
+}
+
+.bc-generate-ai-btn {
+  background: #1E2C68;
+  box-shadow: 0 2px 8px rgba(30, 44, 104, 0.25);
+}
+
+.bc-generate-ai-btn:hover {
+  background: #152050;
+  box-shadow: 0 4px 12px rgba(30, 44, 104, 0.35);
+}
 
 

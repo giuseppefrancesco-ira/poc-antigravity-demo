@@ -3405,203 +3405,236 @@ const OCR_GUEST_SCENARIOS = [
 ];
 
 function openGuestOcrModal(fromNewConv) {
-  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
   const modal = document.getElementById('modalBackdrop');
   const content = document.getElementById('modalContent');
   if (!modal || !content) return;
 
   state.ocrScenarioIdx = state.ocrScenarioIdx || 0;
   state.ocrFromNewConv = Boolean(fromNewConv);
+  state.ocrInputMode = false;
+  state.ocrRawText = '';
   renderGuestOcrModalContent();
   modal.classList.add('open');
 }
 
 function renderGuestOcrModalContent() {
-  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
   const content = document.getElementById('modalContent');
   if (!content) return;
 
-  const idx = state.ocrScenarioIdx || 0;
-  const scen = OCR_GUEST_SCENARIOS[idx] || OCR_GUEST_SCENARIOS[0];
-  const origText = (scen.origByLang && scen.origByLang[conv.lang]) || scen.origByLang.PL;
-  const cleanName = conv.name.replace('↳ ', '');
+  const isEditing = Boolean(state.ocrInputMode || (state.ocrRawText && state.ocrRawText.length > 0));
+  const hasText = Boolean(state.ocrRawText && state.ocrRawText.trim().length > 0);
 
-  content.className = 'modal-card ocr-guest-modal';
+  const imagePlusIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/><line x1="16" y1="5" x2="22" y2="5"/><line x1="19" y1="2" x2="19" y2="8"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>`;
+  const imagePlusSmIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/><line x1="16" y1="5" x2="22" y2="5"/><line x1="19" y1="2" x2="19" y2="8"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>`;
+  const wandSparklesIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-4"/><path d="M11 3H9"/></svg>`;
+
+  content.className = 'modal-card ocr-paste-modal';
   content.innerHTML = `
-    <div class="ocr-modal-header">
-      <div class="ocr-modal-title-row">
-        <span class="ocr-modal-badge-icon">${ICONS.scanText}</span>
-        <div>
-          <div class="ocr-modal-title">Estrai messaggio ospite da foto / screenshot (OCR)</div>
-          <div class="ocr-modal-sub">Copia-incolla o importa un messaggio inviato da <strong>${cleanName}</strong> (all'inizio o nel corso della conversazione)</div>
+    <input type="file" id="ocrHiddenFileInput" accept="image/*" style="display:none" onchange="handleOcrFileSelected(event)" />
+
+    <div class="ocr-paste-body" onpaste="handleOcrPaste(event)">
+      ${!isEditing ? `
+        <div class="ocr-paste-dropzone" onclick="activateOcrInputMode()" tabindex="0" role="button" aria-label="Incolla qui il messaggio">
+          <div class="ocr-paste-plus-circle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </div>
+          <div class="ocr-paste-title">Incolla qui il<br>messaggio</div>
+          <div class="ocr-paste-subtitle">
+            Puoi incollare testo oppure<br>anche uno screenshot con il<br>messaggio dell'ospite
+          </div>
+          <button type="button" class="ocr-upload-pill-btn" onclick="event.stopPropagation();triggerOcrPhotoUpload()">
+            ${imagePlusIcon}
+            <span>Carica una foto</span>
+          </button>
         </div>
-      </div>
-      <button type="button" class="faq-close-btn" onclick="closeModal()" aria-label="Chiudi">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      ` : `
+        <div class="ocr-active-editor-wrap">
+          <textarea
+            id="ocrMainTextarea"
+            class="ocr-active-textarea"
+            placeholder="Scrivi o incolla qui il messaggio dell'ospite..."
+            oninput="onOcrTextareaInput(this.value)"
+          >${state.ocrRawText || ''}</textarea>
+
+          <div class="ocr-active-helper-row">
+            <span class="ocr-active-helper-icon">${imagePlusSmIcon}</span>
+            <span class="ocr-active-helper-text">Incolla anche un'immagine: Larry prova a leggere il testo automaticamente</span>
+          </div>
+
+          <div class="ocr-active-upload-row">
+            <button type="button" class="ocr-upload-pill-btn" onclick="triggerOcrPhotoUpload()">
+              ${imagePlusIcon}
+              <span>Carica foto</span>
+            </button>
+          </div>
+        </div>
+      `}
+    </div>
+
+    <div class="ocr-paste-footer">
+      <button
+        type="button"
+        id="ocrSubmitMainBtn"
+        class="ocr-submit-main-btn ${hasText ? 'ready' : 'disabled'}"
+        onclick="submitOcrAddAndTranslate()"
+      >
+        ${wandSparklesIcon}
+        <span>Aggiungi e Traduci</span>
       </button>
-    </div>
-
-    <!-- Dropzone / Paste & Scenario Selector -->
-    <div class="ocr-dropzone" onclick="cycleOcrScenario()">
-      <div class="ocr-dropzone-left">
-        <div class="ocr-dropzone-thumb">
-          ${ICONS.scanText}
-          <span class="ocr-thumb-tag">OCR AI</span>
-        </div>
-        <div style="min-width:0;">
-          <div class="ocr-dropzone-filename">${scen.fileName} · <span style="color:#2563EB;">Rilevato ${conv.langName}</span></div>
-          <div class="ocr-dropzone-hint">Trascina qui uno screenshot, premi <kbd>Ctrl+V</kbd> per incollare oppure clicca per simulare un'altra foto</div>
-        </div>
-      </div>
-      <span class="ocr-dropzone-change-btn">Cambia foto demo</span>
-    </div>
-
-    <!-- Preset pills -->
-    <div class="ocr-preset-bar">
-      <span class="ocr-preset-label">Esempio foto ospite:</span>
-      <div class="ocr-preset-pills">
-        ${OCR_GUEST_SCENARIOS.map((s, i) => `
-          <button type="button" class="ocr-preset-pill ${i === idx ? 'active' : ''}" onclick="selectOcrScenario(${i})">
-            ${s.label.split('—')[1] ? s.label.split('—')[1].trim() : s.label}
-          </button>
-        `).join('')}
-      </div>
-    </div>
-
-    <!-- Channel & Extracted fields -->
-    <div class="ocr-fields-grid">
-      <div class="ocr-field-box">
-        <div class="ocr-field-hdr">
-          <span class="ocr-field-title">${ getLangFlagHtml(conv.lang) } TESTO ORIGINALE ESTRATTO DALLA FOTO (${conv.langName.toUpperCase()})</span>
-          <button type="button" class="ocr-mini-copy-btn" onclick="copyOcrTextById('ocrOrigTextarea', 'Testo originale copiato negli appunti')">
-            ${ICONS.copy} <span>Copia originale</span>
-          </button>
-        </div>
-        <textarea id="ocrOrigTextarea" class="ocr-textarea" rows="2">${origText}</textarea>
-      </div>
-
-      <div class="ocr-field-box translated">
-        <div class="ocr-field-hdr">
-          <span class="ocr-field-title">🇮🇹 TRADUZIONE AUTOMATICA IN ITALIANO (PRonta PER LA CHAT)</span>
-          <button type="button" class="ocr-mini-copy-btn" onclick="copyOcrTextById('ocrTransTextarea', 'Traduzione italiana copiata negli appunti')">
-            ${ICONS.copy} <span>Copia traduzione</span>
-          </button>
-        </div>
-        <textarea id="ocrTransTextarea" class="ocr-textarea" rows="2">${scen.translatedIt}</textarea>
-      </div>
-    </div>
-
-    <!-- Option bar: conversation & channel -->
-    <div class="ocr-meta-bar">
-      <div class="ocr-meta-item">
-        <span>Ospite / Conversazione:</span>
-        <select id="ocrTargetConvSelect" class="ocr-meta-select" onchange="changeOcrTargetConv(this.value)">
-          ${CONVERSATIONS.map(c => `<option value="${c.id}" ${c.id === conv.id ? 'selected' : ''}>${c.name.replace('↳ ', '')} (${c.stay.room})</option>`).join('')}
-        </select>
-      </div>
-      <div class="ocr-meta-item">
-        <span>Canale fonte foto:</span>
-        <select id="ocrSourceChannelSelect" class="ocr-meta-select">
-          <option value="WhatsApp" ${scen.channel === 'WhatsApp' ? 'selected' : ''}>WhatsApp</option>
-          <option value="Airbnb" ${scen.channel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
-          <option value="Booking.com" ${scen.channel === 'Booking.com' ? 'selected' : ''}>Booking.com</option>
-          <option value="Screenshot / Foto" ${scen.channel === 'Screenshot / Foto' ? 'selected' : ''}>Screenshot / Foto</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Footer Actions -->
-    <div class="ocr-modal-footer">
-      <button type="button" class="ocr-btn-secondary" onclick="insertOcrTextIntoComposerOnly()">
-        ${ICONS.copy} <span>Incolla nel campo testo</span>
-      </button>
-      <div class="ocr-footer-right">
-        <button type="button" class="ocr-btn-outline-primary" onclick="insertOcrGuestMsgIntoThread(false)">
-          <span>Aggiungi come messaggio ospite</span>
-        </button>
-        <button type="button" class="ocr-btn-primary" onclick="insertOcrGuestMsgIntoThread(true)">
-          ${ICONS.sparkles} <span>Importa messaggio ospite e genera risposta AI</span>
-        </button>
-      </div>
     </div>
   `;
 }
 
-function selectOcrScenario(idx) {
-  state.ocrScenarioIdx = idx;
+function activateOcrInputMode() {
+  state.ocrInputMode = true;
   renderGuestOcrModalContent();
+  setTimeout(() => {
+    const ta = document.getElementById('ocrMainTextarea');
+    if (ta) {
+      ta.focus();
+      ta.setSelectionRange(ta.value.length, ta.value.length);
+    }
+  }, 20);
 }
 
-function cycleOcrScenario() {
-  state.ocrScenarioIdx = ((state.ocrScenarioIdx || 0) + 1) % OCR_GUEST_SCENARIOS.length;
-  renderGuestOcrModalContent();
-  showToast('Simulazione caricamento nuova foto/screenshot ospite');
-}
-
-function changeOcrTargetConv(convId) {
-  state.selectedConvId = convId;
-  renderConversationLists();
-  renderThread();
-  renderSiderAI();
-  renderGuestOcrModalContent();
-}
-
-function copyOcrTextById(elId, toastMsg) {
-  const el = document.getElementById(elId);
-  const val = el ? el.value.trim() : '';
-  if (val && navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(val).catch(() => {});
+function onOcrTextareaInput(val) {
+  state.ocrRawText = val;
+  const btn = document.getElementById('ocrSubmitMainBtn');
+  if (btn) {
+    const hasText = Boolean(val && val.trim().length > 0);
+    btn.classList.toggle('ready', hasText);
+    btn.classList.toggle('disabled', !hasText);
   }
-  showToast(toastMsg || 'Testo copiato negli appunti');
 }
 
-function insertOcrTextIntoComposerOnly() {
-  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
-  const transEl = document.getElementById('ocrTransTextarea');
-  const extracted = transEl ? transEl.value.trim() : '';
-  if (!extracted) return;
-
-  state.acc_modifica = true;
-  state.draftOpen = true;
-  const current = (state.drafts[conv.id] || '').trim();
-  state.drafts[conv.id] = current ? `${current}\n${extracted}` : extracted;
-  closeModal();
-  renderThread();
-  renderSiderAI();
-  showToast('Testo estratto da foto incollato nel compositore');
+function triggerOcrPhotoUpload() {
+  const fileInput = document.getElementById('ocrHiddenFileInput');
+  if (!fileInput) {
+    simulateOcrPhotoExtraction();
+    return;
+  }
+  let handled = false;
+  const onFocusBack = () => {
+    window.removeEventListener('focus', onFocusBack);
+    setTimeout(() => {
+      if (!handled && (!fileInput.files || fileInput.files.length === 0)) {
+        simulateOcrPhotoExtraction();
+      }
+    }, 250);
+  };
+  window.addEventListener('focus', onFocusBack);
+  fileInput.value = '';
+  fileInput.click();
 }
 
-function insertOcrGuestMsgIntoThread(andGenerateReply) {
-  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
-  const origEl = document.getElementById('ocrOrigTextarea');
-  const transEl = document.getElementById('ocrTransTextarea');
-  const chanEl = document.getElementById('ocrSourceChannelSelect');
+function handleOcrFileSelected(event) {
+  const file = event?.target?.files?.[0];
+  simulateOcrPhotoExtraction(file ? file.name : null);
+}
 
-  const origText = origEl ? origEl.value.trim() : '';
-  const translatedText = transEl ? transEl.value.trim() : origText;
-  const channel = chanEl ? chanEl.value : conv.channel;
+function handleOcrPaste(event) {
+  const items = event?.clipboardData?.items;
+  if (items) {
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type && items[i].type.indexOf('image') !== -1) {
+        event.preventDefault();
+        simulateOcrPhotoExtraction('screenshot_incollato.png');
+        return;
+      }
+    }
+  }
+  if (!state.ocrInputMode) {
+    const pastedText = event?.clipboardData?.getData('text/plain') || '';
+    state.ocrInputMode = true;
+    if (pastedText) {
+      event.preventDefault();
+      state.ocrRawText = pastedText;
+    }
+    renderGuestOcrModalContent();
+    setTimeout(() => {
+      const ta = document.getElementById('ocrMainTextarea');
+      if (ta) {
+        ta.focus();
+        ta.setSelectionRange(ta.value.length, ta.value.length);
+      }
+    }, 20);
+  }
+}
+
+function simulateOcrPhotoExtraction(fileName) {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const idx = state.ocrScenarioIdx || 0;
+  const scen = OCR_GUEST_SCENARIOS[idx] || OCR_GUEST_SCENARIOS[0];
+  const langKey = conv.langCode || conv.lang || 'PL';
+  const extractedText = (scen.origByLang && scen.origByLang[langKey]) || scen.origByLang.PL;
+
+  state.ocrInputMode = true;
+  state.ocrRawText = extractedText;
+  state.ocrScenarioIdx = (idx + 1) % OCR_GUEST_SCENARIOS.length;
+  renderGuestOcrModalContent();
+
+  setTimeout(() => {
+    const ta = document.getElementById('ocrMainTextarea');
+    if (ta) {
+      ta.focus();
+      ta.setSelectionRange(ta.value.length, ta.value.length);
+    }
+  }, 30);
+
+  showToast(fileName
+    ? `Testo estratto automaticamente da "${fileName}"`
+    : 'Testo letto automaticamente dalla foto con Larry AI');
+}
+
+function submitOcrAddAndTranslate() {
+  const ta = document.getElementById('ocrMainTextarea');
+  const rawText = (ta ? ta.value : (state.ocrRawText || '')).trim();
+  if (!rawText) {
+    if (!state.ocrInputMode) {
+      activateOcrInputMode();
+    } else if (ta) {
+      ta.focus();
+    }
+    showToast('Incolla un messaggio o carica una foto prima di procedere');
+    return;
+  }
+
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const matchedScen = OCR_GUEST_SCENARIOS.find(s =>
+    Object.values(s.origByLang || {}).some(v => v.trim() === rawText)
+  );
+  const fallbackScen = OCR_GUEST_SCENARIOS[0];
+  const scen = matchedScen || fallbackScen;
+
+  const itText = matchedScen
+    ? matchedScen.translatedIt
+    : (conv.langCode === 'IT'
+        ? rawText
+        : `${rawText}\n\n[Traduzione IT]: Ciao! Avremmo bisogno di informazioni per il nostro soggiorno in ${conv.stay.room}, grazie!`);
 
   const now = new Date();
   const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
   conv.importedOcrMessages = conv.importedOcrMessages || [];
   conv.importedOcrMessages.push({
-    channel,
+    channel: conv.channel || 'WhatsApp',
+    sourceChannel: conv.channel || 'Screenshot',
     time: timeStr,
-    origText,
-    translatedText,
+    origText: rawText,
+    itText: itText,
+    translatedText: itText,
     showOrig: false
   });
-  conv.preview = translatedText;
+  conv.preview = itText;
   conv.dagestire = true;
+  conv.msgCount = (Number(conv.msgCount) || 12) + 1;
 
-  if (andGenerateReply) {
-    const scen = OCR_GUEST_SCENARIOS[state.ocrScenarioIdx || 0] || OCR_GUEST_SCENARIOS[0];
-    const firstName = conv.name.replace('↳ ', '').split(' ')[0];
-    state.drafts[conv.id] = scen.aiReplyDraft(conv, firstName);
-    state.acc_modifica = true;
-    state.draftOpen = true;
-  }
+  const firstName = conv.name.replace('↳ ', '').split(' ')[0];
+  state.drafts[conv.id] = scen.aiReplyDraft(conv, firstName);
+  state.acc_modifica = true;
+  state.draftOpen = true;
 
   closeModal();
   renderConversationLists();
@@ -3609,13 +3642,13 @@ function insertOcrGuestMsgIntoThread(andGenerateReply) {
   renderSiderAI();
 
   setTimeout(() => {
-    const areaMessaggi = document.getElementById('areaMessaggi');
-    if (areaMessaggi) areaMessaggi.scrollTop = areaMessaggi.scrollHeight;
+    const deskArea = document.getElementById('desktopMessagesArea');
+    const mobArea = document.getElementById('mobileMessagesArea');
+    if (deskArea) deskArea.scrollTop = deskArea.scrollHeight;
+    if (mobArea) mobArea.scrollTop = mobArea.scrollHeight;
   }, 50);
 
-  showToast(andGenerateReply
-    ? 'Messaggio ospite importato da foto (OCR) e bozza risposta AI pronta!'
-    : 'Messaggio ospite estratto da foto aggiunto alla conversazione');
+  showToast('Messaggio ospite aggiunto e tradotto con AI!');
 }
 
 function toggleOcrMsgOrig(idx) {
