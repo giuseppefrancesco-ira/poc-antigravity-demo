@@ -8008,91 +8008,17 @@ button, input, textarea {
 
 /* =========================================================
    SISTEMA CROMATICO MOBILE COERENTE:
-   1. Header / Barra in alto in Blu Scuro (#18255B) con titolo bianco (lega Inbox, Chat e Dettagli Ospite)
-   2. Bolle dei tuoi messaggi in blu (#2E54E8)
+   1. Inbox (#mobScreenInbox) interamente in Blu Scuro (#1E2C68) come da design originale
+   2. Header in alto (.mob-chat-header) e Bottom Bar (.mob-bottom-bar) in Blu Scuro (#1E2C68)
+      con titolo bianco su tutte le schermate mobile (Inbox, Chat, Dettagli Ospite)
    3. Tab bar attiva e pulsanti primari nello stesso blu (#2E54E8)
-   4. Il resto (sfondo, card, liste conversazioni) chiaro (#FFFFFF / #F8FAFC)
+   4. Contenuto di Chat e Dettagli Ospite (sfondo, card, liste) chiaro
    ========================================================= */
 
-/* --- 1. HEADER IN BLU SCURO CON TITOLO BIANCO SU TUTTE LE SCHERMATE MOBILE --- */
-#mobScreenInbox .header-lista {
-  background: #18255B;
-  border-bottom: 1px solid #2C3B75;
-}
-
-#mobScreenInbox .titolo-lista {
-  color: #FFFFFF;
-  font-weight: 700;
-}
-
-#mobScreenInbox .btn-scarica-msg {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #FFFFFF;
-}
-
-#mobScreenInbox .btn-scarica-msg:hover {
-  background: rgba(255, 255, 255, 0.18);
-  color: #FFFFFF;
-}
-
-#mobScreenInbox .btn-nuovo-msg {
-  background: #2E54E8;
-  color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(46, 84, 232, 0.35);
-}
-
-#mobScreenInbox .btn-nuovo-msg:hover {
-  background: #2346CC;
-}
-
-#mobScreenInbox .ricerca-box {
-  background: #243370;
-  border: 1px solid #38498B;
-  border-radius: 10px;
-  color: #CBD5E1;
-}
-
-#mobScreenInbox .ricerca-box:focus-within {
-  background: #2B3C80;
-  border-color: #60A5FA;
-}
-
-#mobScreenInbox .ricerca-box input {
-  color: #FFFFFF;
-}
-
-#mobScreenInbox .ricerca-box input::placeholder {
-  color: #93A2D8;
-}
-
-#mobScreenInbox .cartella-row,
-#mobScreenInbox .cartella-row.in-corso,
-#mobScreenInbox .cartella-row.archiviate {
-  background: #243370;
-  border: 1px solid #38498B;
-  border-radius: 10px;
-  color: #FFFFFF;
-}
-
-#mobScreenInbox .cartella-row:hover {
-  background: #2C3E84;
-  border-color: #4D62AD;
-}
-
-#mobScreenInbox .cartella-row svg {
-  color: #93A2D8;
-}
-
-#mobScreenInbox .cartella-lbl {
-  color: #F8FAFC;
-  font-weight: 600;
-}
-
-/* Header Blu Scuro anche in Chat Mobile (#mobScreenChat) e Dettagli Ospite (#mobScreenAI) */
+/* --- 1. HEADER IN BLU SCURO (#1E2C68) CON TITOLO BIANCO SU CHAT E DETTAGLI OSPITE --- */
 .figma-mobile .mob-chat-header {
-  background: #18255B;
-  border-bottom: 1px solid #2C3B75;
+  background: #1E2C68;
+  border-bottom: 1px solid #2E3E7A;
   color: #FFFFFF;
 }
 
@@ -8142,131 +8068,11 @@ button, input, textarea {
   stroke: #FFFFFF !important;
 }
 
-/* --- 2. LISTE, SFONDI E CARD CHIARE (#mobScreenInbox, #mobScreenChat, #mobScreenAI) --- */
-#mobScreenInbox {
-  background: #F8FAFC;
-}
-
-#mobScreenInbox .elenco-conv {
-  background: #F8FAFC;
-}
-
-#mobScreenInbox .elenco-conv::-webkit-scrollbar-track {
-  background: #F8FAFC;
-}
-
-#mobScreenInbox .elenco-conv::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-}
-
-#mobScreenInbox .conv-item {
-  background: #FFFFFF;
-  border-bottom: 1px solid #E7EAF0;
-}
-
-#mobScreenInbox .conv-item:hover {
-  background: #F8FAFC;
-}
-
-#mobScreenInbox .conv-item.selected {
-  background: #F0F5FF;
-  border-bottom-color: #DCE6FE;
-}
-
-#mobScreenInbox .conv-item.linked {
-  background: #FAFCFF;
-  border-bottom: 1px solid #E7EAF0;
-}
-
-#mobScreenInbox .conv-item.linked:hover {
-  background: #F1F5F9;
-}
-
-#mobScreenInbox .conv-item.linked.selected {
-  background: #EBF2FF;
-}
-
-#mobScreenInbox .barra-accento {
-  background: #2E54E8;
-}
-
-#mobScreenInbox .barra-accento.gialla {
-  background: #F59E0B;
-}
-
-#mobScreenInbox .conv-nome {
-  color: #0F172A;
-}
-
-#mobScreenInbox .conv-item.linked .conv-nome {
-  color: #334155;
-}
-
-#mobScreenInbox .conv-sent-face {
-  color: #16A34A;
-}
-
-#mobScreenInbox .conv-data {
-  color: #64748B;
-}
-
-#mobScreenInbox .conv-prev {
-  color: #475569;
-}
-
-#mobScreenInbox .prev-arrow.in {
-  color: #D97706;
-}
-
-#mobScreenInbox .prev-arrow.out {
-  color: #2E54E8;
-}
-
-#mobScreenInbox .bozza-prefix {
-  color: #2E54E8;
-}
-
-#mobScreenInbox .bozza-preview-text {
-  color: #64748B;
-}
-
-#mobScreenInbox .pill.date {
-  background: #EFF6FF;
-  color: #1D4ED8;
-  border: 1px solid #DBEAFE;
-  font-weight: 600;
-}
-
-#mobScreenInbox .pill.checkin {
-  background: #ECFDF5;
-  color: #15803D;
-  border: 1px solid #BBF7D0;
-  font-weight: 600;
-}
-
-#mobScreenInbox .pill-attesa-risposta {
-  background: #FEF3C7;
-  color: #B45309;
-  border: 1px solid #FDE68A;
-  font-weight: 700;
-}
-
-#mobScreenInbox .footer-lista {
-  background: #18255B;
-  border-top: 1px solid #2C3B75;
-  color: #94A3B8;
-}
-
-#mobScreenInbox .footer-struttura {
-  color: #FFFFFF;
-  font-weight: 600;
-}
-
-/* --- 3. BOTTOM BAR SCURA (#18255B) CON TAB ATTIVA NELLO STESSO BLU PRIMARIO (#2E54E8) --- */
+/* --- 2. BOTTOM BAR SCURA (#1E2C68) CON TAB ATTIVA NELLO STESSO BLU PRIMARIO (#2E54E8) --- */
 .figma-mobile .mob-bottom-bar,
 #mobScreenInbox .mob-bottom-bar {
-  background: #18255B;
-  border-top: 1px solid #2C3B75;
+  background: #1E2C68;
+  border-top: 1px solid #2E3E7A;
 }
 
 .figma-mobile .mob-tab,
