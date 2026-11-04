@@ -81,6 +81,10 @@ const state = {
   bcToneOpen: false,
   bcMoreOpen: false,
   bcTransOpen: false,
+  atMentionOpen: false,
+  atMentionQuery: '',
+  atMentionIndex: 0,
+  atMentionRange: null,
   customTranslations: {},
   mpSearchQuery: '',
   mpActiveCategory: 'Tutti',
@@ -992,6 +996,54 @@ function getLangFlagSvg(code) {
   return `<svg class="lang-flag-svg" width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><rect width="5.33" height="12" fill="#009246"/><rect x="5.33" width="5.34" height="12" fill="#FFFFFF"/><rect x="10.67" width="5.33" height="12" fill="#CE2B37"/><rect x="0.5" y="0.5" width="15" height="11" rx="2" fill="none" stroke="rgba(15,23,42,0.12)"/></svg>`;
 }
 
+const AT_SIGN_SVG = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></svg>`;
+
+function getAvailablePmsTags(conv) {
+  const c = conv || CONVERSATIONS.find(x => x.id === state.selectedConvId) || CONVERSATIONS[0];
+  const firstName = (c?.name || 'Adam').replace('↳ ', '').split(' ')[0];
+  const room = c?.stay?.room || 'Suite 14';
+  const nuki = c?.stay?.nukiCode || '000000';
+  return [
+    { key: 'Ospite', token: '@Ospite', value: firstName, desc: 'Nome ospite' },
+    { key: 'Camera', token: '@Camera', value: room, desc: 'Alloggio assegnato' },
+    { key: 'Nuki', token: '@Nuki', value: nuki, desc: 'Codice tastierino' },
+    { key: 'Check-in', token: '@Check-in', value: '15:00', desc: 'Orario check-in' },
+    { key: 'Check-out', token: '@Check-out', value: '11:00', desc: 'Orario check-out' },
+    { key: 'Wi-Fi', token: '@Wi-Fi', value: 'AuroraGuest2026', desc: 'Password rete Wi-Fi' }
+  ];
+}
+
+function resolvePmsTagsInText(text, conv) {
+  if (!text) return '';
+  const tags = getAvailablePmsTags(conv);
+  let out = text;
+  tags.forEach(t => {
+    const escapedKey = t.key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const reAt = new RegExp(`@${escapedKey}(?![A-Za-zÀ-ÿ0-9_-])`, 'gi');
+    const reBrace = new RegExp(`\\{${escapedKey}\\}`, 'gi');
+    out = out.replace(reAt, t.value).replace(reBrace, t.value);
+  });
+  return out;
+}
+
+function escapeHtmlForBackdrop(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function renderHighlightedDraftHtml(text) {
+  if (!text) return '';
+  const escaped = escapeHtmlForBackdrop(text);
+  // Evidenzia in azzurrino grassetto qualsiasi @Tag (es. @Ospite, @Camera, @Check-in, @Wi-Fi o @parola) e {Tag}
+  const highlighted = escaped.replace(
+    /(@[A-Za-zÀ-ÿ0-9_-]+|\{[A-Za-zÀ-ÿ0-9_-]+\})/g,
+    '<mark class="bc-tag-highlight">$1</mark>'
+  );
+  return highlighted.endsWith('\n') ? highlighted + ' ' : highlighted;
+}
+
 // Render Bottom Messaging Composer (Expanded & Collapsed modes 1:1 with reference screenshots)
 function renderBottomComposer() {
   const deskComp = document.getElementById('desktopBottomComposer');
@@ -1190,10 +1242,10 @@ function renderBottomComposer() {
             </button>
 
             <!-- Tag Disponibili Pill (Upper Composer) -->
-            <button type="button" class="bc-top-pill tags ${state.bcTagsOpen ? 'active' : ''}" onclick="toggleBcPopover('tags')" title="Tag dinamici PMS disponibili">
-              ${ICONS.bookOpen}
+            <button type="button" class="bc-top-pill tags ${state.bcTagsOpen ? 'active' : ''}" onclick="toggleBcPopover('tags')" title="Variabili dinamiche soggiorno (@Tag)">
+              ${AT_SIGN_SVG}
               <span>Tag disponibili</span>
-              <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
+              <span class="bc-chevron-muted ${state.bcTagsOpen ? 'open' : ''}">${ICONS.chevronDown}</span>
             </button>
           </div>
 
@@ -1209,15 +1261,19 @@ function renderBottomComposer() {
         ${state.bcTagsOpen ? `
           <div class="bc-upper-drawer">
             <div class="bc-upper-drawer-head">
-              <span class="bc-upper-drawer-title" style="color:#0284C7;">${ICONS.bookOpen} <span>TAG DISPONIBILI (DATI DINAMICI PMS AUTO-RISOLTI)</span></span>
-              <button type="button" class="bc-pop-close" onclick="toggleBcPopover(null)">${ICONS.close12}</button>
+              <div class="bc-upper-drawer-title-group">
+                <span class="bc-upper-drawer-title">Variabili dinamiche soggiorno</span>
+                <span class="bc-upper-drawer-sub">Clicca per inserire o digita <strong>@</strong> nel testo</span>
+              </div>
+              <button type="button" class="bc-pop-close" onclick="toggleBcPopover(null)" title="Chiudi">${ICONS.close12}</button>
             </div>
-            <div class="chip-tag-row">
-              <span class="chip-pms" onclick="insertTagPMS('${conv.name.replace('↳ ', '').split(' ')[0]}')">{Ospite}: ${conv.name.replace('↳ ', '').split(' ')[0]}</span>
-              <span class="chip-pms" onclick="insertTagPMS('${conv.stay.room}')">{Camera}: ${conv.stay.room}</span>
-              <span class="chip-pms" onclick="insertTagPMS('000000')">{Nuki}: 000000</span>
-              <span class="chip-pms" onclick="insertTagPMS('15:00')">{Check-in}: 15:00</span>
-              <span class="chip-pms" onclick="insertTagPMS('AuroraGuest2026')">{Wi-Fi}: AuroraGuest2026</span>
+            <div class="bc-tags-grid">
+              ${getAvailablePmsTags(conv).map(t => `
+                <button type="button" class="bc-tag-chip" onclick="insertTagPMS('${t.token}')" title="Inserisci ${t.token} (${t.value})">
+                  <span class="bc-tag-chip-key">${t.token}</span>
+                  <span class="bc-tag-chip-val">${t.value}</span>
+                </button>
+              `).join('')}
             </div>
           </div>
         ` : ''}
@@ -1233,12 +1289,19 @@ function renderBottomComposer() {
             >${state.noteDraftText}</textarea>
           ` : `
             <div class="bc-textarea-wrap">
-              <textarea
-                class="bc-textarea"
-                id="draftTextarea"
-                placeholder="Scrivi un messaggio in italiano..."
-                oninput="handleComposerInput(this.value, this)"
-              >${draftVal}</textarea>
+              <div class="bc-textarea-editor">
+                <div class="bc-textarea-backdrop" aria-hidden="true">${renderHighlightedDraftHtml(draftVal)}</div>
+                <textarea
+                  class="bc-textarea has-backdrop"
+                  id="draftTextarea"
+                  placeholder="Scrivi un messaggio in italiano (digita @ per inserire un tag)..."
+                  oninput="handleComposerInput(this.value, this)"
+                  onscroll="syncComposerBackdropScroll(this)"
+                  onkeydown="handleComposerKeydown(event, this)"
+                  onclick="checkComposerAtMention(this)"
+                >${draftVal}</textarea>
+              </div>
+              <div class="bc-at-mention-host"></div>
               <button
                 type="button"
                 class="bc-generate-ai-btn"
@@ -1368,7 +1431,7 @@ function autoResizeAllDraftTextareas() {
 }
 
 function translateDraftToLang(italianText, langCode, conv) {
-  const raw = (italianText || '').trim();
+  const raw = resolvePmsTagsInText((italianText || '').trim(), conv);
   if (!raw) return '';
   const firstName = (conv?.name || 'Adam').replace('↳ ', '').split(' ')[0];
   const room = conv?.stay?.room || 'Suite 14';
@@ -1722,9 +1785,171 @@ function syncLiveTranslationUI(val) {
   }
 }
 
+function syncComposerBackdropScroll(el) {
+  if (!el) return;
+  const wrap = el.closest('.bc-textarea-editor');
+  const backdrop = wrap ? wrap.querySelector('.bc-textarea-backdrop') : null;
+  if (backdrop) {
+    backdrop.scrollTop = el.scrollTop;
+    backdrop.scrollLeft = el.scrollLeft;
+  }
+}
+
+function syncAllComposerBackdrops(val) {
+  const html = renderHighlightedDraftHtml(val);
+  document.querySelectorAll('.bc-textarea-backdrop').forEach(bd => {
+    bd.innerHTML = html;
+  });
+}
+
+function getFilteredAtTags(query, conv) {
+  const tags = getAvailablePmsTags(conv);
+  const q = String(query || '').toLowerCase().trim();
+  if (!q) return tags;
+  return tags.filter(t =>
+    t.key.toLowerCase().startsWith(q) ||
+    t.key.toLowerCase().replace('-', '').startsWith(q.replace('-', '')) ||
+    t.desc.toLowerCase().includes(q)
+  );
+}
+
+function renderAtMentionMenu() {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const hosts = document.querySelectorAll('.bc-at-mention-host');
+  if (!state.atMentionOpen) {
+    hosts.forEach(h => { h.innerHTML = ''; });
+    return;
+  }
+  const matches = getFilteredAtTags(state.atMentionQuery, conv);
+  if (matches.length === 0) {
+    hosts.forEach(h => { h.innerHTML = ''; });
+    return;
+  }
+  const activeIdx = Math.min(state.atMentionIndex || 0, matches.length - 1);
+  const menuHtml = `
+    <div class="bc-at-mention-menu" onmousedown="event.preventDefault()">
+      <div class="bc-at-mention-head">
+        <span>Tag disponibili</span>
+        <span class="bc-at-mention-kbd">↵ inserisci</span>
+      </div>
+      <div class="bc-at-mention-list">
+        ${matches.map((t, idx) => `
+          <button
+            type="button"
+            class="bc-at-mention-item ${idx === activeIdx ? 'active' : ''}"
+            onclick="selectAtMentionTag('${t.token}')"
+          >
+            <span class="bc-at-mention-token">${t.token}</span>
+            <span class="bc-at-mention-meta">
+              <span class="bc-at-mention-desc">${t.desc}</span>
+              <span class="bc-at-mention-val">${t.value}</span>
+            </span>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  hosts.forEach(h => { h.innerHTML = menuHtml; });
+}
+
+function checkComposerAtMention(el) {
+  if (!el || typeof el.selectionStart !== 'number') {
+    state.atMentionOpen = false;
+    renderAtMentionMenu();
+    return;
+  }
+  const val = el.value || '';
+  const caret = el.selectionStart;
+  const beforeCaret = val.slice(0, caret);
+  const match = beforeCaret.match(/(?:^|[\s(])@([A-Za-zÀ-ÿ0-9_-]*)$/);
+  if (match) {
+    const query = match[1] || '';
+    const atStart = caret - query.length - 1;
+    const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+    const matches = getFilteredAtTags(query, conv);
+    // Se il tag è già stato completato esattamente e non ci sono altri match più lunghi, oppure c'è almeno un match
+    const exactDone = matches.length === 1 && matches[0].key.toLowerCase() === query.toLowerCase();
+    if (matches.length > 0 && !exactDone) {
+      state.atMentionOpen = true;
+      state.atMentionQuery = query;
+      state.atMentionIndex = 0;
+      state.atMentionRange = { start: atStart, end: caret };
+      renderAtMentionMenu();
+      return;
+    }
+  }
+  if (state.atMentionOpen) {
+    state.atMentionOpen = false;
+    state.atMentionRange = null;
+    renderAtMentionMenu();
+  }
+}
+
+function handleComposerKeydown(event, el) {
+  if (!state.atMentionOpen) return;
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const matches = getFilteredAtTags(state.atMentionQuery, conv);
+  if (!matches.length) return;
+
+  if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    state.atMentionIndex = (state.atMentionIndex + 1) % matches.length;
+    renderAtMentionMenu();
+  } else if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    state.atMentionIndex = (state.atMentionIndex - 1 + matches.length) % matches.length;
+    renderAtMentionMenu();
+  } else if (event.key === 'Enter' || event.key === 'Tab') {
+    event.preventDefault();
+    const chosen = matches[Math.min(state.atMentionIndex, matches.length - 1)];
+    if (chosen) selectAtMentionTag(chosen.token);
+  } else if (event.key === 'Escape') {
+    event.preventDefault();
+    state.atMentionOpen = false;
+    renderAtMentionMenu();
+  }
+}
+
+function selectAtMentionTag(token) {
+  const visibleTa = Array.from(document.querySelectorAll('#draftTextarea')).find(el => el.offsetParent !== null)
+    || document.getElementById('draftTextarea');
+  const curVal = state.draftOpen ? (state.drafts[state.selectedConvId] || '') : (visibleTa ? visibleTa.value : '');
+  const range = state.atMentionRange || { start: curVal.length, end: curVal.length };
+  const before = curVal.slice(0, range.start);
+  const after = curVal.slice(range.end);
+  const needTrailingSpace = after.length === 0 || !/^\s/.test(after);
+  const inserted = token + (needTrailingSpace ? ' ' : '');
+  const nextVal = before + inserted + after;
+  const nextCaret = before.length + inserted.length;
+
+  state.atMentionOpen = false;
+  state.atMentionRange = null;
+  state.draftOpen = nextVal.trim().length > 0;
+  state.drafts[state.selectedConvId] = nextVal;
+
+  document.querySelectorAll('#draftTextarea').forEach(ta => {
+    ta.value = nextVal;
+  });
+  syncAllComposerBackdrops(nextVal);
+  renderAtMentionMenu();
+  renderConversationLists();
+  syncLiveTranslationUI(nextVal);
+
+  if (visibleTa) {
+    visibleTa.focus();
+    visibleTa.setSelectionRange(nextCaret, nextCaret);
+    syncComposerBackdropScroll(visibleTa);
+  }
+}
+
 function handleComposerInput(val, el) {
   state.draftOpen = val.trim().length > 0;
   state.drafts[state.selectedConvId] = val;
+  syncAllComposerBackdrops(val);
+  if (el) {
+    syncComposerBackdropScroll(el);
+    checkComposerAtMention(el);
+  }
   renderConversationLists();
   syncLiveTranslationUI(val);
 }
@@ -2128,15 +2353,10 @@ function selectCannedReplyFromModal(id) {
   const item = CANNED_REPLIES.find(r => r.id === id);
   if (!item) return;
 
-  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
-  const guestFirst = conv.name.replace('↳ ', '').split(' ')[0];
-  const roomName = conv.stay?.room || 'Suite 14';
-  const nukiCode = conv.stay?.nukiCode || '000000';
-
   const compiledText = item.body
-    .replace(/\{Ospite\}/g, guestFirst)
-    .replace(/\{Camera\}/g, roomName)
-    .replace(/\{Nuki\}/g, nukiCode);
+    .replace(/\{Ospite\}/g, '@Ospite')
+    .replace(/\{Camera\}/g, '@Camera')
+    .replace(/\{Nuki\}/g, '@Nuki');
 
   state.composerExpanded = true;
   state.draftOpen = true;
@@ -2147,7 +2367,7 @@ function selectCannedReplyFromModal(id) {
   closeModal();
   renderConversationLists();
   renderSiderAI();
-  showToast(`Messaggio pronto "${item.title}" compilato e inserito nel composer`);
+  showToast(`Messaggio pronto "${item.title}" inserito con tag dinamici`);
 }
 
 function insertCannedReply(title) {
@@ -2155,14 +2375,45 @@ function insertCannedReply(title) {
 }
 
 function insertTagPMS(val) {
+  const token = String(val || '').startsWith('@') ? val : `@${val}`;
+  const visibleTa = Array.from(document.querySelectorAll('#draftTextarea')).find(el => el.offsetParent !== null);
   const cur = state.draftOpen ? (state.drafts[state.selectedConvId] || '') : '';
+
   state.composerExpanded = true;
   state.draftOpen = true;
   state.replyTab = 'risposta';
-  state.drafts[state.selectedConvId] = (cur ? `${cur} ${val}` : `${val}`).trim();
+
+  let nextVal = '';
+  let nextCaret = 0;
+
+  if (visibleTa && typeof visibleTa.selectionStart === 'number') {
+    const start = visibleTa.selectionStart;
+    const end = visibleTa.selectionEnd;
+    const before = cur.slice(0, start);
+    const after = cur.slice(end);
+    const prefixSpace = before.length > 0 && !/\s$/.test(before) ? ' ' : '';
+    const suffixSpace = after.length === 0 || !/^\s/.test(after) ? ' ' : '';
+    const chunk = `${prefixSpace}${token}${suffixSpace}`;
+    nextVal = before + chunk + after;
+    nextCaret = before.length + chunk.length;
+  } else {
+    nextVal = cur ? `${cur.trimEnd()} ${token} ` : `${token} `;
+    nextCaret = nextVal.length;
+  }
+
+  state.drafts[state.selectedConvId] = nextVal;
   renderConversationLists();
-  renderSiderAI();
-  showToast(`Inserito nel composer: ${val}`);
+  renderBottomComposer();
+  syncLiveTranslationUI(nextVal);
+
+  setTimeout(() => {
+    const ta = Array.from(document.querySelectorAll('#draftTextarea')).find(el => el.offsetParent !== null);
+    if (ta) {
+      ta.focus();
+      ta.setSelectionRange(nextCaret, nextCaret);
+      syncComposerBackdropScroll(ta);
+    }
+  }, 20);
 }
 
 function toggleHostTrad() {
