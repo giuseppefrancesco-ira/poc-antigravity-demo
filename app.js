@@ -677,87 +677,112 @@ function getConvPmsMeta(conv) {
     adam: {
       checkin: '6 ott 2026',
       checkout: '11 ott 2026',
+      arrShort: '6 ott',
+      depShort: '11 ott',
+      nights: '5',
       checkinFull: conv.stay.checkinFull || '06/10/2026',
       checkoutFull: conv.stay.checkoutFull || '11/10/2026',
       roomShort: conv.stay.room || 'Suite 14',
       guestsShort: '2 adulti',
-      guestsNum: '2',
-      statusBadge: 'In Soggiorno',
+      guestsNum: conv.stay.guestsNum || '2',
+      statusBadge: 'In soggiorno',
       statusClass: 'in-stay',
       preferences: 'Viaggia spesso per lavoro. Apprezza camere tranquille, posto auto coperto riservato e colazione con opzioni senza glutine.',
       treatment: 'Colazione Inclusa',
       price: '€1120',
       handoverNote: 'Adam Nowak chiede disponibilità e tariffa del posto auto coperto #14 per la Suite 14 e modalità di accesso con codice Nuki.',
       nukiCode: conv.stay.nukiCode || '000000',
-      checkinPin: conv.stay.checkinPin || '238068'
+      checkinPin: conv.stay.checkinPin || '238068',
+      touristTax: conv.stay.touristTax || '15',
+      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/s14'
     },
     olga: {
       checkin: '6 ott 2026',
       checkout: '11 ott 2026',
+      arrShort: '6 ott',
+      depShort: '11 ott',
+      nights: '5',
       checkinFull: conv.stay.checkinFull || '06/10/2026',
       checkoutFull: conv.stay.checkoutFull || '11/10/2026',
       roomShort: conv.stay.room || 'Suite 14',
       guestsShort: '2 adulti',
-      guestsNum: '2',
-      statusBadge: 'In Soggiorno',
+      guestsNum: conv.stay.guestsNum || '2',
+      statusBadge: 'In soggiorno',
       statusClass: 'in-stay',
       preferences: 'Co-ospite collegata alla prenotazione principale (#DEMO-1048). Preferisce comunicazioni rapide su WhatsApp.',
       treatment: 'Colazione Inclusa',
       price: '€1120',
       handoverNote: 'Olga Nowak ha confermato la ricezione del codice Nuki e ha ritirato la mappa del centro storico in reception.',
       nukiCode: conv.stay.nukiCode || '000000',
-      checkinPin: conv.stay.checkinPin || '238068'
+      checkinPin: conv.stay.checkinPin || '238068',
+      touristTax: conv.stay.touristTax || '15',
+      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/s14'
     },
     maria: {
       checkin: '29 ott 2026',
       checkout: '2 nov 2026',
+      arrShort: '29 ott',
+      depShort: '2 nov',
+      nights: '4',
       checkinFull: conv.stay.checkinFull || '29/10/2026',
       checkoutFull: conv.stay.checkoutFull || '02/11/2026',
       roomShort: conv.stay.room || 'Junior 08',
       guestsShort: '2 adulti',
-      guestsNum: '2',
-      statusBadge: 'In Soggiorno',
+      guestsNum: conv.stay.guestsNum || '2',
+      statusBadge: 'In soggiorno',
       statusClass: 'in-stay',
       preferences: 'Arrivo previsto nel pomeriggio (16:30). Richiede connessione Wi-Fi ad alte prestazioni e cuscini extra.',
       treatment: 'Colazione Inclusa',
       price: '€890',
       handoverNote: 'Maria Camila Villamizar chiede la password del Wi-Fi veloce per la Junior Suite 08 e gli orari della colazione.',
       nukiCode: conv.stay.nukiCode || '753293',
-      checkinPin: conv.stay.checkinPin || '419022'
+      checkinPin: conv.stay.checkinPin || '419022',
+      touristTax: conv.stay.touristTax || '12',
+      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/j08'
     },
     cliff: {
       checkin: '25 ott 2026',
       checkout: '28 ott 2026',
+      arrShort: '25 ott',
+      depShort: '28 ott',
+      nights: '3',
       checkinFull: conv.stay.checkinFull || '25/10/2026',
       checkoutFull: conv.stay.checkoutFull || '28/10/2026',
       roomShort: conv.stay.room || 'Deluxe 04',
       guestsShort: '1 adulto',
-      guestsNum: '1',
-      statusBadge: 'Check-out',
+      guestsNum: conv.stay.guestsNum || '1',
+      statusBadge: 'Soggiorno concluso',
       statusClass: 'checkout',
       preferences: 'Soggiorno business individuale. Molto puntuale al check-out, apprezza procedura express senza attese.',
       treatment: 'Solo Pernottamento',
       price: '€640',
       handoverNote: 'Check-out completato per Deluxe 04 in perfetto ordine. Bozza recensione ospite 5★ pronta per la pubblicazione.',
       nukiCode: conv.stay.nukiCode || '551920',
-      checkinPin: conv.stay.checkinPin || '883104'
+      checkinPin: conv.stay.checkinPin || '883104',
+      touristTax: conv.stay.touristTax || '9',
+      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/d04'
     },
     florian: {
       checkin: '22 ott 2026',
       checkout: '25 ott 2026',
+      arrShort: '22 ott',
+      depShort: '25 ott',
+      nights: '3',
       checkinFull: conv.stay.checkinFull || '22/10/2026',
       checkoutFull: conv.stay.checkoutFull || '25/10/2026',
       roomShort: conv.stay.room || 'Suite 12',
       guestsShort: '2 adulti',
-      guestsNum: '2',
-      statusBadge: 'Archiviata',
+      guestsNum: conv.stay.guestsNum || '2',
+      statusBadge: 'Soggiorno concluso',
       statusClass: 'archived',
       preferences: 'Ospite abituale. Apprezza consigli enogastronomici locali e check-in autonomo con SmartLock.',
       treatment: 'Colazione Inclusa',
       price: '€780',
       handoverNote: 'Soggiorno concluso e archiviato. Saluto finale e recensione Airbnb già inviati.',
       nukiCode: conv.stay.nukiCode || '330194',
-      checkinPin: conv.stay.checkinPin || '192837'
+      checkinPin: conv.stay.checkinPin || '192837',
+      touristTax: conv.stay.touristTax || '12',
+      checkinLink: conv.stay.checkinLink || 'https://checkin.casaaurora.it/s12'
     }
   };
   return metaByConv[conv.id] || metaByConv.adam;
@@ -872,24 +897,35 @@ function renderSiderAI() {
       <div class="gs-section">
         <div class="gs-section-head">
           <span class="gs-section-title">Prenotazione</span>
+          <button type="button" class="gs-pms-open-pill" onclick="openEditGuestPmsModal()" title="Modifica dati ospite & PMS">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            <span>Dati & PMS</span>
+          </button>
+        </div>
+
+        <div class="gs-kpi-mini-grid">
+          <div class="gs-kpi-mini-box">
+            <span class="gs-kpi-mini-label">Arrivo</span>
+            <span class="gs-kpi-mini-val">${m.arrShort}</span>
+          </div>
+          <div class="gs-kpi-mini-box">
+            <span class="gs-kpi-mini-label">Partenza</span>
+            <span class="gs-kpi-mini-val">${m.depShort}</span>
+          </div>
+          <div class="gs-kpi-mini-box">
+            <span class="gs-kpi-mini-label">Notti</span>
+            <span class="gs-kpi-mini-val">${m.nights}</span>
+          </div>
+          <div class="gs-kpi-mini-box">
+            <span class="gs-kpi-mini-label">Ospiti</span>
+            <span class="gs-kpi-mini-val">${m.guestsNum}</span>
+          </div>
         </div>
 
         <div class="gs-info-rows">
           <div class="gs-info-row">
             <span class="gs-info-label">Alloggio</span>
             <span class="gs-info-val">${conv.stay.room} · ${conv.propertyLabel || 'Casa Aurora'}</span>
-          </div>
-          <div class="gs-info-row">
-            <span class="gs-info-label">Check-in</span>
-            <span class="gs-info-val">${m.checkin}</span>
-          </div>
-          <div class="gs-info-row">
-            <span class="gs-info-label">Check-out</span>
-            <span class="gs-info-val">${m.checkout}</span>
-          </div>
-          <div class="gs-info-row">
-            <span class="gs-info-label">Ospiti</span>
-            <span class="gs-info-val">${m.guestsShort}</span>
           </div>
           <div class="gs-info-row">
             <span class="gs-info-label">Trattamento</span>
@@ -2719,125 +2755,192 @@ function openEditGuestPmsModal() {
   const nameParts = cleanName.split(' ');
   const firstName = nameParts.slice(0, -1).join(' ') || nameParts[0] || 'Ospite';
   const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+  const initials = ((firstName[0] || '') + (lastName[0] || firstName[1] || '')).toUpperCase();
   const m = getConvPmsMeta(conv);
+
   const syncIconSm = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`;
+  const syncIconBtn = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`;
+  const calendarIconSvg = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`;
 
   content.className = 'modal-card pms-edit-modal';
   content.innerHTML = `
-    <div class="pms-modal-close-bar">
-      <span class="pms-modal-top-label">Modifica dati ospite & PMS</span>
-      <button type="button" class="faq-close-btn" onclick="closeModal()" aria-label="Chiudi">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    <!-- Top Header & KPI Summary -->
+    <div class="pms-ref-top-section">
+      <button type="button" class="pms-ref-close-x" onclick="closeModal()" aria-label="Chiudi">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
+
+      <div class="pms-ref-header-row">
+        <div class="pms-ref-identity">
+          <div class="pms-ref-avatar">${initials}</div>
+          <div class="pms-ref-title-block">
+            <div class="pms-ref-guest-name">${cleanName}</div>
+            <div class="pms-ref-sub">Prenotazione · ${conv.stay.bookingCode}</div>
+          </div>
+        </div>
+
+        <div class="pms-ref-header-actions">
+          <button type="button" class="pms-ref-sync-pill" onclick="triggerHubSync();showToast('Dati prenotazione sincronizzati da Beddy PMS')">
+            ${syncIconBtn}
+            <span>Aggiorna dati</span>
+          </button>
+          <span class="pms-ref-status-pill">${m.statusBadge}</span>
+        </div>
+      </div>
+
+      <div class="pms-ref-kpi-grid">
+        <div class="pms-ref-kpi-card">
+          <span class="pms-ref-kpi-label">Arrivo</span>
+          <span class="pms-ref-kpi-val">${m.arrShort}</span>
+        </div>
+        <div class="pms-ref-kpi-card">
+          <span class="pms-ref-kpi-label">Partenza</span>
+          <span class="pms-ref-kpi-val">${m.depShort}</span>
+        </div>
+        <div class="pms-ref-kpi-card">
+          <span class="pms-ref-kpi-label">Notti</span>
+          <span class="pms-ref-kpi-val">${m.nights}</span>
+        </div>
+        <div class="pms-ref-kpi-card">
+          <span class="pms-ref-kpi-label">Ospiti</span>
+          <span class="pms-ref-kpi-val">${m.guestsNum}</span>
+        </div>
+      </div>
     </div>
 
-    <div class="gs-card gs-pms-card pms-modal-inner-card" id="gsPmsSection">
-      <div class="gs-pms-head">
-        <div class="gs-pms-title-row">
-          <span style="color:#2563EB;display:inline-flex;">${ICONS.link14}</span>
-          <span class="gs-pms-title">Aggancio prenotazione PMS</span>
-          <span class="stay-pms-verified-pill">${ICONS.check} ${conv.stay.bookingCode}</span>
+    <!-- Scrollable Body -->
+    <div class="pms-ref-scroll-body">
+      <!-- Lingua dei messaggi (full-width lavender band) -->
+      <div class="pms-ref-lang-band">
+        <div class="pms-ref-lang-head">
+          <span class="pms-ref-lang-icon">${ICONS.languages}</span>
+          <span class="pms-ref-lang-title">Lingua dei messaggi</span>
         </div>
-        <button type="button" class="gs-sync-mini-btn" onclick="triggerHubSync();showToast('Dati prenotazione sincronizzati dal PMS')">
-          ${syncIconSm}
-          <span>Aggiorna</span>
-        </button>
-      </div>
-
-      <select id="pmsBookingSelect" class="stay-select-input" onchange="confirmBookingLinkChange(false)">
-        <option value="${conv.stay.bookingCode}" selected>${conv.stay.bookingCode} — ${cleanName} (${conv.stay.room} · ${conv.stay.dates})</option>
-        <option value="#DEMO-1052">#DEMO-1052 — Adam Nowak (Suite 18 · 11/10–14/10 Estensione)</option>
-        <option value="#BKG-8821">#BKG-8821 — Maria Camila Villamizar (Junior Suite 08 · 29/10–02/11)</option>
-      </select>
-
-      <!-- Accessi e Tag Dinamici PMS -->
-      <div class="gs-pms-subblock">
-        <div class="gs-pms-subhead">
-          <span class="gs-pms-subtitle" style="display:inline-flex;align-items:center;gap:5px;"><span style="color:#2563EB;display:inline-flex;">${ICONS.key13}</span> <span>Accessi e tag PMS</span></span>
-          <span class="gs-pms-subhint">Clicca sul tag per inserirlo nel messaggio</span>
-        </div>
-
-        <div class="stay-tags-card">
-          <div class="stay-tag-row">
-            <div class="stay-tag-left" onclick="insertTagPMS('${m.nukiCode}');closeModal();" title="Inserisci codice Nuki nel messaggio">
-              <span class="stay-copy-icon">${ICONS.copy}</span>
-              <div class="stay-tag-texts">
-                <span class="stay-tag-code">{CODICE_NUKI}</span>
-                <span class="stay-tag-desc">Codice SmartLock Nuki</span>
-              </div>
-            </div>
-            <input type="text" id="stayNukiInput" class="stay-tag-val-input" value="${m.nukiCode}" />
-          </div>
-
-          <div class="stay-tag-row">
-            <div class="stay-tag-left" onclick="insertTagPMS('${m.checkinPin}');closeModal();" title="Inserisci PIN check-in online nel messaggio">
-              <span class="stay-copy-icon">${ICONS.copy}</span>
-              <div class="stay-tag-texts">
-                <span class="stay-tag-code">{CHECKIN_ONLINE_PIN}</span>
-                <span class="stay-tag-desc">PIN check-in online</span>
-              </div>
-            </div>
-            <input type="text" id="stayPinInput" class="stay-tag-val-input" value="${m.checkinPin}" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Lingua dei messaggi -->
-      <div class="gs-pms-subblock">
-        <div class="gs-pms-subhead-inline">
-          <span style="color:#2E54E8;display:inline-flex;">${ICONS.languages}</span>
-          <span class="gs-pms-subtitle">Lingua dei messaggi</span>
-        </div>
-        <select id="stayLangSelect" class="stay-select-input white" onchange="setOutboundLanguage(this.value)">
-          <option value="${conv.langCode}" selected>Come scrive l'ospite — ${conv.langName.toLowerCase()}</option>
-          <option value="IT">Italiano</option>
-          <option value="PL">Polacco</option>
-          <option value="ES">Spagnolo</option>
-          <option value="EN">Inglese</option>
-          <option value="DE">Tedesco</option>
-          <option value="FR">Francese</option>
+        <select id="stayLangSelect" class="pms-ref-lang-select" onchange="setOutboundLanguage(this.value)">
+          <option value="${conv.langCode}" selected>Come scrive l'ospite — ${conv.langName}</option>
+          <option value="IT">Italiano (IT)</option>
+          <option value="PL">Polacco (PL)</option>
+          <option value="EN">Inglese (EN)</option>
+          <option value="ES">Spagnolo (ES)</option>
+          <option value="DE">Tedesco (DE)</option>
+          <option value="FR">Francese (FR)</option>
         </select>
+        <p class="pms-ref-lang-hint">
+          Larry riconosce la lingua dai messaggi dell'ospite. Prima di inviare puoi comunque cambiarla per quel singolo messaggio.
+        </p>
       </div>
 
-      <!-- Dati della prenotazione (Beddy / PMS) -->
-      <div class="gs-pms-subblock">
-        <div class="gs-pms-subhead">
-          <span class="gs-pms-subtitle">Dati della prenotazione (Beddy PMS)</span>
-          <span class="stay-sec-sync-note">${syncIconSm} <span>sincronizzati automaticamente</span></span>
+      <!-- Dati della prenotazione -->
+      <div class="pms-ref-section">
+        <div class="pms-ref-sec-head">
+          <span class="pms-ref-sec-title">Dati della prenotazione</span>
+          <span class="pms-ref-sec-sync-note">${syncIconSm} <span>questi li riscrive Beddy a ogni aggiornamento</span></span>
         </div>
 
-        <div class="gs-pms-form-grid">
-          <div class="stay-field">
+        <div class="pms-ref-form-grid">
+          <div class="pms-ref-field">
             <label>Nome ${syncIconSm}</label>
             <input type="text" id="stayFirstNameInput" value="${firstName}" />
           </div>
-          <div class="stay-field">
+          <div class="pms-ref-field">
             <label>Cognome ${syncIconSm}</label>
             <input type="text" id="stayLastNameInput" value="${lastName}" />
           </div>
-          <div class="stay-field">
+
+          <div class="pms-ref-field">
             <label>Check-in ${syncIconSm}</label>
-            <input type="text" id="stayCheckinInput" value="${m.checkinFull}" />
+            <div class="pms-ref-input-icon-wrap">
+              <input type="text" id="stayCheckinInput" value="${m.checkinFull}" />
+              <span class="pms-ref-input-right-icon">${calendarIconSvg}</span>
+            </div>
           </div>
-          <div class="stay-field">
+          <div class="pms-ref-field">
             <label>Check-out ${syncIconSm}</label>
-            <input type="text" id="stayCheckoutInput" value="${m.checkoutFull}" />
+            <div class="pms-ref-input-icon-wrap">
+              <input type="text" id="stayCheckoutInput" value="${m.checkoutFull}" />
+              <span class="pms-ref-input-right-icon">${calendarIconSvg}</span>
+            </div>
           </div>
-          <div class="stay-field">
-            <label>Alloggio ${syncIconSm}</label>
-            <input type="text" id="stayRoomInput" value="${conv.stay.room}" />
+
+          <div class="pms-ref-field">
+            <label>Numero ospiti ${syncIconSm}</label>
+            <input type="text" id="stayGuestsInput" value="${m.guestsNum}" />
           </div>
-          <div class="stay-field">
+          <div class="pms-ref-field">
+            <label>Telefono</label>
+            <input type="text" id="stayPhoneInput" value="${conv.stay.phone}" />
+          </div>
+
+          <div class="pms-ref-field">
             <label>Canale</label>
             <input type="text" value="${conv.channel}" readonly />
           </div>
+          <div class="pms-ref-field">
+            <label>Alloggio ${syncIconSm}</label>
+            <input type="text" id="stayRoomInput" value="${conv.stay.room}" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Accessi e tag -->
+      <div class="pms-ref-section">
+        <div class="pms-ref-sec-head-col">
+          <span class="pms-ref-sec-title">Accessi e tag</span>
+          <span class="pms-ref-sec-subdesc">Scrivi il nome con @ o fra graffe in un messaggio e Larry ci mette il valore di questo ospite.</span>
         </div>
 
-        <button type="button" class="gs-pms-save-btn" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;" onclick="confirmBookingLinkChange(true)">
-          ${ICONS.save14}
-          <span>Salva dati PMS</span>
-        </button>
+        <div class="pms-ref-tags-box">
+          <div class="pms-ref-tag-row">
+            <div class="pms-ref-tag-left" onclick="insertTagPMS('@Nuki');closeModal();" title="Clicca per inserire nel messaggio">
+              <span class="pms-ref-copy-icon">${ICONS.copy}</span>
+              <div class="pms-ref-tag-texts">
+                <span class="pms-ref-tag-code">{CODICE_NUKI}</span>
+                <span class="pms-ref-tag-label">Codice Nuki</span>
+              </div>
+            </div>
+            <input type="text" id="stayNukiInput" class="pms-ref-tag-input" value="${m.nukiCode}" placeholder="Es. 642949" />
+          </div>
+
+          <div class="pms-ref-tag-row">
+            <div class="pms-ref-tag-left" onclick="insertTagPMS('${m.checkinPin}');closeModal();" title="Clicca per inserire nel messaggio">
+              <span class="pms-ref-copy-icon">${ICONS.copy}</span>
+              <div class="pms-ref-tag-texts">
+                <span class="pms-ref-tag-code">{CHECKIN_ONLINE_PIN}</span>
+                <span class="pms-ref-tag-label">PIN check-in online</span>
+              </div>
+            </div>
+            <input type="text" id="stayPinInput" class="pms-ref-tag-input" value="${m.checkinPin}" placeholder="Es. 81daad" />
+          </div>
+
+          <div class="pms-ref-tag-row">
+            <div class="pms-ref-tag-left" onclick="insertTagPMS('€' + (document.getElementById('stayTaxInput')?.value || '${m.touristTax}'));closeModal();" title="Clicca per inserire nel messaggio">
+              <span class="pms-ref-copy-icon">${ICONS.copy}</span>
+              <div class="pms-ref-tag-texts">
+                <span class="pms-ref-tag-code">{TASSA_SOGGIORNO}</span>
+                <span class="pms-ref-tag-label">Tassa di soggiorno</span>
+              </div>
+            </div>
+            <input type="text" id="stayTaxInput" class="pms-ref-tag-input" value="${m.touristTax}" placeholder="Es. 12" />
+          </div>
+
+          <div class="pms-ref-tag-row">
+            <div class="pms-ref-tag-left" onclick="insertTagPMS(document.getElementById('stayLinkInput')?.value || '${m.checkinLink}');closeModal();" title="Clicca per inserire nel messaggio">
+              <span class="pms-ref-copy-icon">${ICONS.copy}</span>
+              <div class="pms-ref-tag-texts">
+                <span class="pms-ref-tag-code">{CHECKIN_ONLINE_LINK}</span>
+                <span class="pms-ref-tag-label">Link check-in online</span>
+              </div>
+            </div>
+            <input type="text" id="stayLinkInput" class="pms-ref-tag-input" value="${m.checkinLink}" placeholder="https://..." />
+          </div>
+        </div>
       </div>
+    </div>
+
+    <!-- Bottom Sticky Footer -->
+    <div class="pms-ref-footer">
+      <button type="button" class="pms-ref-btn-cancel" onclick="closeModal()">Annulla</button>
+      <button type="button" class="pms-ref-btn-save" onclick="confirmBookingLinkChange(true)">Salva</button>
     </div>
   `;
   modal.classList.add('open');
@@ -2847,8 +2950,11 @@ function confirmBookingLinkChange(shouldClose = true) {
   const sel = document.getElementById('pmsBookingSelect');
   const langEl = document.getElementById('stayLangSelect');
   const phoneEl = document.getElementById('stayPhoneInput');
+  const guestsEl = document.getElementById('stayGuestsInput');
   const nukiEl = document.getElementById('stayNukiInput');
   const pinEl = document.getElementById('stayPinInput');
+  const taxEl = document.getElementById('stayTaxInput');
+  const linkEl = document.getElementById('stayLinkInput');
   const firstEl = document.getElementById('stayFirstNameInput');
   const lastEl = document.getElementById('stayLastNameInput');
   const checkinEl = document.getElementById('stayCheckinInput');
@@ -2865,8 +2971,11 @@ function confirmBookingLinkChange(shouldClose = true) {
     conv.langName = LANG_LABELS[langEl.value] || conv.langName;
   }
   if (phoneEl && phoneEl.value.trim()) conv.stay.phone = phoneEl.value.trim();
+  if (guestsEl && guestsEl.value.trim()) conv.stay.guestsNum = guestsEl.value.trim();
   if (nukiEl && nukiEl.value.trim()) conv.stay.nukiCode = nukiEl.value.trim();
   if (pinEl && pinEl.value.trim()) conv.stay.checkinPin = pinEl.value.trim();
+  if (taxEl && taxEl.value.trim()) conv.stay.touristTax = taxEl.value.trim();
+  if (linkEl && linkEl.value.trim()) conv.stay.checkinLink = linkEl.value.trim();
   if (firstEl || lastEl) {
     const newFull = [firstEl?.value.trim(), lastEl?.value.trim()].filter(Boolean).join(' ');
     if (newFull) {
@@ -2882,7 +2991,7 @@ function confirmBookingLinkChange(shouldClose = true) {
   renderConversationLists();
   renderThread();
   renderSiderAI();
-  showToast(`Dati ospite e aggancio PMS (${conv.stay.bookingCode}) salvati`);
+  showToast(`Dati prenotazione e tag PMS salvati`);
 }
 
 function openGenerateReviewModal() {
