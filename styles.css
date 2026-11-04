@@ -8107,17 +8107,19 @@ button, input, textarea {
    MOBILE TOUCH TARGETS & USABILITY UPGRADE (40–44px HIG/WCAG)
    ========================================================= */
 
-/* Desktop default for scheduled message links */
+/* Desktop default for scheduled message edit icon button */
 .meta-sched-btn {
-  border: none;
-  background: transparent;
-  padding: 2px 4px;
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 600;
+  border: 1px solid #DBEAFE;
+  background: #EFF6FF;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  border-radius: 6px;
-  transition: background 0.15s ease;
+  border-radius: 7px;
+  transition: all 0.15s ease;
 }
 
 .meta-sched-btn.edit {
@@ -8125,15 +8127,8 @@ button, input, textarea {
 }
 
 .meta-sched-btn.edit:hover {
-  background: #EFF6FF;
-}
-
-.meta-sched-btn.cancel {
-  color: #DC2626;
-}
-
-.meta-sched-btn.cancel:hover {
-  background: #FEF2F2;
+  background: #DBEAFE;
+  border-color: #BFDBFE;
 }
 
 /* 1. Mobile Top Headers (Inbox, Chat, Dettagli Ospite) */
@@ -8231,22 +8226,25 @@ button, input, textarea {
 }
 
 .figma-mobile .meta-sched-btn {
-  min-height: 32px;
-  padding: 4px 9px;
-  font-size: 12px;
-  border-radius: 7px;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border-radius: 8px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+}
+
+.figma-mobile .meta-sched-btn svg {
+  width: 15px;
+  height: 15px;
 }
 
 .figma-mobile .meta-sched-btn.edit {
   background: #EFF6FF;
   border: 1px solid #DBEAFE;
-}
-
-.figma-mobile .meta-sched-btn.cancel {
-  background: #FEF2F2;
-  border: 1px solid #FECACA;
 }
 
 .figma-mobile .card-allegato-host {

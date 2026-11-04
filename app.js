@@ -665,8 +665,7 @@ function renderThread() {
         <span style="color:#D97706;display:inline-flex;">${ICONS.clock}</span>
         <span style="font-size:11px;font-weight:600;color:#D97706;">PROGRAMMATO OGGI 11:30 ·</span>
         <span class="meta-ch" title="${conv.channel}">${getChannelBadgeHtml(conv.channel)}</span>
-        <button type="button" class="meta-sched-btn edit" onclick="openDraftEditor();showToast('Apertura modifica messaggio programmato')">Modifica</button>
-        <button type="button" class="meta-sched-btn cancel" onclick="showToast('Invio programmato delle 11:30 messo in pausa')">Annulla</button>
+        <button type="button" class="meta-sched-btn edit" onclick="openDraftEditor();showToast('Apertura modifica messaggio programmato')" title="Modifica messaggio programmato" aria-label="Modifica messaggio programmato">${ICONS.pencil}</button>
       </div>
 
       <div class="bolla-programmata">
