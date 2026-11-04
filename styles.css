@@ -8196,9 +8196,8 @@ button, input, textarea {
    4. Contenuto di Chat e Dettagli Ospite (sfondo, card, liste) chiaro
    ========================================================= */
 
-/* --- 1. HEADER IN BLU SCURO (#1E2C68) CON TITOLO BIANCO SULLA BARRA MESSAGGI / CHAT / DETTAGLI OSPITE (DESKTOP & MOBILE) --- */
+/* --- 1. HEADER IN BLU SCURO (#1E2C68) CON TITOLO BIANCO SULLA BARRA MESSAGGI / CHAT / DETTAGLI OSPITE MOBILE --- */
 .col-thread .intestazione-thread,
-.gs-topbar,
 .figma-mobile .mob-chat-header,
 #mobScreenChat .mob-chat-header,
 #mobScreenAI .mob-chat-header {
@@ -8208,7 +8207,6 @@ button, input, textarea {
 }
 
 .col-thread .intestazione-thread .titolo-messaggi,
-.gs-topbar .gs-topbar-title,
 .figma-mobile .mob-chat-header .titolo-messaggi,
 #mobScreenChat .mob-chat-header .titolo-messaggi,
 #mobScreenAI .mob-chat-header .titolo-messaggi,
@@ -8216,8 +8214,6 @@ button, input, textarea {
   color: #FFFFFF !important;
 }
 
-.gs-topbar .gs-header-plain-icon,
-.gs-topbar .gs-header-plain-icon svg,
 #mobScreenAI .mob-ai-hdr-title svg {
   color: #E2E8F0 !important;
   stroke: #E2E8F0 !important;
