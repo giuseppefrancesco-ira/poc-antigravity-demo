@@ -8708,17 +8708,31 @@ button, input, textarea {
 
 .bc-top-pill.template.active,
 .bc-top-pill.ocr-pill,
-.bc-icon-btn.ocr-quick-icon-btn {
+.bc-icon-btn.ocr-quick-icon-btn,
+.bc-pill-btn.ai-tone,
+.bc-tone-chip.active {
   background: #EEF4FF;
   border-color: #BFDBFE;
   color: #2B62FF;
 }
 
+.bc-pill-btn.ai-tone svg {
+  stroke: #2B62FF;
+}
+
 .bc-top-pill.ocr-pill:hover,
-.bc-icon-btn.ocr-quick-icon-btn:hover {
+.bc-icon-btn.ocr-quick-icon-btn:hover,
+.bc-pill-btn.ai-tone:hover,
+.bc-pill-btn.ai-tone.active,
+.bc-tone-chip:hover {
   background: #E0EAFF;
   border-color: #93C5FD;
   color: #1E50E6;
+}
+
+.bc-pill-btn.ai-tone:hover svg,
+.bc-pill-btn.ai-tone.active svg {
+  stroke: #1E50E6;
 }
 
 .bc-generate-ai-btn {
