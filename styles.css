@@ -8252,36 +8252,36 @@ button, input, textarea {
 }
 
 #mobScreenInbox .footer-lista {
-  background: #FFFFFF;
-  border-top: 1px solid #E2E8F0;
-  color: #475569;
+  background: #18255B;
+  border-top: 1px solid #2C3B75;
+  color: #94A3B8;
 }
 
 #mobScreenInbox .footer-struttura {
-  color: #1E293B;
+  color: #FFFFFF;
   font-weight: 600;
 }
 
-/* --- 3. TAB BAR CHIARA CON TAB ATTIVA E PULSANTI PRIMARI NELLO STESSO BLU (#2E54E8) --- */
+/* --- 3. BOTTOM BAR SCURA (#18255B) CON TAB ATTIVA NELLO STESSO BLU PRIMARIO (#2E54E8) --- */
 .figma-mobile .mob-bottom-bar,
 #mobScreenInbox .mob-bottom-bar {
-  background: #FFFFFF;
-  border-top: 1px solid #E2E8F0;
+  background: #18255B;
+  border-top: 1px solid #2C3B75;
 }
 
 .figma-mobile .mob-tab,
 #mobScreenInbox .mob-tab {
-  color: #64748B;
+  color: #94A3B8;
 }
 
 .figma-mobile .mob-tab:hover,
 #mobScreenInbox .mob-tab:hover {
-  color: #1E293B;
+  color: #E2E8F0;
 }
 
 .figma-mobile .mob-tab.active,
 #mobScreenInbox .mob-tab.active {
-  color: #2E54E8;
+  color: #FFFFFF;
   font-weight: 700;
 }
 
@@ -8289,12 +8289,12 @@ button, input, textarea {
 #mobScreenInbox .mob-tab.active .mob-tab-pill {
   background: #2E54E8;
   color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(46, 84, 232, 0.28);
+  box-shadow: 0 2px 10px rgba(46, 84, 232, 0.45);
 }
 
 .figma-mobile .home-indicator,
 #mobScreenInbox .home-indicator {
-  background: #0F172A;
+  background: rgba(255, 255, 255, 0.35);
 }
 
 /* =========================================================
