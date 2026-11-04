@@ -789,71 +789,62 @@ function renderSiderAI() {
     : currentNoteObj.text;
 
   const html = `
-    <!-- Top Header: Dettagli ospite + AI Copilot button + Close -->
+    <!-- Top Header: Dettagli ospite con icona senza sfondo (visibile solo su Desktop; su Mobile è nell'intestazione-thread in alto) -->
     <div class="gs-topbar">
       <div class="gs-topbar-left">
-        <div class="gs-user-icon-box" style="color:#2563EB;background:#EFF6FF;border-color:#DBEAFE;">
+        <span class="gs-header-plain-icon">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
-        </div>
-        <div class="gs-topbar-titles">
-          <div class="gs-topbar-title">Dettagli ospite</div>
-          <div class="gs-topbar-sub">Informazioni prenotazione e PMS</div>
-        </div>
-      </div>
-
-      <div class="gs-topbar-right">
-        <button type="button" class="gs-close-btn" onclick="toggleDesktopSider(true)" title="Chiudi pannello laterale" aria-label="Chiudi">
-          ${ICONS.close14}
-        </button>
+        </span>
+        <span class="gs-topbar-title">Dettagli ospite</span>
       </div>
     </div>
 
     <!-- Scrollable Content -->
     <div class="gs-scroll-body">
 
-      <!-- 1. Card Principale Ospite & Contatti -->
-      <div class="gs-card gs-guest-card">
+      <!-- 1. Ospite & Contatti -->
+      <div class="gs-section">
         <div class="gs-guest-top">
           <div class="gs-guest-identity">
             <div class="gs-avatar">${initials}</div>
             <div class="gs-name-wrap">
               <div class="gs-name">${cleanName}</div>
-              <div class="gs-phone-sub">${conv.stay.phone}</div>
+              <div class="gs-booking-sub">${conv.stay.bookingCode} · ${conv.channel}</div>
             </div>
           </div>
           <span class="gs-status-pill ${m.statusClass}">${m.statusBadge}</span>
         </div>
 
-        <div class="gs-card-divider"></div>
-
         <div class="gs-contact-list">
           <div class="gs-contact-row" onclick="navigator.clipboard?.writeText('${conv.stay.phone}');showToast('Numero copiato negli appunti')" title="Clicca per copiare il telefono" style="cursor:pointer;">
-            <span class="gs-wa-circle">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <span class="gs-plain-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
               </svg>
             </span>
+            <span class="gs-contact-label">Telefono</span>
             <span class="gs-contact-val">${conv.stay.phone}</span>
           </div>
 
           <div class="gs-contact-row" onclick="navigator.clipboard?.writeText('${conv.stay.email}');showToast('Email copiata negli appunti')" title="Clicca per copiare l'email" style="cursor:pointer;">
-            <span class="gs-mail-icon" style="color:#64748B;">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <span class="gs-plain-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <rect width="20" height="16" x="2" y="4" rx="2"/>
                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
               </svg>
             </span>
+            <span class="gs-contact-label">Email</span>
             <span class="gs-contact-val">${conv.stay.email}</span>
           </div>
 
           <div class="gs-contact-row gs-lang-row">
-            <span class="gs-mail-icon" style="color:#64748B;">
+            <span class="gs-plain-icon">
               ${ICONS.globe}
             </span>
-            <span class="gs-lang-row-label">Lingua</span>
+            <span class="gs-contact-label">Lingua</span>
             <div class="gs-lang-pill-wrap">
               <span class="gs-lang-flag-icon">${getLangFlagSvg(conv.langCode)}</span>
               <select class="gs-lang-quick-select" onchange="setOutboundLanguage(this.value)" title="Cambia lingua dell'ospite">
@@ -870,56 +861,45 @@ function renderSiderAI() {
         </div>
       </div>
 
-      <!-- 2. Riepilogo Soggiorno (5 elementi ottimizzati con Camera a larghezza piena) -->
-      <div class="gs-stay-summary">
-        <div class="gs-kpi-grid-3">
-          <div class="gs-kpi-box">
-            <span class="gs-kpi-label">CHECK-IN</span>
-            <span class="gs-kpi-value">${m.checkin}</span>
-          </div>
-          <div class="gs-kpi-box">
-            <span class="gs-kpi-label">CHECK-OUT</span>
-            <span class="gs-kpi-value">${m.checkout}</span>
-          </div>
-          <div class="gs-kpi-box">
-            <span class="gs-kpi-label">OSPITI</span>
-            <span class="gs-kpi-value">${m.guestsShort}</span>
-          </div>
+      <!-- 2. Prenotazione & Soggiorno -->
+      <div class="gs-section">
+        <div class="gs-section-head">
+          <span class="gs-section-title">Prenotazione</span>
         </div>
 
-        <div class="gs-room-bar">
-          <div class="gs-room-icon-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>
-            </svg>
+        <div class="gs-info-rows">
+          <div class="gs-info-row">
+            <span class="gs-info-label">Alloggio</span>
+            <span class="gs-info-val">${conv.stay.room} · ${conv.propertyLabel || 'Casa Aurora'}</span>
           </div>
-          <div class="gs-room-content">
-            <span class="gs-kpi-label">CAMERA / ALLOGGIO</span>
-            <span class="gs-room-value">${conv.stay.room} · ${conv.propertyLabel || 'Casa Aurora (Appartamento Superior)'}</span>
+          <div class="gs-info-row">
+            <span class="gs-info-label">Check-in</span>
+            <span class="gs-info-val">${m.checkin}</span>
           </div>
-        </div>
-
-        <!-- 3. Barra Trattamento & Prezzo -->
-        <div class="gs-treatment-bar">
-          <div class="gs-treatment-left">
-            <span class="gs-treatment-icon">${ICONS.utensils14}</span>
-            <div class="gs-treatment-texts">
-              <span class="gs-kpi-label">TRATTAMENTO</span>
-              <span class="gs-treatment-val">${m.treatment}</span>
-            </div>
+          <div class="gs-info-row">
+            <span class="gs-info-label">Check-out</span>
+            <span class="gs-info-val">${m.checkout}</span>
           </div>
-          <div class="gs-treatment-right">
-            <span class="gs-kpi-label" style="text-align:right;">TOTALE</span>
-            <span class="gs-treatment-price">${m.price}</span>
+          <div class="gs-info-row">
+            <span class="gs-info-label">Ospiti</span>
+            <span class="gs-info-val">${m.guestsShort}</span>
+          </div>
+          <div class="gs-info-row">
+            <span class="gs-info-label">Trattamento</span>
+            <span class="gs-info-val">${m.treatment}</span>
+          </div>
+          <div class="gs-info-row gs-info-row-total">
+            <span class="gs-info-label">Totale soggiorno</span>
+            <span class="gs-info-val gs-info-total-val">${m.price}</span>
           </div>
         </div>
       </div>
 
-      <!-- 4. Note Ospite (singola nota con tastino matita per modificare e bottone per salvare) -->
-      <div class="gs-card gs-note-card" id="gsGuestNoteSection">
+      <!-- 3. Note Ospite (singola nota con tastino matita per modificare e bottone per salvare) -->
+      <div class="gs-section gs-note-section" id="gsGuestNoteSection">
         <div class="gs-note-head">
           <div class="gs-note-title-row">
-            <span class="gs-note-icon">${ICONS.stickyNote14}</span>
+            <span class="gs-plain-icon">${ICONS.stickyNote14}</span>
             <span class="gs-note-title">Note ospite</span>
           </div>
           <div class="gs-note-head-right">

@@ -5182,148 +5182,71 @@ button, input, textarea {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 14px 16px;
-  border-bottom: 1px solid #F1F5F9;
+  height: 68px;
+  padding: 0 18px;
+  border-bottom: 1px solid #E2E8F0;
   background: #FFFFFF;
   flex-shrink: 0;
+}
+
+.figma-mobile .gs-topbar {
+  display: none;
 }
 
 .gs-topbar-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
 }
 
-.gs-user-icon-box {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  display: flex;
+.gs-header-plain-icon {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  color: #475569;
   flex-shrink: 0;
-}
-
-.gs-topbar-titles {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
 }
 
 .gs-topbar-title {
-  font-size: 13.5px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   color: #0F172A;
   line-height: 1.2;
-}
-
-.gs-topbar-sub {
-  font-size: 11px;
-  color: #64748B;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.gs-topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.gs-copilot-btn {
-  height: 28px;
-  padding: 0 10px;
-  border-radius: 8px;
-  border: 1px solid #E2E8F0;
-  background: #FFFFFF;
-  color: #0F172A;
-  font-size: 11.5px;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.gs-copilot-btn:hover {
-  background: #F8FAFC;
-  border-color: #CBD5E1;
-}
-
-.gs-copilot-btn.active {
-  background: #FFF7ED;
-  border-color: #FDBA74;
-  color: #9A3412;
-}
-
-.gs-close-btn {
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  border: none;
-  background: transparent;
-  color: #64748B;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-}
-
-.gs-close-btn:hover {
-  background: #F1F5F9;
-  color: #0F172A;
 }
 
 .gs-scroll-body {
   flex: 1;
   overflow-y: auto;
-  padding: 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+.gs-section {
+  padding: 18px 18px;
+  border-bottom: 1px solid #E2E8F0;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  background: #FFFFFF;
 }
 
-.gs-copilot-drawer {
-  background: #FFFBF5;
-  border: 1px solid #FED7AA;
-  border-radius: 14px;
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.gs-section:last-child {
+  border-bottom: none;
 }
 
-.gs-copilot-head {
+.gs-section-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
 }
 
-.gs-copilot-badge {
-  font-size: 11px;
-  font-weight: 700;
-  color: #9A3412;
-  background: #FFEDD5;
-  padding: 3px 8px;
-  border-radius: 999px;
-}
-
-.gs-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+.gs-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748B;
+  letter-spacing: 0.01em;
 }
 
 .gs-guest-top {
@@ -5336,18 +5259,19 @@ button, input, textarea {
 .gs-guest-identity {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 11px;
   min-width: 0;
 }
 
 .gs-avatar {
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: #DBEAFE;
-  color: #1D4ED8;
-  font-size: 14px;
-  font-weight: 700;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5362,22 +5286,22 @@ button, input, textarea {
 }
 
 .gs-name {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 14.5px;
+  font-weight: 600;
   color: #0F172A;
   line-height: 1.2;
 }
 
-.gs-phone-sub {
+.gs-booking-sub {
   font-size: 12px;
   color: #64748B;
 }
 
 .gs-status-pill {
-  padding: 4px 10px;
+  padding: 3px 9px;
   border-radius: 999px;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -5397,59 +5321,51 @@ button, input, textarea {
   color: #475569;
 }
 
-.gs-card-divider {
-  height: 1px;
-  background: #F1F5F9;
-  margin: 14px 0 12px;
-}
-
 .gs-contact-list {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 8px;
+  padding-top: 2px;
 }
 
 .gs-contact-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  min-height: 28px;
 }
 
-.gs-wa-circle {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: #22C55E;
+.gs-plain-icon {
+  width: 16px;
+  height: 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  color: #64748B;
   flex-shrink: 0;
 }
 
-.gs-mail-icon {
-  width: 22px;
-  height: 22px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+.gs-plain-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.gs-contact-label {
+  font-size: 12.5px;
+  color: #64748B;
+  font-weight: 400;
 }
 
 .gs-contact-val {
+  margin-left: auto;
   font-size: 12.5px;
-  color: #1E293B;
+  color: #0F172A;
   font-weight: 500;
+  text-align: right;
 }
 
 .gs-lang-row {
   justify-content: flex-start;
-  padding-top: 2px;
-}
-
-.gs-lang-row-label {
-  font-size: 12.5px;
-  color: #64748B;
-  font-weight: 500;
 }
 
 .gs-lang-pill-wrap {
@@ -5458,16 +5374,16 @@ button, input, textarea {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 30px;
-  padding: 0 10px;
-  background: #F8FAFC;
+  height: 28px;
+  padding: 0 9px;
+  background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 9px;
+  border-radius: 7px;
   transition: border-color 0.15s, background 0.15s;
 }
 
 .gs-lang-pill-wrap:hover {
-  background: #F1F5F9;
+  background: #F8FAFC;
   border-color: #CBD5E1;
 }
 
@@ -5485,7 +5401,7 @@ button, input, textarea {
   background: transparent;
   font-family: inherit;
   font-size: 12.5px;
-  font-weight: 600;
+  font-weight: 500;
   color: #0F172A;
   padding-right: 16px;
   cursor: pointer;
@@ -5494,337 +5410,57 @@ button, input, textarea {
 
 .gs-lang-chevron {
   position: absolute;
-  right: 8px;
+  right: 7px;
   display: inline-flex;
   align-items: center;
   color: #64748B;
   pointer-events: none;
 }
 
-/* Riepilogo Soggiorno (5 elementi ottimizzati) */
-.gs-stay-summary {
+/* Righe Informazioni Prenotazione (layout piatto e pulito) */
+.gs-info-rows {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 9px;
 }
 
-.gs-kpi-grid-3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-
-.gs-kpi-box {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 10px 8px;
+.gs-info-row {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 3px;
-}
-
-.gs-kpi-label {
-  font-size: 9.5px;
-  font-weight: 700;
-  color: #64748B;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  line-height: 1.2;
-}
-
-.gs-kpi-value {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: #0F172A;
-  line-height: 1.25;
-  white-space: nowrap;
-}
-
-/* Box Camera a larghezza piena (supporta testi lunghi su più righe) */
-.gs-room-bar {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 10px 14px;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.gs-room-icon-box {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: #EFF6FF;
-  color: #2563EB;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-.gs-room-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-  flex: 1;
-}
-
-.gs-room-value {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: #0F172A;
-  line-height: 1.38;
-  word-break: break-word;
-}
-
-/* Trattamento & Price Bar */
-.gs-treatment-bar {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 10px 14px;
-  display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 10px;
-}
-
-.gs-treatment-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-}
-
-.gs-treatment-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: #F1F5F9;
-  color: #475569;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.gs-treatment-texts {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.gs-treatment-val {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: #0F172A;
-  line-height: 1.25;
-}
-
-.gs-treatment-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 1px;
-  flex-shrink: 0;
-}
-
-.gs-treatment-price {
-  font-size: 15px;
-  font-weight: 800;
-  color: #2563EB;
-  line-height: 1.2;
-}
-
-/* Note Turno & Handover */
-.gs-handover-card {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.gs-handover-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.gs-handover-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: #0F172A;
-}
-
-.gs-add-note-link {
-  border: none;
-  background: transparent;
-  color: #2563EB;
-  font-size: 11.5px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 4px;
-}
-
-.gs-add-note-link:hover {
-  background: #EFF6FF;
-}
-
-.gs-handover-body {
-  font-size: 12.5px;
-  color: #475569;
-  line-height: 1.5;
-}
-
-.gs-shift-notes-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 4px;
-  padding-top: 8px;
-  border-top: 1px dashed #E2E8F0;
-}
-
-.gs-shift-note-item {
-  background: #FFFBEB;
-  border: 1px solid #FDE68A;
-  border-radius: 8px;
-  padding: 7px 9px;
-}
-
-.gs-shift-note-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 10.5px;
-  color: #92400E;
-  margin-bottom: 2px;
-}
-
-.gs-shift-note-txt {
-  font-size: 11.5px;
-  color: #78350F;
-  line-height: 1.35;
-}
-
-/* PMS Card inside Sider */
-.gs-pms-card {
-  display: flex;
-  flex-direction: column;
   gap: 12px;
 }
 
-.gs-pms-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+.gs-info-label {
+  font-size: 12.5px;
+  color: #64748B;
+  font-weight: 400;
+  flex-shrink: 0;
 }
 
-.gs-pms-title-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.gs-pms-title {
-  font-size: 13px;
-  font-weight: 700;
+.gs-info-val {
+  font-size: 12.5px;
   color: #0F172A;
+  font-weight: 500;
+  text-align: right;
+  line-height: 1.35;
 }
 
-.gs-sync-mini-btn {
-  height: 26px;
-  padding: 0 9px;
-  border-radius: 7px;
-  border: 1px solid #BFDBFE;
-  background: #EFF6FF;
-  color: #1D4ED8;
-  font-size: 11px;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-}
-
-.gs-sync-mini-btn:hover {
-  background: #DBEAFE;
-}
-
-.gs-pms-subblock {
-  padding-top: 10px;
+.gs-info-row-total {
+  padding-top: 9px;
+  margin-top: 2px;
   border-top: 1px solid #F1F5F9;
 }
 
-.gs-pms-subhead {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.gs-pms-subhead-inline {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.gs-pms-subtitle {
-  font-size: 12px;
-  font-weight: 700;
+.gs-info-total-val {
+  font-size: 13.5px;
+  font-weight: 600;
   color: #0F172A;
 }
 
-.gs-pms-subhint {
-  font-size: 11px;
-  color: #64748B;
-}
-
-.gs-pms-form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 6px;
-}
-
-.gs-pms-save-btn {
-  margin-top: 4px;
-  height: 34px;
-  width: 100%;
-  border-radius: 9px;
-  border: none;
-  background: #2563EB;
-  color: #FFFFFF;
-  font-size: 12.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.gs-pms-save-btn:hover {
-  background: #1D4ED8;
-}
-
-/* Note Ospite Card & Form in Dettagli Ospite */
-.gs-note-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  padding: 13px 14px;
-  display: flex;
-  flex-direction: column;
+/* Note Ospite */
+.gs-note-section {
   gap: 10px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
 }
 
 .gs-note-head {
@@ -5837,29 +5473,12 @@ button, input, textarea {
 .gs-note-title-row {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-}
-
-.gs-note-icon {
-  width: 24px;
-  height: 24px;
-  border-radius: 7px;
-  background: #EEF2FF;
-  color: #4F46E5;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.gs-note-icon svg {
-  width: 13px;
-  height: 13px;
+  gap: 6px;
 }
 
 .gs-note-title {
   font-size: 12.5px;
-  font-weight: 700;
+  font-weight: 600;
   color: #0F172A;
 }
 
@@ -5870,18 +5489,18 @@ button, input, textarea {
 }
 
 .gs-note-time {
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 11.5px;
+  font-weight: 400;
   color: #64748B;
 }
 
 .gs-note-edit-btn {
   width: 26px;
   height: 26px;
-  border-radius: 7px;
+  border-radius: 6px;
   border: 1px solid #E2E8F0;
-  background: #F8FAFC;
-  color: #475569;
+  background: #FFFFFF;
+  color: #64748B;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -5896,25 +5515,25 @@ button, input, textarea {
 }
 
 .gs-note-edit-btn:hover {
-  background: #EFF6FF;
-  border-color: #BFDBFE;
-  color: #2563EB;
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
 }
 
 .gs-note-edit-btn.active {
-  background: #EEF2FF;
-  border-color: #6384F7;
-  color: #2E54E8;
+  background: #F1F5F9;
+  border-color: #94A3B8;
+  color: #0F172A;
 }
 
 .gs-note-display {
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
-  border-radius: 10px;
-  padding: 9px 11px;
+  border-radius: 8px;
+  padding: 10px 12px;
   font-size: 12.5px;
-  line-height: 1.45;
-  color: #1E293B;
+  line-height: 1.5;
+  color: #334155;
 }
 
 .gs-note-display.empty {
@@ -7307,18 +6926,21 @@ button, input, textarea {
         <div class="bottom-composer-wrap mobile" id="mobileBottomComposer"></div>
       </div>
 
-      <!-- SCREEN 3: AI · Modifica risposta Mobile (308:4338) -->
+      <!-- SCREEN 3: Dettagli ospite Mobile -->
       <div class="mob-screen" id="mobScreenAI">
         <div class="intestazione-thread" style="height:54px;padding:0 14px;">
-          <div class="titolo-left" style="gap:8px;">
+          <div class="titolo-left" style="gap:10px;">
             <button class="btn-top icon-only" style="width:30px;height:30px;background:#F8FAFC;" onclick="setMobileTab('inbox')" title="Torna alla lista Messaggi">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
               </svg>
             </button>
-            <div>
-              <div style="font-size:14px;font-weight:600;color:#0F172A;">Dettagli ospite & PMS</div>
-              <div style="font-size:11px;color:#64748B;" id="mobAISubtitle">Adam Nowak · Suite 14</div>
+            <div style="display:inline-flex;align-items:center;gap:7px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <span style="font-size:14px;font-weight:600;color:#0F172A;">Dettagli ospite</span>
             </div>
           </div>
         </div>
@@ -7343,7 +6965,7 @@ button, input, textarea {
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
             </div>
-            <span>Ospite & PMS</span>
+            <span>Dettagli ospite</span>
           </button>
         </div>
         <div class="home-indicator"></div>
@@ -8152,71 +7774,62 @@ function renderSiderAI() {
     : currentNoteObj.text;
 
   const html = `
-    <!-- Top Header: Dettagli ospite + AI Copilot button + Close -->
+    <!-- Top Header: Dettagli ospite con icona senza sfondo (visibile solo su Desktop; su Mobile è nell'intestazione-thread in alto) -->
     <div class="gs-topbar">
       <div class="gs-topbar-left">
-        <div class="gs-user-icon-box" style="color:#2563EB;background:#EFF6FF;border-color:#DBEAFE;">
+        <span class="gs-header-plain-icon">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
-        </div>
-        <div class="gs-topbar-titles">
-          <div class="gs-topbar-title">Dettagli ospite</div>
-          <div class="gs-topbar-sub">Informazioni prenotazione e PMS</div>
-        </div>
-      </div>
-
-      <div class="gs-topbar-right">
-        <button type="button" class="gs-close-btn" onclick="toggleDesktopSider(true)" title="Chiudi pannello laterale" aria-label="Chiudi">
-          ${ICONS.close14}
-        </button>
+        </span>
+        <span class="gs-topbar-title">Dettagli ospite</span>
       </div>
     </div>
 
     <!-- Scrollable Content -->
     <div class="gs-scroll-body">
 
-      <!-- 1. Card Principale Ospite & Contatti -->
-      <div class="gs-card gs-guest-card">
+      <!-- 1. Ospite & Contatti -->
+      <div class="gs-section">
         <div class="gs-guest-top">
           <div class="gs-guest-identity">
             <div class="gs-avatar">${initials}</div>
             <div class="gs-name-wrap">
               <div class="gs-name">${cleanName}</div>
-              <div class="gs-phone-sub">${conv.stay.phone}</div>
+              <div class="gs-booking-sub">${conv.stay.bookingCode} · ${conv.channel}</div>
             </div>
           </div>
           <span class="gs-status-pill ${m.statusClass}">${m.statusBadge}</span>
         </div>
 
-        <div class="gs-card-divider"></div>
-
         <div class="gs-contact-list">
           <div class="gs-contact-row" onclick="navigator.clipboard?.writeText('${conv.stay.phone}');showToast('Numero copiato negli appunti')" title="Clicca per copiare il telefono" style="cursor:pointer;">
-            <span class="gs-wa-circle">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <span class="gs-plain-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
               </svg>
             </span>
+            <span class="gs-contact-label">Telefono</span>
             <span class="gs-contact-val">${conv.stay.phone}</span>
           </div>
 
           <div class="gs-contact-row" onclick="navigator.clipboard?.writeText('${conv.stay.email}');showToast('Email copiata negli appunti')" title="Clicca per copiare l'email" style="cursor:pointer;">
-            <span class="gs-mail-icon" style="color:#64748B;">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <span class="gs-plain-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                 <rect width="20" height="16" x="2" y="4" rx="2"/>
                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
               </svg>
             </span>
+            <span class="gs-contact-label">Email</span>
             <span class="gs-contact-val">${conv.stay.email}</span>
           </div>
 
           <div class="gs-contact-row gs-lang-row">
-            <span class="gs-mail-icon" style="color:#64748B;">
+            <span class="gs-plain-icon">
               ${ICONS.globe}
             </span>
-            <span class="gs-lang-row-label">Lingua</span>
+            <span class="gs-contact-label">Lingua</span>
             <div class="gs-lang-pill-wrap">
               <span class="gs-lang-flag-icon">${getLangFlagSvg(conv.langCode)}</span>
               <select class="gs-lang-quick-select" onchange="setOutboundLanguage(this.value)" title="Cambia lingua dell'ospite">
@@ -8233,56 +7846,45 @@ function renderSiderAI() {
         </div>
       </div>
 
-      <!-- 2. Riepilogo Soggiorno (5 elementi ottimizzati con Camera a larghezza piena) -->
-      <div class="gs-stay-summary">
-        <div class="gs-kpi-grid-3">
-          <div class="gs-kpi-box">
-            <span class="gs-kpi-label">CHECK-IN</span>
-            <span class="gs-kpi-value">${m.checkin}</span>
-          </div>
-          <div class="gs-kpi-box">
-            <span class="gs-kpi-label">CHECK-OUT</span>
-            <span class="gs-kpi-value">${m.checkout}</span>
-          </div>
-          <div class="gs-kpi-box">
-            <span class="gs-kpi-label">OSPITI</span>
-            <span class="gs-kpi-value">${m.guestsShort}</span>
-          </div>
+      <!-- 2. Prenotazione & Soggiorno -->
+      <div class="gs-section">
+        <div class="gs-section-head">
+          <span class="gs-section-title">Prenotazione</span>
         </div>
 
-        <div class="gs-room-bar">
-          <div class="gs-room-icon-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>
-            </svg>
+        <div class="gs-info-rows">
+          <div class="gs-info-row">
+            <span class="gs-info-label">Alloggio</span>
+            <span class="gs-info-val">${conv.stay.room} · ${conv.propertyLabel || 'Casa Aurora'}</span>
           </div>
-          <div class="gs-room-content">
-            <span class="gs-kpi-label">CAMERA / ALLOGGIO</span>
-            <span class="gs-room-value">${conv.stay.room} · ${conv.propertyLabel || 'Casa Aurora (Appartamento Superior)'}</span>
+          <div class="gs-info-row">
+            <span class="gs-info-label">Check-in</span>
+            <span class="gs-info-val">${m.checkin}</span>
           </div>
-        </div>
-
-        <!-- 3. Barra Trattamento & Prezzo -->
-        <div class="gs-treatment-bar">
-          <div class="gs-treatment-left">
-            <span class="gs-treatment-icon">${ICONS.utensils14}</span>
-            <div class="gs-treatment-texts">
-              <span class="gs-kpi-label">TRATTAMENTO</span>
-              <span class="gs-treatment-val">${m.treatment}</span>
-            </div>
+          <div class="gs-info-row">
+            <span class="gs-info-label">Check-out</span>
+            <span class="gs-info-val">${m.checkout}</span>
           </div>
-          <div class="gs-treatment-right">
-            <span class="gs-kpi-label" style="text-align:right;">TOTALE</span>
-            <span class="gs-treatment-price">${m.price}</span>
+          <div class="gs-info-row">
+            <span class="gs-info-label">Ospiti</span>
+            <span class="gs-info-val">${m.guestsShort}</span>
+          </div>
+          <div class="gs-info-row">
+            <span class="gs-info-label">Trattamento</span>
+            <span class="gs-info-val">${m.treatment}</span>
+          </div>
+          <div class="gs-info-row gs-info-row-total">
+            <span class="gs-info-label">Totale soggiorno</span>
+            <span class="gs-info-val gs-info-total-val">${m.price}</span>
           </div>
         </div>
       </div>
 
-      <!-- 4. Note Ospite (singola nota con tastino matita per modificare e bottone per salvare) -->
-      <div class="gs-card gs-note-card" id="gsGuestNoteSection">
+      <!-- 3. Note Ospite (singola nota con tastino matita per modificare e bottone per salvare) -->
+      <div class="gs-section gs-note-section" id="gsGuestNoteSection">
         <div class="gs-note-head">
           <div class="gs-note-title-row">
-            <span class="gs-note-icon">${ICONS.stickyNote14}</span>
+            <span class="gs-plain-icon">${ICONS.stickyNote14}</span>
             <span class="gs-note-title">Note ospite</span>
           </div>
           <div class="gs-note-head-right">

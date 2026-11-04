@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261103_40" />
+  <link rel="stylesheet" href="styles.css?v=20261103_41" />
 </head>
 <body>
 
@@ -390,18 +390,21 @@
         <div class="bottom-composer-wrap mobile" id="mobileBottomComposer"></div>
       </div>
 
-      <!-- SCREEN 3: AI · Modifica risposta Mobile (308:4338) -->
+      <!-- SCREEN 3: Dettagli ospite Mobile -->
       <div class="mob-screen" id="mobScreenAI">
         <div class="intestazione-thread" style="height:54px;padding:0 14px;">
-          <div class="titolo-left" style="gap:8px;">
+          <div class="titolo-left" style="gap:10px;">
             <button class="btn-top icon-only" style="width:30px;height:30px;background:#F8FAFC;" onclick="setMobileTab('inbox')" title="Torna alla lista Messaggi">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
               </svg>
             </button>
-            <div>
-              <div style="font-size:14px;font-weight:600;color:#0F172A;">Dettagli ospite & PMS</div>
-              <div style="font-size:11px;color:#64748B;" id="mobAISubtitle">Adam Nowak · Suite 14</div>
+            <div style="display:inline-flex;align-items:center;gap:7px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <span style="font-size:14px;font-weight:600;color:#0F172A;">Dettagli ospite</span>
             </div>
           </div>
         </div>
@@ -426,7 +429,7 @@
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
             </div>
-            <span>Ospite & PMS</span>
+            <span>Dettagli ospite</span>
           </button>
         </div>
         <div class="home-indicator"></div>
@@ -443,6 +446,6 @@
 
   <div class="toast" id="toastBox"></div>
 
-  <script src="app.js?v=20261103_40"></script>
+  <script src="app.js?v=20261103_41"></script>
 </body>
 </html>
