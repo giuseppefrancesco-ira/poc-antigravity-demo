@@ -469,26 +469,23 @@ function renderConversationLists() {
 function renderThread() {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
 
+  const headerLeftHtml = `
+    <span class="titolo-messaggi">Messaggi</span>
+    <span class="contatore-msg">${ICONS.msgSquare} ${conv.msgCount}</span>
+    <span class="hdr-sentiment-face" title="Sentiment: ${conv.headerSentiment}">${ICONS.smile16}</span>
+  `;
   const headerLeft = document.getElementById('desktopThreadHeaderLeft');
-  if (headerLeft) {
-    headerLeft.innerHTML = `
-      <span class="titolo-messaggi">Messaggi</span>
-      <span class="contatore-msg">${ICONS.msgSquare} ${conv.msgCount}</span>
-      <span class="hdr-sentiment-face" title="Sentiment: ${conv.headerSentiment}">${ICONS.smile16}</span>
-    `;
-  }
+  if (headerLeft) headerLeft.innerHTML = headerLeftHtml;
+  const mobHeaderLeft = document.getElementById('mobileThreadHeaderLeft');
+  if (mobHeaderLeft) mobHeaderLeft.innerHTML = headerLeftHtml;
 
   const langCodeEl = document.getElementById('desktopLangCode');
   const langNameEl = document.getElementById('desktopLangName');
   if (langCodeEl) langCodeEl.innerHTML = getLangFlagSvg(conv.langCode);
   if (langNameEl) langNameEl.textContent = conv.langName;
 
-  const mobName = document.getElementById('mobChatGuestName');
-  const mobSub = document.getElementById('mobChatSubInfo');
   const mobLang = document.getElementById('mobLangBadgeLabel');
   const mobAISub = document.getElementById('mobAISubtitle');
-  if (mobName) mobName.textContent = conv.name.replace('↳ ', '');
-  if (mobSub) mobSub.innerHTML = `<span class="mob-sub-ch">${getChannelBadgeHtml(conv.channel)}</span><span>${conv.stay.room} · In soggiorno</span>`;
   if (mobLang) mobLang.innerHTML = `${getLangFlagSvg(conv.langCode)}<span>${conv.langName}</span>`;
   if (mobAISub) mobAISub.textContent = `${conv.name.replace('↳ ', '')} · ${conv.stay.room}`;
 

@@ -8353,14 +8353,8 @@ button, input, textarea {
                 <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
               </svg>
             </button>
-            <div class="mob-chat-title-col">
-              <div class="mob-chat-name-row">
-                <span class="mob-chat-guest-name" id="mobChatGuestName">Adam Nowak</span>
-                <span class="hdr-sentiment-face" title="Sentiment: Positivo">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-                </span>
-              </div>
-              <div class="mob-chat-subinfo" id="mobChatSubInfo">Suite 14 · In soggiorno</div>
+            <div class="mob-thread-title-group" id="mobileThreadHeaderLeft" style="display:inline-flex;align-items:center;gap:6px;">
+              <!-- Populated dynamically by app.js like desktop -->
             </div>
           </div>
           <div class="controlli-right mob-chat-controls">
@@ -8372,11 +8366,6 @@ button, input, textarea {
             <button class="btn-scarica-msg mob-hdr-btn" title="Scarica messaggi" onclick="triggerHubSync()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A5467" stroke-width="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-            </button>
-            <button class="btn-top icon-only mob-hdr-btn" id="btnToggleGuestSiderMob" title="Apri Dettagli ospite" onclick="setMobileTab('ai')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
             </button>
             <div class="hdr-more-wrap">
@@ -8946,26 +8935,23 @@ function renderConversationLists() {
 function renderThread() {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
 
+  const headerLeftHtml = `
+    <span class="titolo-messaggi">Messaggi</span>
+    <span class="contatore-msg">${ICONS.msgSquare} ${conv.msgCount}</span>
+    <span class="hdr-sentiment-face" title="Sentiment: ${conv.headerSentiment}">${ICONS.smile16}</span>
+  `;
   const headerLeft = document.getElementById('desktopThreadHeaderLeft');
-  if (headerLeft) {
-    headerLeft.innerHTML = `
-      <span class="titolo-messaggi">Messaggi</span>
-      <span class="contatore-msg">${ICONS.msgSquare} ${conv.msgCount}</span>
-      <span class="hdr-sentiment-face" title="Sentiment: ${conv.headerSentiment}">${ICONS.smile16}</span>
-    `;
-  }
+  if (headerLeft) headerLeft.innerHTML = headerLeftHtml;
+  const mobHeaderLeft = document.getElementById('mobileThreadHeaderLeft');
+  if (mobHeaderLeft) mobHeaderLeft.innerHTML = headerLeftHtml;
 
   const langCodeEl = document.getElementById('desktopLangCode');
   const langNameEl = document.getElementById('desktopLangName');
   if (langCodeEl) langCodeEl.innerHTML = getLangFlagSvg(conv.langCode);
   if (langNameEl) langNameEl.textContent = conv.langName;
 
-  const mobName = document.getElementById('mobChatGuestName');
-  const mobSub = document.getElementById('mobChatSubInfo');
   const mobLang = document.getElementById('mobLangBadgeLabel');
   const mobAISub = document.getElementById('mobAISubtitle');
-  if (mobName) mobName.textContent = conv.name.replace('↳ ', '');
-  if (mobSub) mobSub.innerHTML = `<span class="mob-sub-ch">${getChannelBadgeHtml(conv.channel)}</span><span>${conv.stay.room} · In soggiorno</span>`;
   if (mobLang) mobLang.innerHTML = `${getLangFlagSvg(conv.langCode)}<span>${conv.langName}</span>`;
   if (mobAISub) mobAISub.textContent = `${conv.name.replace('↳ ', '')} · ${conv.stay.room}`;
 
