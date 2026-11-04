@@ -7796,6 +7796,224 @@ button, input, textarea {
   background: #1D4ED8;
 }
 
+/* =========================================================
+   EXPANDED COMPOSER HEADER & MOBILE BOTTOM-SHEET OPTIMIZATION
+   ========================================================= */
+.bc-mobile-sheet-handle {
+  display: none;
+}
+
+.bc-collapse-mobile {
+  display: none;
+}
+
+.pill-lbl-mob {
+  display: none;
+}
+
+.bc-header-top-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bc-header-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bc-header-right.bc-collapse-desktop {
+  margin-left: auto;
+}
+
+/* --- MOBILE EXPANDED COMPOSER (SMART BOTTOM SHEET) --- */
+.bottom-composer-wrap.mobile.is-expanded {
+  height: auto;
+  max-height: calc(100% - 76px);
+  padding: 6px 10px 10px 10px;
+}
+
+.bottom-composer-wrap.mobile .bc-expanded {
+  height: auto;
+  max-height: 100%;
+  border-radius: 18px;
+  box-shadow: 0 -8px 28px rgba(15, 23, 42, 0.14), 0 4px 14px rgba(15, 23, 42, 0.08);
+  border: 1px solid #CBD5E1;
+}
+
+.bottom-composer-wrap.mobile .bc-mobile-sheet-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0 2px 0;
+  cursor: pointer;
+}
+
+.bottom-composer-wrap.mobile .bc-mobile-sheet-bar {
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: #CBD5E1;
+}
+
+.bottom-composer-wrap.mobile .bc-header {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 4px 12px 9px 12px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.bottom-composer-wrap.mobile .bc-header-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.bottom-composer-wrap.mobile .bc-collapse-mobile {
+  display: inline-flex;
+  padding: 3px 8px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 999px;
+  font-size: 11.5px;
+  color: #334155;
+}
+
+.bottom-composer-wrap.mobile .bc-collapse-desktop {
+  display: none;
+}
+
+.bottom-composer-wrap.mobile .bc-header-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  width: 100%;
+}
+
+.bottom-composer-wrap.mobile .bc-header-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.bottom-composer-wrap.mobile .pill-lbl-full {
+  display: none;
+}
+
+.bottom-composer-wrap.mobile .pill-lbl-mob {
+  display: inline;
+}
+
+.bottom-composer-wrap.mobile .bc-top-pill {
+  height: 27px;
+  padding: 0 9px;
+  font-size: 11.5px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Compact, well-proportioned body on mobile (no giant dead white space) */
+.bottom-composer-wrap.mobile .bc-body {
+  padding: 10px 12px 8px 12px;
+  gap: 8px;
+  flex: 0 1 auto;
+}
+
+.bottom-composer-wrap.mobile .bc-textarea-wrap {
+  flex: 0 1 auto;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.bottom-composer-wrap.mobile .bc-textarea-editor,
+.bottom-composer-wrap.mobile .bc-textarea {
+  min-height: 104px;
+  max-height: 156px;
+  font-size: 13.5px;
+  line-height: 1.48;
+}
+
+.bottom-composer-wrap.mobile .bc-textarea-backdrop {
+  font-size: 13.5px;
+  line-height: 1.48;
+}
+
+.bottom-composer-wrap.mobile .bc-generate-ai-btn {
+  width: 32px;
+  height: 32px;
+}
+
+.bottom-composer-wrap.mobile .bc-attached-chip {
+  padding: 4px 9px;
+  font-size: 11.5px;
+  max-width: 100%;
+}
+
+.bottom-composer-wrap.mobile .bc-ai-feedback-row {
+  padding-top: 6px;
+  font-size: 11px;
+  gap: 4px;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.bottom-composer-wrap.mobile .bc-ai-rate-left {
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.bottom-composer-wrap.mobile .bc-kb-inline-btn {
+  font-size: 11px;
+  padding: 2px 4px;
+  white-space: nowrap;
+}
+
+/* Intentional 2-tier mobile footer toolbar */
+.bottom-composer-wrap.mobile .bc-footer {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 8px 12px 10px 12px;
+  background: #FAFCFF;
+  border-radius: 0 0 18px 18px;
+}
+
+.bottom-composer-wrap.mobile .bc-tools-left {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+.bottom-composer-wrap.mobile .bc-tools-left .bc-pill-btn.ai-tone {
+  order: 10;
+  margin-left: auto;
+  height: 28px;
+  padding: 0 10px;
+  font-size: 11.5px;
+}
+
+.bottom-composer-wrap.mobile .bc-tools-right {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding-top: 7px;
+  border-top: 1px solid #EEF2F6;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+.bottom-composer-wrap.mobile .bc-tools-right .bc-send-btn {
+  margin-left: auto;
+}
+
+
 
 
 
@@ -9570,35 +9788,50 @@ function renderBottomComposer() {
           </div>
         ` : ''}
 
-        <!-- 1. Top Header Bar (with Template & Tag disponibili in the upper part) -->
+        <!-- Mobile bottom-sheet grab handle -->
+        <div class="bc-mobile-sheet-handle" onclick="toggleComposerExpand(false)" title="Tocca per ridurre">
+          <span class="bc-mobile-sheet-bar"></span>
+        </div>
+
+        <!-- 1. Top Header Bar (with Template, Tag disponibili & OCR in the upper part) -->
         <div class="bc-header">
-          <div class="bc-header-left">
+          <div class="bc-header-top-row">
             <span class="bc-title-wrap">
               <span class="bc-WaitSparkle">${ICONS.sparkles16}</span>
               <span class="bc-title-text">Componi risposta</span>
             </span>
 
+            <button type="button" class="bc-collapse-btn bc-collapse-mobile" onclick="toggleComposerExpand(false)" title="Riduci a barra compatta">
+              ${ICONS.chevronDown}
+              <span>Riduci</span>
+            </button>
+          </div>
+
+          <div class="bc-header-pills">
             <!-- Messaggi Pronti Pill (Upper Composer -> apre Modale) -->
             <button type="button" class="bc-top-pill template" onclick="openCannedRepliesModal()" title="Apri Messaggi Pronti">
               ${ICONS.docTemplate14}
-              <span>Messaggi pronti</span>
+              <span class="pill-lbl-full">Messaggi pronti</span>
+              <span class="pill-lbl-mob">Messaggi pronti</span>
             </button>
 
             <!-- Tag Disponibili Pill (Upper Composer) -->
             <button type="button" class="bc-top-pill tags ${state.bcTagsOpen ? 'active' : ''}" onclick="toggleBcPopover('tags')" title="Variabili dinamiche soggiorno (@Tag)">
               ${AT_SIGN_SVG}
-              <span>Tag disponibili</span>
+              <span class="pill-lbl-full">Tag disponibili</span>
+              <span class="pill-lbl-mob">Tag</span>
               <span class="bc-chevron-muted ${state.bcTagsOpen ? 'open' : ''}">${ICONS.chevronDown}</span>
             </button>
 
             <!-- Estrai da foto OCR Pill (Upper Composer -> apre Modale OCR messaggio ospite) -->
             <button type="button" class="bc-top-pill ocr-pill" onclick="openGuestOcrModal()" title="Estrai e incolla messaggio dell'ospite da foto o screenshot (OCR)">
               ${ICONS.scanText}
-              <span>Estrai da foto (OCR)</span>
+              <span class="pill-lbl-full">Estrai da foto (OCR)</span>
+              <span class="pill-lbl-mob">Foto OCR</span>
             </button>
           </div>
 
-          <div class="bc-header-right">
+          <div class="bc-header-right bc-collapse-desktop">
             <button type="button" class="bc-collapse-btn" onclick="toggleComposerExpand(false)" title="Riduci a barra compatta">
               ${ICONS.chevronDown}
               <span>Riduci</span>

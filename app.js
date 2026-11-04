@@ -1311,35 +1311,50 @@ function renderBottomComposer() {
           </div>
         ` : ''}
 
-        <!-- 1. Top Header Bar (with Template & Tag disponibili in the upper part) -->
+        <!-- Mobile bottom-sheet grab handle -->
+        <div class="bc-mobile-sheet-handle" onclick="toggleComposerExpand(false)" title="Tocca per ridurre">
+          <span class="bc-mobile-sheet-bar"></span>
+        </div>
+
+        <!-- 1. Top Header Bar (with Template, Tag disponibili & OCR in the upper part) -->
         <div class="bc-header">
-          <div class="bc-header-left">
+          <div class="bc-header-top-row">
             <span class="bc-title-wrap">
               <span class="bc-WaitSparkle">${ICONS.sparkles16}</span>
               <span class="bc-title-text">Componi risposta</span>
             </span>
 
+            <button type="button" class="bc-collapse-btn bc-collapse-mobile" onclick="toggleComposerExpand(false)" title="Riduci a barra compatta">
+              ${ICONS.chevronDown}
+              <span>Riduci</span>
+            </button>
+          </div>
+
+          <div class="bc-header-pills">
             <!-- Messaggi Pronti Pill (Upper Composer -> apre Modale) -->
             <button type="button" class="bc-top-pill template" onclick="openCannedRepliesModal()" title="Apri Messaggi Pronti">
               ${ICONS.docTemplate14}
-              <span>Messaggi pronti</span>
+              <span class="pill-lbl-full">Messaggi pronti</span>
+              <span class="pill-lbl-mob">Messaggi pronti</span>
             </button>
 
             <!-- Tag Disponibili Pill (Upper Composer) -->
             <button type="button" class="bc-top-pill tags ${state.bcTagsOpen ? 'active' : ''}" onclick="toggleBcPopover('tags')" title="Variabili dinamiche soggiorno (@Tag)">
               ${AT_SIGN_SVG}
-              <span>Tag disponibili</span>
+              <span class="pill-lbl-full">Tag disponibili</span>
+              <span class="pill-lbl-mob">Tag</span>
               <span class="bc-chevron-muted ${state.bcTagsOpen ? 'open' : ''}">${ICONS.chevronDown}</span>
             </button>
 
             <!-- Estrai da foto OCR Pill (Upper Composer -> apre Modale OCR messaggio ospite) -->
             <button type="button" class="bc-top-pill ocr-pill" onclick="openGuestOcrModal()" title="Estrai e incolla messaggio dell'ospite da foto o screenshot (OCR)">
               ${ICONS.scanText}
-              <span>Estrai da foto (OCR)</span>
+              <span class="pill-lbl-full">Estrai da foto (OCR)</span>
+              <span class="pill-lbl-mob">Foto OCR</span>
             </button>
           </div>
 
-          <div class="bc-header-right">
+          <div class="bc-header-right bc-collapse-desktop">
             <button type="button" class="bc-collapse-btn" onclick="toggleComposerExpand(false)" title="Riduci a barra compatta">
               ${ICONS.chevronDown}
               <span>Riduci</span>
