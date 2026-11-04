@@ -5748,7 +5748,6 @@ button, input, textarea {
 .gs-sentiment-pill {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
   padding: 3px 9px;
   border-radius: 999px;
   background: #DCFCE7;
@@ -5759,13 +5758,6 @@ button, input, textarea {
   flex-shrink: 0;
 }
 
-.gs-sentiment-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #16A34A;
-}
-
 .gs-sentiment-summary {
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
@@ -5774,23 +5766,6 @@ button, input, textarea {
   font-size: 12px;
   line-height: 1.45;
   color: #334155;
-}
-
-.gs-sentiment-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.gs-sentiment-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: #F1F5F9;
-  color: #475569;
-  font-size: 11px;
-  font-weight: 500;
 }
 
 /* Note Ospite */
@@ -10271,20 +10246,11 @@ function renderSiderAI() {
               <span class="gs-sentiment-sub">Analisi su ${conv.msgCount} messaggi · ${m.sentimentTone || 'Cordiale'}</span>
             </div>
           </div>
-          <span class="gs-sentiment-pill">
-            <span class="gs-sentiment-dot"></span>
-            ${m.sentimentLabel || 'Positivo'}
-          </span>
+          <span class="gs-sentiment-pill">${m.sentimentLabel || 'Positivo'}</span>
         </div>
 
         <div class="gs-sentiment-summary">
           ${m.sentimentSummary || 'Conversazione fluida e cordiale, nessuna criticità rilevata.'}
-        </div>
-
-        <div class="gs-sentiment-tags">
-          ${(m.sentimentSignals || ['Check-in regolare', 'Tono cortese']).map(sig => `
-            <span class="gs-sentiment-tag">${sig}</span>
-          `).join('')}
         </div>
       </div>
 

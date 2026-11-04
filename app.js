@@ -972,20 +972,11 @@ function renderSiderAI() {
               <span class="gs-sentiment-sub">Analisi su ${conv.msgCount} messaggi · ${m.sentimentTone || 'Cordiale'}</span>
             </div>
           </div>
-          <span class="gs-sentiment-pill">
-            <span class="gs-sentiment-dot"></span>
-            ${m.sentimentLabel || 'Positivo'}
-          </span>
+          <span class="gs-sentiment-pill">${m.sentimentLabel || 'Positivo'}</span>
         </div>
 
         <div class="gs-sentiment-summary">
           ${m.sentimentSummary || 'Conversazione fluida e cordiale, nessuna criticità rilevata.'}
-        </div>
-
-        <div class="gs-sentiment-tags">
-          ${(m.sentimentSignals || ['Check-in regolare', 'Tono cortese']).map(sig => `
-            <span class="gs-sentiment-tag">${sig}</span>
-          `).join('')}
         </div>
       </div>
 
