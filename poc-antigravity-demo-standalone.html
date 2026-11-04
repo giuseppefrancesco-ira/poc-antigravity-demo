@@ -7828,16 +7828,15 @@ button, input, textarea {
   margin-left: auto;
 }
 
-/* --- MOBILE EXPANDED COMPOSER (SMART BOTTOM SHEET) --- */
+/* --- MOBILE EXPANDED COMPOSER (FULL HEIGHT) --- */
 .bottom-composer-wrap.mobile.is-expanded {
-  height: auto;
-  max-height: calc(100% - 76px);
+  height: calc(100% - 96px);
   padding: 6px 10px 10px 10px;
 }
 
 .bottom-composer-wrap.mobile .bc-expanded {
-  height: auto;
-  max-height: 100%;
+  flex: 1;
+  height: 100%;
   border-radius: 18px;
   box-shadow: 0 -8px 28px rgba(15, 23, 42, 0.14), 0 4px 14px rgba(15, 23, 42, 0.08);
   border: 1px solid #CBD5E1;
@@ -7917,23 +7916,27 @@ button, input, textarea {
   white-space: nowrap;
 }
 
-/* Compact, well-proportioned body on mobile (no giant dead white space) */
+/* Full-height body on mobile */
 .bottom-composer-wrap.mobile .bc-body {
-  padding: 10px 12px 8px 12px;
+  padding: 12px 14px 8px 14px;
   gap: 8px;
-  flex: 0 1 auto;
+  flex: 1;
+  min-height: 0;
 }
 
 .bottom-composer-wrap.mobile .bc-textarea-wrap {
-  flex: 0 1 auto;
+  flex: 1;
+  min-height: 0;
   align-items: flex-start;
   gap: 8px;
 }
 
 .bottom-composer-wrap.mobile .bc-textarea-editor,
 .bottom-composer-wrap.mobile .bc-textarea {
-  min-height: 104px;
-  max-height: 156px;
+  flex: 1;
+  height: 100%;
+  min-height: 120px;
+  max-height: none;
   font-size: 13.5px;
   line-height: 1.48;
 }
