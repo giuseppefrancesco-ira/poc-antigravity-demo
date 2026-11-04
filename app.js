@@ -1341,6 +1341,18 @@ function renderBottomComposer() {
     mobComp.classList.toggle('is-expanded', !!state.composerExpanded);
     mobComp.innerHTML = html;
   }
+  if (state.bcTransOpen) {
+    requestAnimationFrame(autoResizeTransTextarea);
+  }
+}
+
+function autoResizeTransTextarea() {
+  document.querySelectorAll('.bc-trans-textarea').forEach(el => {
+    el.style.height = 'auto';
+    if (el.scrollHeight > 0) {
+      el.style.height = Math.min(200, Math.max(84, el.scrollHeight + 2)) + 'px';
+    }
+  });
 }
 
 function autoResizeTextarea(el) {
@@ -1490,16 +1502,16 @@ function renderTranslationPopoverHtml(conv, draftVal, hasText) {
           <span class="bc-trans-flag">${getLangFlagSvg(conv.langCode)}</span>
           <span class="bc-trans-title">Traduzione in ${conv.langName}</span>
           ${hasText ? `
-            <span class="bc-trans-badge ${isCustom ? 'edited' : 'auto'}" id="bcTransStatusBadge">
-              ${isCustom ? '✏️ Modificata' : `${ICONS.sparkles12} Auto AI`}
+            <span class="bc-trans-badge ${isCustom ? 'edited' : 'auto'}" style="${isCustom ? '' : 'display:none;'}">
+              Modificata
             </span>
           ` : ''}
         </div>
         <div class="bc-trans-header-actions">
           ${hasText ? `
-            <button type="button" class="bc-trans-reset-btn" id="bcTransResetBtn" onclick="resetCustomTranslation(event)" title="Rigenera traduzione automatica AI" style="${isCustom ? '' : 'display:none;'}">
+            <button type="button" class="bc-trans-reset-btn" onclick="resetCustomTranslation(event)" title="Ripristina traduzione automatica" style="${isCustom ? '' : 'display:none;'}">
               ${ICONS.refresh}
-              <span>Rigenera</span>
+              <span>Ripristina</span>
             </button>
           ` : ''}
           <button type="button" class="bc-pop-close" onclick="toggleTranslationPopover(event, false)" title="Chiudi" aria-label="Chiudi">
@@ -1511,18 +1523,16 @@ function renderTranslationPopoverHtml(conv, draftVal, hasText) {
       ${hasText ? `
         <div class="bc-trans-body">
           <textarea
-            id="bcTransTextarea"
             class="bc-trans-textarea"
-            rows="4"
+            rows="3"
             placeholder="Scrivi o modifica la traduzione in ${conv.langName}..."
             oninput="updateCustomTranslation(this.value)"
           >${translatedText}</textarea>
         </div>
         <div class="bc-trans-footer">
-          <span class="bc-trans-hint">L'ospite riceverà questo testo · clicca dentro per modificarlo</span>
+          <span class="bc-trans-hint">Testo inviato all'ospite · clicca per modificare</span>
           <button type="button" class="bc-trans-confirm-btn" onclick="toggleTranslationPopover(event, false)">
-            ${ICONS.check12}
-            <span>Conferma</span>
+            <span>Applica</span>
           </button>
         </div>
       ` : `
@@ -1552,12 +1562,13 @@ function toggleTranslationPopover(event, forceState) {
   renderBottomComposer();
   if (next) {
     setTimeout(() => {
-      const ta = document.getElementById('bcTransTextarea');
-      if (ta) {
-        ta.focus();
-        ta.setSelectionRange(ta.value.length, ta.value.length);
+      autoResizeTransTextarea();
+      const visibleTa = Array.from(document.querySelectorAll('.bc-trans-textarea')).find(el => el.offsetParent !== null);
+      if (visibleTa) {
+        visibleTa.focus();
+        visibleTa.setSelectionRange(visibleTa.value.length, visibleTa.value.length);
       }
-    }, 40);
+    }, 30);
   }
 }
 
@@ -1566,16 +1577,17 @@ function updateCustomTranslation(val) {
   state.customTranslations = state.customTranslations || {};
   state.customTranslations[conv.id] = val;
 
+  autoResizeTransTextarea();
+
   // Aggiorna badge e pill senza perdere il focus della textarea
-  const badge = document.getElementById('bcTransStatusBadge');
-  if (badge) {
+  document.querySelectorAll('.bc-trans-badge').forEach(badge => {
     badge.className = 'bc-trans-badge edited';
-    badge.innerHTML = '✏️ Modificata';
-  }
-  const resetBtn = document.getElementById('bcTransResetBtn');
-  if (resetBtn) {
+    badge.textContent = 'Modificata';
+    badge.style.display = 'inline-flex';
+  });
+  document.querySelectorAll('.bc-trans-reset-btn').forEach(resetBtn => {
     resetBtn.style.display = 'inline-flex';
-  }
+  });
   document.querySelectorAll('.bc-lang-pill').forEach(pill => {
     pill.classList.add('is-edited');
     const dot = pill.querySelector('.bc-lang-status-dot');
@@ -1590,7 +1602,7 @@ function resetCustomTranslation(event) {
     delete state.customTranslations[conv.id];
   }
   renderBottomComposer();
-  showToast(`Traduzione in ${conv.langName} rigenerata con AI`);
+  showToast(`Traduzione in ${conv.langName} ripristinata`);
 }
 
 function fillSampleDraftForTranslation(event) {
@@ -1605,9 +1617,10 @@ function fillSampleDraftForTranslation(event) {
   renderConversationLists();
   renderBottomComposer();
   setTimeout(() => {
-    const ta = document.getElementById('bcTransTextarea');
-    if (ta) ta.focus();
-  }, 40);
+    autoResizeTransTextarea();
+    const visibleTa = Array.from(document.querySelectorAll('.bc-trans-textarea')).find(el => el.offsetParent !== null);
+    if (visibleTa) visibleTa.focus();
+  }, 30);
 }
 
 // =========================================================================
@@ -1681,16 +1694,20 @@ function syncLiveTranslationUI(val) {
   });
 
   if (state.bcTransOpen) {
-    const transTa = document.getElementById('bcTransTextarea');
-    if (hasText && transTa) {
-      transTa.value = translateDraftToLang(val, conv.langCode, conv);
-      const badge = document.getElementById('bcTransStatusBadge');
-      if (badge) {
+    const transTas = document.querySelectorAll('.bc-trans-textarea');
+    if (hasText && transTas.length > 0) {
+      const nextTrans = translateDraftToLang(val, conv.langCode, conv);
+      transTas.forEach(ta => {
+        ta.value = nextTrans;
+      });
+      autoResizeTransTextarea();
+      document.querySelectorAll('.bc-trans-badge').forEach(badge => {
         badge.className = 'bc-trans-badge auto';
-        badge.innerHTML = `${ICONS.sparkles12} Auto AI`;
-      }
-      const resetBtn = document.getElementById('bcTransResetBtn');
-      if (resetBtn) resetBtn.style.display = 'none';
+        badge.style.display = 'none';
+      });
+      document.querySelectorAll('.bc-trans-reset-btn').forEach(resetBtn => {
+        resetBtn.style.display = 'none';
+      });
     } else {
       // Passaggio tra stato vuoto e stato con testo mentre il tooltip è aperto
       document.querySelectorAll('.bc-trans-popover').forEach(pop => {
@@ -1700,6 +1717,7 @@ function syncLiveTranslationUI(val) {
           pop.replaceWith(wrapper.firstElementChild);
         }
       });
+      requestAnimationFrame(autoResizeTransTextarea);
     }
   }
 }

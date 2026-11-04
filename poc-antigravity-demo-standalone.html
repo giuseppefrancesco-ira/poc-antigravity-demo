@@ -6116,36 +6116,36 @@ button, input, textarea {
   position: absolute;
   bottom: calc(100% + 10px);
   right: 0;
-  width: min(390px, calc(100vw - 28px));
+  width: min(380px, calc(100vw - 28px));
   background: #FFFFFF;
-  border: 1px solid #BFDBFE;
-  border-radius: 14px;
-  box-shadow: 0 14px 32px -4px rgba(15, 23, 42, 0.16), 0 4px 12px -2px rgba(37, 99, 235, 0.08);
-  padding: 12px;
-  z-index: 120;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.12), 0 4px 10px -2px rgba(15, 23, 42, 0.05);
+  padding: 12px 13px;
+  z-index: 200;
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  animation: bcTransFadeIn 0.15s ease-out;
+  gap: 8px;
+  animation: bcTransFadeIn 0.14s ease-out;
 }
 
 .bc-trans-popover::after {
   content: '';
   position: absolute;
-  bottom: -6px;
-  right: 36px;
-  width: 11px;
-  height: 11px;
+  bottom: -5px;
+  right: 34px;
+  width: 9px;
+  height: 9px;
   background: #FFFFFF;
-  border-right: 1px solid #BFDBFE;
-  border-bottom: 1px solid #BFDBFE;
+  border-right: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;
   transform: rotate(45deg);
 }
 
 @keyframes bcTransFadeIn {
   from {
     opacity: 0;
-    transform: translateY(5px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
@@ -6158,16 +6158,13 @@ button, input, textarea {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding-bottom: 7px;
-  border-bottom: 1px solid #F1F5F9;
 }
 
 .bc-trans-title-wrap {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   min-width: 0;
-  flex-wrap: wrap;
 }
 
 .bc-trans-flag {
@@ -6178,7 +6175,7 @@ button, input, textarea {
 
 .bc-trans-title {
   font-size: 12.5px;
-  font-weight: 700;
+  font-weight: 600;
   color: #0F172A;
   white-space: nowrap;
 }
@@ -6186,25 +6183,17 @@ button, input, textarea {
 .bc-trans-badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  height: 20px;
-  padding: 0 7px;
-  border-radius: 999px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 6px;
   font-size: 10.5px;
   font-weight: 600;
   white-space: nowrap;
 }
 
-.bc-trans-badge.auto {
-  background: #EFF6FF;
-  color: #2563EB;
-  border: 1px solid #BFDBFE;
-}
-
 .bc-trans-badge.edited {
   background: #EEF2FF;
   color: #4F46E5;
-  border: 1px solid #C7D2FE;
 }
 
 .bc-trans-header-actions {
@@ -6215,15 +6204,15 @@ button, input, textarea {
 }
 
 .bc-trans-reset-btn {
-  height: 24px;
-  padding: 0 8px;
+  height: 22px;
+  padding: 0 7px;
   border-radius: 6px;
   border: 1px solid #E2E8F0;
-  background: #F8FAFC;
+  background: #FFFFFF;
   color: #475569;
   font-family: inherit;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -6232,9 +6221,9 @@ button, input, textarea {
 }
 
 .bc-trans-reset-btn:hover {
-  background: #EFF6FF;
-  border-color: #BFDBFE;
-  color: #2563EB;
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
 }
 
 .bc-trans-body {
@@ -6244,25 +6233,26 @@ button, input, textarea {
 
 .bc-trans-textarea {
   width: 100%;
-  min-height: 92px;
-  max-height: 170px;
+  min-height: 84px;
+  max-height: 200px;
   padding: 9px 11px;
-  border-radius: 10px;
-  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
   background: #F8FAFC;
   font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  line-height: 1.48;
-  color: #0F172A;
-  resize: vertical;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #1E293B;
+  resize: none;
+  overflow-y: auto;
   outline: none;
   transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
 }
 
 .bc-trans-textarea:focus {
   background: #FFFFFF;
-  border-color: #2563EB;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  border-color: #93C5FD;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
 }
 
 .bc-trans-footer {
@@ -6270,35 +6260,38 @@ button, input, textarea {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding-top: 2px;
 }
 
 .bc-trans-hint {
   font-size: 11px;
   color: #64748B;
-  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bc-trans-confirm-btn {
-  height: 28px;
-  padding: 0 11px;
-  border-radius: 8px;
-  border: none;
-  background: #2563EB;
-  color: #FFFFFF;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid #DBEAFE;
+  background: #EFF6FF;
+  color: #2563EB;
   font-family: inherit;
   font-size: 11.5px;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  transition: background 0.15s;
+  transition: all 0.15s ease;
 }
 
 .bc-trans-confirm-btn:hover {
-  background: #1D4ED8;
+  background: #2563EB;
+  border-color: #2563EB;
+  color: #FFFFFF;
 }
 
 .bc-trans-empty {
@@ -8346,6 +8339,18 @@ function renderBottomComposer() {
     mobComp.classList.toggle('is-expanded', !!state.composerExpanded);
     mobComp.innerHTML = html;
   }
+  if (state.bcTransOpen) {
+    requestAnimationFrame(autoResizeTransTextarea);
+  }
+}
+
+function autoResizeTransTextarea() {
+  document.querySelectorAll('.bc-trans-textarea').forEach(el => {
+    el.style.height = 'auto';
+    if (el.scrollHeight > 0) {
+      el.style.height = Math.min(200, Math.max(84, el.scrollHeight + 2)) + 'px';
+    }
+  });
 }
 
 function autoResizeTextarea(el) {
@@ -8495,16 +8500,16 @@ function renderTranslationPopoverHtml(conv, draftVal, hasText) {
           <span class="bc-trans-flag">${getLangFlagSvg(conv.langCode)}</span>
           <span class="bc-trans-title">Traduzione in ${conv.langName}</span>
           ${hasText ? `
-            <span class="bc-trans-badge ${isCustom ? 'edited' : 'auto'}" id="bcTransStatusBadge">
-              ${isCustom ? '✏️ Modificata' : `${ICONS.sparkles12} Auto AI`}
+            <span class="bc-trans-badge ${isCustom ? 'edited' : 'auto'}" style="${isCustom ? '' : 'display:none;'}">
+              Modificata
             </span>
           ` : ''}
         </div>
         <div class="bc-trans-header-actions">
           ${hasText ? `
-            <button type="button" class="bc-trans-reset-btn" id="bcTransResetBtn" onclick="resetCustomTranslation(event)" title="Rigenera traduzione automatica AI" style="${isCustom ? '' : 'display:none;'}">
+            <button type="button" class="bc-trans-reset-btn" onclick="resetCustomTranslation(event)" title="Ripristina traduzione automatica" style="${isCustom ? '' : 'display:none;'}">
               ${ICONS.refresh}
-              <span>Rigenera</span>
+              <span>Ripristina</span>
             </button>
           ` : ''}
           <button type="button" class="bc-pop-close" onclick="toggleTranslationPopover(event, false)" title="Chiudi" aria-label="Chiudi">
@@ -8516,18 +8521,16 @@ function renderTranslationPopoverHtml(conv, draftVal, hasText) {
       ${hasText ? `
         <div class="bc-trans-body">
           <textarea
-            id="bcTransTextarea"
             class="bc-trans-textarea"
-            rows="4"
+            rows="3"
             placeholder="Scrivi o modifica la traduzione in ${conv.langName}..."
             oninput="updateCustomTranslation(this.value)"
           >${translatedText}</textarea>
         </div>
         <div class="bc-trans-footer">
-          <span class="bc-trans-hint">L'ospite riceverà questo testo · clicca dentro per modificarlo</span>
+          <span class="bc-trans-hint">Testo inviato all'ospite · clicca per modificare</span>
           <button type="button" class="bc-trans-confirm-btn" onclick="toggleTranslationPopover(event, false)">
-            ${ICONS.check12}
-            <span>Conferma</span>
+            <span>Applica</span>
           </button>
         </div>
       ` : `
@@ -8557,12 +8560,13 @@ function toggleTranslationPopover(event, forceState) {
   renderBottomComposer();
   if (next) {
     setTimeout(() => {
-      const ta = document.getElementById('bcTransTextarea');
-      if (ta) {
-        ta.focus();
-        ta.setSelectionRange(ta.value.length, ta.value.length);
+      autoResizeTransTextarea();
+      const visibleTa = Array.from(document.querySelectorAll('.bc-trans-textarea')).find(el => el.offsetParent !== null);
+      if (visibleTa) {
+        visibleTa.focus();
+        visibleTa.setSelectionRange(visibleTa.value.length, visibleTa.value.length);
       }
-    }, 40);
+    }, 30);
   }
 }
 
@@ -8571,16 +8575,17 @@ function updateCustomTranslation(val) {
   state.customTranslations = state.customTranslations || {};
   state.customTranslations[conv.id] = val;
 
+  autoResizeTransTextarea();
+
   // Aggiorna badge e pill senza perdere il focus della textarea
-  const badge = document.getElementById('bcTransStatusBadge');
-  if (badge) {
+  document.querySelectorAll('.bc-trans-badge').forEach(badge => {
     badge.className = 'bc-trans-badge edited';
-    badge.innerHTML = '✏️ Modificata';
-  }
-  const resetBtn = document.getElementById('bcTransResetBtn');
-  if (resetBtn) {
+    badge.textContent = 'Modificata';
+    badge.style.display = 'inline-flex';
+  });
+  document.querySelectorAll('.bc-trans-reset-btn').forEach(resetBtn => {
     resetBtn.style.display = 'inline-flex';
-  }
+  });
   document.querySelectorAll('.bc-lang-pill').forEach(pill => {
     pill.classList.add('is-edited');
     const dot = pill.querySelector('.bc-lang-status-dot');
@@ -8595,7 +8600,7 @@ function resetCustomTranslation(event) {
     delete state.customTranslations[conv.id];
   }
   renderBottomComposer();
-  showToast(`Traduzione in ${conv.langName} rigenerata con AI`);
+  showToast(`Traduzione in ${conv.langName} ripristinata`);
 }
 
 function fillSampleDraftForTranslation(event) {
@@ -8610,9 +8615,10 @@ function fillSampleDraftForTranslation(event) {
   renderConversationLists();
   renderBottomComposer();
   setTimeout(() => {
-    const ta = document.getElementById('bcTransTextarea');
-    if (ta) ta.focus();
-  }, 40);
+    autoResizeTransTextarea();
+    const visibleTa = Array.from(document.querySelectorAll('.bc-trans-textarea')).find(el => el.offsetParent !== null);
+    if (visibleTa) visibleTa.focus();
+  }, 30);
 }
 
 // =========================================================================
@@ -8686,16 +8692,20 @@ function syncLiveTranslationUI(val) {
   });
 
   if (state.bcTransOpen) {
-    const transTa = document.getElementById('bcTransTextarea');
-    if (hasText && transTa) {
-      transTa.value = translateDraftToLang(val, conv.langCode, conv);
-      const badge = document.getElementById('bcTransStatusBadge');
-      if (badge) {
+    const transTas = document.querySelectorAll('.bc-trans-textarea');
+    if (hasText && transTas.length > 0) {
+      const nextTrans = translateDraftToLang(val, conv.langCode, conv);
+      transTas.forEach(ta => {
+        ta.value = nextTrans;
+      });
+      autoResizeTransTextarea();
+      document.querySelectorAll('.bc-trans-badge').forEach(badge => {
         badge.className = 'bc-trans-badge auto';
-        badge.innerHTML = `${ICONS.sparkles12} Auto AI`;
-      }
-      const resetBtn = document.getElementById('bcTransResetBtn');
-      if (resetBtn) resetBtn.style.display = 'none';
+        badge.style.display = 'none';
+      });
+      document.querySelectorAll('.bc-trans-reset-btn').forEach(resetBtn => {
+        resetBtn.style.display = 'none';
+      });
     } else {
       // Passaggio tra stato vuoto e stato con testo mentre il tooltip è aperto
       document.querySelectorAll('.bc-trans-popover').forEach(pop => {
@@ -8705,6 +8715,7 @@ function syncLiveTranslationUI(val) {
           pop.replaceWith(wrapper.firstElementChild);
         }
       });
+      requestAnimationFrame(autoResizeTransTextarea);
     }
   }
 }
