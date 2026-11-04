@@ -8017,59 +8017,294 @@ button, input, textarea {
 }
 
 /* =========================================================
-   MOBILE INBOX UNIFIED BLU NAVY THEME (#mobScreenInbox)
-   Matches Desktop Nav Rail (#18255B) & Lista Messaggi (#1E2C68)
+   SISTEMA CROMATICO MOBILE COERENTE:
+   1. Header / Barra in alto in Blu Scuro (#18255B) con titolo bianco (lega Inbox, Chat e Dettagli Ospite)
+   2. Bolle dei tuoi messaggi in blu (#2E54E8)
+   3. Tab bar attiva e pulsanti primari nello stesso blu (#2E54E8)
+   4. Il resto (sfondo, card, liste conversazioni) chiaro (#FFFFFF / #F8FAFC)
    ========================================================= */
-#mobScreenInbox {
-  background: #1E2C68;
+
+/* --- 1. HEADER IN BLU SCURO CON TITOLO BIANCO SU TUTTE LE SCHERMATE MOBILE --- */
+#mobScreenInbox .header-lista {
+  background: #18255B;
+  border-bottom: 1px solid #2C3B75;
+}
+
+#mobScreenInbox .titolo-lista {
+  color: #FFFFFF;
+  font-weight: 700;
 }
 
 #mobScreenInbox .btn-scarica-msg {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid #3A4B83;
-  color: #CBD5E1;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
 }
 
 #mobScreenInbox .btn-scarica-msg:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.18);
   color: #FFFFFF;
 }
 
-#mobScreenInbox .mob-bottom-bar {
+#mobScreenInbox .btn-nuovo-msg {
+  background: #2E54E8;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(46, 84, 232, 0.35);
+}
+
+#mobScreenInbox .btn-nuovo-msg:hover {
+  background: #2346CC;
+}
+
+#mobScreenInbox .ricerca-box {
+  background: #243370;
+  border: 1px solid #38498B;
+  border-radius: 10px;
+  color: #CBD5E1;
+}
+
+#mobScreenInbox .ricerca-box:focus-within {
+  background: #2B3C80;
+  border-color: #60A5FA;
+}
+
+#mobScreenInbox .ricerca-box input {
+  color: #FFFFFF;
+}
+
+#mobScreenInbox .ricerca-box input::placeholder {
+  color: #93A2D8;
+}
+
+#mobScreenInbox .cartella-row,
+#mobScreenInbox .cartella-row.in-corso,
+#mobScreenInbox .cartella-row.archiviate {
+  background: #243370;
+  border: 1px solid #38498B;
+  border-radius: 10px;
+  color: #FFFFFF;
+}
+
+#mobScreenInbox .cartella-row:hover {
+  background: #2C3E84;
+  border-color: #4D62AD;
+}
+
+#mobScreenInbox .cartella-row svg {
+  color: #93A2D8;
+}
+
+#mobScreenInbox .cartella-lbl {
+  color: #F8FAFC;
+  font-weight: 600;
+}
+
+/* Header Blu Scuro anche in Chat Mobile (#mobScreenChat) e Dettagli Ospite (#mobScreenAI) */
+.figma-mobile .mob-chat-header {
   background: #18255B;
-  border-top: 1px solid #2C3B75;
+  border-bottom: 1px solid #2C3B75;
+  color: #FFFFFF;
 }
 
+.figma-mobile .mob-chat-header .titolo-messaggi,
+.figma-mobile .mob-ai-hdr-title,
+.figma-mobile .mob-ai-hdr-title span {
+  color: #FFFFFF !important;
+}
+
+.figma-mobile .mob-ai-hdr-title svg {
+  stroke: #CBD5E1 !important;
+}
+
+.figma-mobile .mob-chat-header .contatore-msg {
+  color: #CBD5E1;
+}
+
+.figma-mobile .mob-chat-header .contatore-msg svg {
+  stroke: #CBD5E1;
+}
+
+.figma-mobile .mob-chat-header .hdr-sentiment-face {
+  color: #4ADE80;
+}
+
+.figma-mobile .mob-chat-header .hdr-sentiment-face svg {
+  stroke: #4ADE80;
+}
+
+.figma-mobile .mob-hdr-btn,
+#mobScreenAI .btn-top.icon-only {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #FFFFFF !important;
+}
+
+.figma-mobile .mob-hdr-btn:hover,
+.figma-mobile .mob-hdr-btn.active,
+#mobScreenAI .btn-top.icon-only:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #FFFFFF !important;
+}
+
+.figma-mobile .mob-hdr-btn svg,
+#mobScreenAI .btn-top.icon-only svg {
+  stroke: #FFFFFF !important;
+}
+
+/* --- 2. LISTE, SFONDI E CARD CHIARE (#mobScreenInbox, #mobScreenChat, #mobScreenAI) --- */
+#mobScreenInbox {
+  background: #F8FAFC;
+}
+
+#mobScreenInbox .elenco-conv {
+  background: #F8FAFC;
+}
+
+#mobScreenInbox .elenco-conv::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+
+#mobScreenInbox .elenco-conv::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+}
+
+#mobScreenInbox .conv-item {
+  background: #FFFFFF;
+  border-bottom: 1px solid #E7EAF0;
+}
+
+#mobScreenInbox .conv-item:hover {
+  background: #F8FAFC;
+}
+
+#mobScreenInbox .conv-item.selected {
+  background: #F0F5FF;
+  border-bottom-color: #DCE6FE;
+}
+
+#mobScreenInbox .conv-item.linked {
+  background: #FAFCFF;
+  border-bottom: 1px solid #E7EAF0;
+}
+
+#mobScreenInbox .conv-item.linked:hover {
+  background: #F1F5F9;
+}
+
+#mobScreenInbox .conv-item.linked.selected {
+  background: #EBF2FF;
+}
+
+#mobScreenInbox .barra-accento {
+  background: #2E54E8;
+}
+
+#mobScreenInbox .barra-accento.gialla {
+  background: #F59E0B;
+}
+
+#mobScreenInbox .conv-nome {
+  color: #0F172A;
+}
+
+#mobScreenInbox .conv-item.linked .conv-nome {
+  color: #334155;
+}
+
+#mobScreenInbox .conv-sent-face {
+  color: #16A34A;
+}
+
+#mobScreenInbox .conv-data {
+  color: #64748B;
+}
+
+#mobScreenInbox .conv-prev {
+  color: #475569;
+}
+
+#mobScreenInbox .prev-arrow.in {
+  color: #D97706;
+}
+
+#mobScreenInbox .prev-arrow.out {
+  color: #2E54E8;
+}
+
+#mobScreenInbox .bozza-prefix {
+  color: #2E54E8;
+}
+
+#mobScreenInbox .bozza-preview-text {
+  color: #64748B;
+}
+
+#mobScreenInbox .pill.date {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #DBEAFE;
+  font-weight: 600;
+}
+
+#mobScreenInbox .pill.checkin {
+  background: #ECFDF5;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+  font-weight: 600;
+}
+
+#mobScreenInbox .pill-attesa-risposta {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+  font-weight: 700;
+}
+
+#mobScreenInbox .footer-lista {
+  background: #FFFFFF;
+  border-top: 1px solid #E2E8F0;
+  color: #475569;
+}
+
+#mobScreenInbox .footer-struttura {
+  color: #1E293B;
+  font-weight: 600;
+}
+
+/* --- 3. TAB BAR CHIARA CON TAB ATTIVA E PULSANTI PRIMARI NELLO STESSO BLU (#2E54E8) --- */
+.figma-mobile .mob-bottom-bar,
+#mobScreenInbox .mob-bottom-bar {
+  background: #FFFFFF;
+  border-top: 1px solid #E2E8F0;
+}
+
+.figma-mobile .mob-tab,
 #mobScreenInbox .mob-tab {
-  color: #93A2D8;
+  color: #64748B;
 }
 
+.figma-mobile .mob-tab:hover,
 #mobScreenInbox .mob-tab:hover {
-  color: #E2E8F0;
+  color: #1E293B;
 }
 
-#mobScreenInbox .mob-tab .mob-tab-pill {
-  color: #93A2D8;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-
-#mobScreenInbox .mob-tab:hover .mob-tab-pill {
-  background: rgba(255, 255, 255, 0.08);
-  color: #FFFFFF;
-}
-
+.figma-mobile .mob-tab.active,
 #mobScreenInbox .mob-tab.active {
-  color: #FFFFFF;
+  color: #2E54E8;
+  font-weight: 700;
 }
 
+.figma-mobile .mob-tab.active .mob-tab-pill,
 #mobScreenInbox .mob-tab.active .mob-tab-pill {
-  background: #3B66F5;
+  background: #2E54E8;
   color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(59, 102, 245, 0.35);
+  box-shadow: 0 2px 8px rgba(46, 84, 232, 0.28);
 }
 
+.figma-mobile .home-indicator,
 #mobScreenInbox .home-indicator {
-  background: rgba(255, 255, 255, 0.35);
+  background: #0F172A;
 }
 
 /* =========================================================
@@ -8793,16 +9028,16 @@ button, input, textarea {
         <div class="intestazione-thread mob-chat-header">
           <div class="titolo-left" style="gap:10px;">
             <button class="btn-top icon-only mob-hdr-btn" onclick="setMobileTab('inbox')" title="Torna alla lista Messaggi">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
               </svg>
             </button>
-            <div style="display:inline-flex;align-items:center;gap:7px;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <div class="mob-ai-hdr-title" style="display:inline-flex;align-items:center;gap:7px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
                 <circle cx="12" cy="7" r="4"/>
               </svg>
-              <span style="font-size:14.5px;font-weight:700;color:#0F172A;">Dettagli ospite</span>
+              <span class="titolo-messaggi" style="font-size:15px;font-weight:700;">Dettagli ospite</span>
             </div>
           </div>
         </div>
