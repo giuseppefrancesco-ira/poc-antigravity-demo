@@ -1199,17 +1199,97 @@ button, input, textarea {
   gap: 10px;
 }
 
-.msg-bottom-actions {
+/* Riga compatta sotto la bolla: etichetta Tradotto con AI + azioni in hover */
+.msg-sub-bar {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 2px;
+  gap: 10px;
+  min-height: 24px;
+  margin-top: -1px;
+  flex-wrap: wrap;
+}
+
+.msg-sub-bar.host {
+  justify-content: flex-end;
+}
+
+.msg-sub-bar.guest {
+  justify-content: flex-start;
+}
+
+.msg-trad-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748B;
+  line-height: 1.2;
+}
+
+.msg-trad-sparkle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #2E54E8;
+  flex-shrink: 0;
+}
+
+.msg-trad-sparkle svg {
+  width: 11px;
+  height: 11px;
+}
+
+.msg-trad-dot {
+  color: #CBD5E1;
+  font-weight: 700;
+}
+
+.msg-trad-toggle-link {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.msg-trad-toggle-link:hover {
+  color: #2E54E8;
+  text-decoration: underline;
+}
+
+.msg-bottom-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-1px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.blocco-msg:hover .msg-bottom-actions,
+.blocco-msg:focus-within .msg-bottom-actions {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+@media (hover: none) {
+  .msg-bottom-actions {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
 }
 
 .btn-msg-action {
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
   border: none;
   background: transparent;
   display: inline-flex;
@@ -1242,14 +1322,14 @@ button, input, textarea {
 
 .btn-msg-action.read-pill {
   width: auto;
-  height: 24px;
-  padding: 0 9px;
+  height: 22px;
+  padding: 0 8px;
   border-radius: 6px;
   background: #ECFDF5;
   color: #15803D;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
-  gap: 5px;
+  gap: 4px;
 }
 
 .btn-msg-action.read-pill:hover {
