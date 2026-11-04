@@ -1422,10 +1422,6 @@ function renderBottomComposer() {
                 <button type="button" class="btn-rate-ai rate-up ${state.aiRating === 'up' ? 'active' : ''}" onclick="rateAiSuggestion('up')" title="Risposta AI utile">${ICONS.thumbsUp}</button>
                 <button type="button" class="btn-rate-ai rate-down ${state.aiRating === 'down' ? 'active' : ''}" onclick="rateAiSuggestion('down')" title="Segnala risposta AI da migliorare">${ICONS.thumbsDown}</button>
               </div>
-              <button type="button" class="bc-kb-inline-btn" onclick="openCreateKbModal()">
-                ${ICONS.bookmarkPlus}
-                <span>${state.saveToKb ? 'FAQ salvata in KB' : 'Salva come FAQ in KB'}</span>
-              </button>
             </div>
           ` : ''}
         </div>
