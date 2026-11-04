@@ -8015,78 +8015,59 @@ button, input, textarea {
    4. Contenuto di Chat e Dettagli Ospite (sfondo, card, liste) chiaro
    ========================================================= */
 
-/* --- 1. HEADER IN BLU SCURO (#1E2C68) CON TITOLO BIANCO SU CHAT E DETTAGLI OSPITE (DESKTOP & MOBILE) --- */
-.intestazione-thread,
-.figma-mobile .mob-chat-header,
-.gs-topbar {
+/* --- 1. HEADER IN BLU SCURO (#1E2C68) CON TITOLO BIANCO SULLA BARRA MESSAGGI / CHAT (DESKTOP & MOBILE) --- */
+.col-thread .intestazione-thread,
+#mobScreenChat .mob-chat-header {
   background: #1E2C68;
   border-bottom: 1px solid #2E3E7A;
   color: #FFFFFF;
 }
 
-.gs-topbar {
-  height: 64px;
-  border-left: 1px solid #2E3E7A;
-}
-
-.intestazione-thread .titolo-messaggi,
-.figma-mobile .mob-chat-header .titolo-messaggi,
-.figma-mobile .mob-ai-hdr-title,
-.figma-mobile .mob-ai-hdr-title span,
-.gs-topbar .gs-topbar-title {
+.col-thread .intestazione-thread .titolo-messaggi,
+#mobScreenChat .mob-chat-header .titolo-messaggi {
   color: #FFFFFF !important;
 }
 
-.figma-mobile .mob-ai-hdr-title svg,
-.gs-topbar .gs-header-plain-icon,
-.gs-topbar .gs-header-plain-icon svg {
-  color: #CBD5E1 !important;
-  stroke: #CBD5E1 !important;
-}
-
-.intestazione-thread .contatore-msg,
-.figma-mobile .mob-chat-header .contatore-msg {
+.col-thread .intestazione-thread .contatore-msg,
+#mobScreenChat .mob-chat-header .contatore-msg {
   color: #CBD5E1;
 }
 
-.intestazione-thread .contatore-msg svg,
-.figma-mobile .mob-chat-header .contatore-msg svg {
+.col-thread .intestazione-thread .contatore-msg svg,
+#mobScreenChat .mob-chat-header .contatore-msg svg {
   stroke: #CBD5E1;
 }
 
-.intestazione-thread .hdr-sentiment-face,
-.figma-mobile .mob-chat-header .hdr-sentiment-face {
+.col-thread .intestazione-thread .hdr-sentiment-face,
+#mobScreenChat .mob-chat-header .hdr-sentiment-face {
   color: #4ADE80;
 }
 
-.intestazione-thread .hdr-sentiment-face svg,
-.figma-mobile .mob-chat-header .hdr-sentiment-face svg {
+.col-thread .intestazione-thread .hdr-sentiment-face svg,
+#mobScreenChat .mob-chat-header .hdr-sentiment-face svg {
   stroke: #4ADE80;
 }
 
-.intestazione-thread .btn-top,
-.intestazione-thread .btn-top.ocr-header-btn,
-.figma-mobile .mob-hdr-btn,
-#mobScreenAI .btn-top.icon-only {
+.col-thread .intestazione-thread .btn-top,
+.col-thread .intestazione-thread .btn-top.ocr-header-btn,
+#mobScreenChat .mob-hdr-btn {
   background: rgba(255, 255, 255, 0.1) !important;
   border: 1px solid rgba(255, 255, 255, 0.18) !important;
   color: #FFFFFF !important;
 }
 
-.intestazione-thread .btn-top:hover,
-.intestazione-thread .btn-top.active,
-.intestazione-thread .btn-top.ocr-header-btn:hover,
-.figma-mobile .mob-hdr-btn:hover,
-.figma-mobile .mob-hdr-btn.active,
-#mobScreenAI .btn-top.icon-only:hover {
+.col-thread .intestazione-thread .btn-top:hover,
+.col-thread .intestazione-thread .btn-top.active,
+.col-thread .intestazione-thread .btn-top.ocr-header-btn:hover,
+#mobScreenChat .mob-hdr-btn:hover,
+#mobScreenChat .mob-hdr-btn.active {
   background: rgba(255, 255, 255, 0.2) !important;
   border-color: rgba(255, 255, 255, 0.3) !important;
   color: #FFFFFF !important;
 }
 
-.intestazione-thread .btn-top svg,
-.figma-mobile .mob-hdr-btn svg,
-#mobScreenAI .btn-top.icon-only svg {
+.col-thread .intestazione-thread .btn-top svg,
+#mobScreenChat .mob-hdr-btn svg {
   stroke: #FFFFFF !important;
 }
 
