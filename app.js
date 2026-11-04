@@ -1118,10 +1118,6 @@ function renderBottomComposer() {
                 ${ICONS.bookmarkPlus}
                 <span>Crea / Aggiorna FAQ in Knowledge Base</span>
               </button>
-              <button type="button" class="bc-pop-item" onclick="toggleBcPopover(null);focusGuestNoteForm();">
-                ${ICONS.fileText}
-                <span>Modifica nota nel dettaglio ospite</span>
-              </button>
             </div>
           </div>
         ` : ''}
@@ -1299,7 +1295,7 @@ function renderBottomComposer() {
             <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
               ${ICONS.mic16}
             </button>
-            <button type="button" class="bc-icon-btn ${state.bcMoreOpen ? 'active' : ''}" onclick="toggleBcPopover('more')" title="Altre opzioni (Programma invio, OCR, FAQ, Nota manuale)">
+            <button type="button" class="bc-icon-btn ${state.bcMoreOpen ? 'active' : ''}" onclick="toggleBcPopover('more')" title="Altre opzioni (Programma invio, OCR, FAQ)">
               ${ICONS.moreHoriz}
             </button>
           </div>
