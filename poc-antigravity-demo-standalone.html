@@ -9651,10 +9651,6 @@ function renderBottomComposer() {
             ${ICONS.paperclip16}
           </button>
 
-          <button type="button" class="bc-icon-btn ocr-quick-icon-btn" onclick="openGuestOcrModal()" title="Estrai messaggio ospite da foto / screenshot (OCR)">
-            ${ICONS.scanText}
-          </button>
-
           <input
             type="text"
             class="bc-collapsed-input"
@@ -9797,23 +9793,14 @@ function renderBottomComposer() {
             <!-- Messaggi Pronti Pill (Upper Composer -> apre Modale) -->
             <button type="button" class="bc-top-pill template" onclick="openCannedRepliesModal()" title="Apri Messaggi Pronti">
               ${ICONS.docTemplate14}
-              <span class="pill-lbl-full">Messaggi pronti</span>
-              <span class="pill-lbl-mob">Messaggi pronti</span>
+              <span>Messaggi pronti</span>
             </button>
 
             <!-- Tag Disponibili Pill (Upper Composer) -->
             <button type="button" class="bc-top-pill tags ${state.bcTagsOpen ? 'active' : ''}" onclick="toggleBcPopover('tags')" title="Variabili dinamiche soggiorno (@Tag)">
               ${AT_SIGN_SVG}
-              <span class="pill-lbl-full">Tag disponibili</span>
-              <span class="pill-lbl-mob">Tag</span>
+              <span>Tag disponibili</span>
               <span class="bc-chevron-muted ${state.bcTagsOpen ? 'open' : ''}">${ICONS.chevronDown}</span>
-            </button>
-
-            <!-- Estrai da foto OCR Pill (Upper Composer -> apre Modale OCR messaggio ospite) -->
-            <button type="button" class="bc-top-pill ocr-pill" onclick="openGuestOcrModal()" title="Estrai e incolla messaggio dell'ospite da foto o screenshot (OCR)">
-              ${ICONS.scanText}
-              <span class="pill-lbl-full">Estrai da foto (OCR)</span>
-              <span class="pill-lbl-mob">Foto OCR</span>
             </button>
           </div>
 
