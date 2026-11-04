@@ -1311,59 +1311,6 @@ function renderBottomComposer() {
           </div>
         ` : ''}
 
-        ${state.schedulePopoverOpen ? `
-          <div class="bc-floating-popover schedule-pop">
-            <div class="card-quando-inviarlo" style="margin:0;border:none;box-shadow:none;">
-              <div class="qi-header">
-                <span class="qi-title">Quando inviarlo</span>
-                <button class="qi-close" onclick="toggleSchedulePopover()" title="Chiudi">${ICONS.close12}</button>
-              </div>
-              <div class="qi-presets">
-                <button class="qi-pill ${state.schedPreset === '1h' ? 'active' : ''}" onclick="applySchedPreset('1h', 2, '12', '00')">Tra un'ora</button>
-                <button class="qi-pill ${state.schedPreset === '18' ? 'active' : ''}" onclick="applySchedPreset('18', 2, '18', '00')">Oggi 18:00</button>
-                <button class="qi-pill ${state.schedPreset === 'dom9' ? 'active' : ''}" onclick="applySchedPreset('dom9', 3, '09', '00')">Domani 9:00</button>
-              </div>
-              <div class="qi-month-nav">
-                <button class="qi-nav-arrow" onclick="cycleSchedMonth(-1)">${ICONS.chevronLeft14}</button>
-                <span class="qi-month-label">${state.schedMonthLabel}</span>
-                <button class="qi-nav-arrow" onclick="cycleSchedMonth(1)">${ICONS.chevronRight14}</button>
-              </div>
-              <div class="qi-weekdays">
-                <span>L</span><span>M</span><span>M</span><span>G</span><span>V</span><span>S</span><span>D</span>
-              </div>
-              <div class="qi-days-grid">
-                ${calCells.map(c => !c.d
-                  ? `<span class="qi-day empty"></span>`
-                  : `<button class="qi-day ${c.muted ? 'muted' : ''} ${c.highlight && state.schedDay !== c.d ? 'soft-bg' : ''} ${state.schedDay === c.d && !c.muted ? 'selected' : ''}" onclick="selectSchedDay(${c.d})">${c.d}</button>`
-                ).join('')}
-              </div>
-              <div class="qi-time-row">
-                <span class="qi-clock-icon">${ICONS.clock}</span>
-                <select class="qi-time-select" onchange="updateSchedHour(this.value)">${hourOptions}</select>
-                <span class="qi-time-colon">:</span>
-                <select class="qi-time-select" onchange="updateSchedMin(this.value)">${minOptions}</select>
-              </div>
-              ${isNightHour ? `
-                <div class="qi-night-warning" style="display:flex;align-items:center;gap:6px;">
-                  ${ICONS.moon}
-                  <span>Orario notturno (22:00–08:00): consigliato posticipare al mattino.</span>
-                </div>
-              ` : ''}
-              <label class="qi-autocancel-row" onclick="toggleAutoCancelRule()">
-                <input type="checkbox" ${state.autoCancelScheduled ? 'checked' : ''} onclick="event.stopPropagation();toggleAutoCancelRule()" />
-                <span>Annulla se l'ospite risponde prima</span>
-              </label>
-              <div class="qi-actions">
-                <button class="qi-btn-cancel" onclick="toggleSchedulePopover()">Annulla</button>
-                <button class="qi-btn-confirm" onclick="confirmScheduledSend()">
-                  ${ICONS.sendWhite}
-                  <span>Programma</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        ` : ''}
-
         <!-- Mobile bottom-sheet grab handle -->
         <div class="bc-mobile-sheet-handle" onclick="toggleComposerExpand(false)" title="Tocca per ridurre">
           <span class="bc-mobile-sheet-bar"></span>
@@ -2665,6 +2612,9 @@ function toggleAutoCancelRule() {
   state.autoCancelScheduled = !state.autoCancelScheduled;
   renderThread();
   renderSiderAI();
+  if (document.getElementById('modalContent')?.classList.contains('qi-modal')) {
+    renderScheduleModalContent();
+  }
   showToast(state.autoCancelScheduled
     ? 'Regola attiva: annulla invio programmato se l\'ospite risponde prima'
     : 'Regola auto-annullamento disattivata');
@@ -2709,15 +2659,126 @@ function cycleOutboundChannel() {
   showToast(`Canale di uscita impostato su: ${state.outboundChannel}`);
 }
 
-function toggleSchedulePopover() {
-  state.schedulePopoverOpen = !state.schedulePopoverOpen;
+function openScheduleModal() {
+  const modal = document.getElementById('modalBackdrop');
+  const content = document.getElementById('modalContent');
+  if (!modal || !content) return;
+  state.schedulePopoverOpen = false;
+  state.bcMoreOpen = false;
   renderSiderAI();
+  renderScheduleModalContent();
+  modal.classList.add('open');
+}
+
+function renderScheduleModalContent() {
+  const content = document.getElementById('modalContent');
+  if (!content) return;
+
+  const isNightHour = (() => {
+    const hr = parseInt(state.schedHour || '10', 10);
+    return hr >= 22 || hr < 8;
+  })();
+
+  const calCells = [
+    { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: 1, muted: true },
+    { d: 2 }, { d: 3 }, { d: 4 }, { d: 5 }, { d: 6 }, { d: 7 }, { d: 8 },
+    { d: 9 }, { d: 10 }, { d: 11 }, { d: 12 }, { d: 13 }, { d: 14 }, { d: 15 },
+    { d: 16 }, { d: 17, highlight: true }, { d: 18 }, { d: 19 }, { d: 20 }, { d: 21 }, { d: 22 },
+    { d: 23 }, { d: 24 }, { d: 25 }, { d: 26 }, { d: 27 }, { d: 28 }, { d: 29 },
+    { d: 30 }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }, { d: '', muted: true }
+  ];
+
+  const hourOptions = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
+    .map(h => `<option value="${h}" ${state.schedHour === h ? 'selected' : ''}>${h}</option>`).join('');
+  const minOptions = ['00', '15', '30', '45']
+    .map(m => `<option value="${m}" ${state.schedMin === m ? 'selected' : ''}>${m}</option>`).join('');
+
+  content.className = 'modal-card qi-modal';
+  content.innerHTML = `
+    <div class="qi-header">
+      <div class="qi-header-left">
+        <span class="qi-header-icon">${ICONS.clock}</span>
+        <span class="qi-title">Quando inviarlo</span>
+      </div>
+      <button type="button" class="qi-close" onclick="closeModal()" title="Chiudi" aria-label="Chiudi">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="qi-presets">
+      <button type="button" class="qi-pill ${state.schedPreset === '1h' ? 'active' : ''}" onclick="applySchedPreset('1h', 2, '12', '00')">Tra un'ora</button>
+      <button type="button" class="qi-pill ${state.schedPreset === '18' ? 'active' : ''}" onclick="applySchedPreset('18', 2, '18', '00')">Oggi 18:00</button>
+      <button type="button" class="qi-pill ${state.schedPreset === 'dom9' ? 'active' : ''}" onclick="applySchedPreset('dom9', 3, '09', '00')">Domani 9:00</button>
+    </div>
+
+    <div class="qi-calendar-box">
+      <div class="qi-month-nav">
+        <button type="button" class="qi-nav-arrow" onclick="cycleSchedMonth(-1)" aria-label="Mese precedente">${ICONS.chevronLeft14}</button>
+        <span class="qi-month-label">${state.schedMonthLabel}</span>
+        <button type="button" class="qi-nav-arrow" onclick="cycleSchedMonth(1)" aria-label="Mese successivo">${ICONS.chevronRight14}</button>
+      </div>
+      <div class="qi-weekdays">
+        <span>L</span><span>M</span><span>M</span><span>G</span><span>V</span><span>S</span><span>D</span>
+      </div>
+      <div class="qi-days-grid">
+        ${calCells.map(c => !c.d
+          ? `<span class="qi-day empty"></span>`
+          : `<button type="button" class="qi-day ${c.muted ? 'muted' : ''} ${c.highlight && state.schedDay !== c.d ? 'soft-bg' : ''} ${state.schedDay === c.d && !c.muted ? 'selected' : ''}" onclick="selectSchedDay(${c.d})">${c.d}</button>`
+        ).join('')}
+      </div>
+    </div>
+
+    <div class="qi-time-row">
+      <div class="qi-time-label-wrap">
+        <span class="qi-clock-icon">${ICONS.clock}</span>
+        <span class="qi-time-label">Orario di invio</span>
+      </div>
+      <div class="qi-time-selects">
+        <select class="qi-time-select" onchange="updateSchedHour(this.value)">${hourOptions}</select>
+        <span class="qi-time-colon">:</span>
+        <select class="qi-time-select" onchange="updateSchedMin(this.value)">${minOptions}</select>
+      </div>
+    </div>
+
+    ${isNightHour ? `
+      <div class="qi-night-warning" style="display:flex;align-items:center;gap:6px;">
+        ${ICONS.moon}
+        <span>Orario notturno (22:00–08:00): consigliato posticipare al mattino.</span>
+      </div>
+    ` : ''}
+
+    <label class="qi-autocancel-row" onclick="toggleAutoCancelRule()">
+      <input type="checkbox" ${state.autoCancelScheduled ? 'checked' : ''} onclick="event.stopPropagation();toggleAutoCancelRule()" />
+      <span>Annulla se l'ospite risponde prima</span>
+    </label>
+
+    <div class="qi-actions">
+      <button type="button" class="qi-btn-cancel" onclick="closeModal()">Annulla</button>
+      <button type="button" class="qi-btn-confirm" onclick="confirmScheduledSend()">
+        ${ICONS.sendWhite}
+        <span>Programma</span>
+      </button>
+    </div>
+  `;
+}
+
+function toggleSchedulePopover() {
+  const modal = document.getElementById('modalBackdrop');
+  const content = document.getElementById('modalContent');
+  if (modal?.classList.contains('open') && content?.classList.contains('qi-modal')) {
+    closeModal();
+    return;
+  }
+  openScheduleModal();
 }
 
 function selectSchedDay(day) {
   state.schedDay = day;
   state.schedPreset = null;
   renderSiderAI();
+  if (document.getElementById('modalContent')?.classList.contains('qi-modal')) {
+    renderScheduleModalContent();
+  }
 }
 
 function applySchedPreset(presetKey, day, hr, min) {
@@ -2727,6 +2788,9 @@ function applySchedPreset(presetKey, day, hr, min) {
   state.schedMin = min;
   state.scheduledTime = `${hr}:${min}`;
   renderSiderAI();
+  if (document.getElementById('modalContent')?.classList.contains('qi-modal')) {
+    renderScheduleModalContent();
+  }
 }
 
 function cycleSchedMonth(dir) {
@@ -2734,6 +2798,9 @@ function cycleSchedMonth(dir) {
     ? (dir > 0 ? 'Dicembre 2026' : 'Ottobre 2026')
     : 'Novembre 2026';
   renderSiderAI();
+  if (document.getElementById('modalContent')?.classList.contains('qi-modal')) {
+    renderScheduleModalContent();
+  }
 }
 
 function updateSchedHour(hr) {
@@ -2741,6 +2808,9 @@ function updateSchedHour(hr) {
   state.schedPreset = null;
   state.scheduledTime = `${state.schedHour}:${state.schedMin}`;
   renderSiderAI();
+  if (document.getElementById('modalContent')?.classList.contains('qi-modal')) {
+    renderScheduleModalContent();
+  }
 }
 
 function updateSchedMin(min) {
@@ -2748,6 +2818,9 @@ function updateSchedMin(min) {
   state.schedPreset = null;
   state.scheduledTime = `${state.schedHour}:${state.schedMin}`;
   renderSiderAI();
+  if (document.getElementById('modalContent')?.classList.contains('qi-modal')) {
+    renderScheduleModalContent();
+  }
 }
 
 function updateScheduledTime(val) {
@@ -2757,6 +2830,7 @@ function updateScheduledTime(val) {
 
 function confirmScheduledSend() {
   state.schedulePopoverOpen = false;
+  closeModal();
   closeDraftEditor();
   showToast(`Invio programmato per il ${state.schedDay} ${state.schedMonthLabel} alle ${state.schedHour}:${state.schedMin} su ${state.outboundChannel}`);
 }
@@ -3280,6 +3354,10 @@ function openNewConvModal() {
 
 function closeModal() {
   document.getElementById('modalBackdrop')?.classList.remove('open');
+  if (state.schedulePopoverOpen) {
+    state.schedulePopoverOpen = false;
+    renderSiderAI();
+  }
 }
 
 function removeManualTag(idx) {
