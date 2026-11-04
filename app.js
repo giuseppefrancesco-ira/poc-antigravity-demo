@@ -471,6 +471,8 @@ function renderThread() {
 
   const headerLeftHtml = `
     <span class="titolo-messaggi">${conv.name.replace('↳ ', '')}</span>
+    <span class="contatore-msg">${ICONS.msgSquare} ${conv.msgCount}</span>
+    <span class="hdr-sentiment-face" title="Sentiment: ${conv.headerSentiment}">${ICONS.smile16}</span>
   `;
   const headerLeft = document.getElementById('desktopThreadHeaderLeft');
   if (headerLeft) headerLeft.innerHTML = headerLeftHtml;
