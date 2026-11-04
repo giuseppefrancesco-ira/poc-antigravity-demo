@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261103_52" />
+  <link rel="stylesheet" href="styles.css?v=20261103_53" />
 </head>
 <body>
 
@@ -241,31 +241,31 @@
               </svg>
             </button>
           </div>
-          <div class="ricerca-box" style="height:36px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <div class="ricerca-box">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
             <input type="text" placeholder="Cerca..." oninput="document.getElementById('searchInputDesktop').value=this.value;renderConversationLists();" />
           </div>
           <div class="cartelle-stato">
-            <button class="cartella-row in-corso" style="height:36px;" onclick="setFolderFilter('incorso')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button class="cartella-row in-corso" onclick="setFolderFilter('incorso')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
               </svg>
-              <span class="cartella-lbl" style="font-size:12px;">Soggiorno in corso</span>
+              <span class="cartella-lbl">Soggiorno in corso</span>
               <span class="cartella-pill-white">3</span>
             </button>
-            <button class="cartella-row archiviate" style="height:36px;" onclick="setFolderFilter('archiviate')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button class="cartella-row archiviate" onclick="setFolderFilter('archiviate')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
               </svg>
-              <span class="cartella-lbl" style="font-size:12px;">Archiviate</span>
+              <span class="cartella-lbl">Archiviate</span>
               <span class="cartella-pill-orange">42</span>
             </button>
           </div>
         </div>
         <div class="elenco-conv" id="mobileConvList"></div>
-        <div class="footer-lista" onclick="showToast('Filtro struttura: Casa Aurora (Tutte le unità)')" style="height:34px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;cursor:pointer;">
+        <div class="footer-lista" onclick="showToast('Filtro struttura: Casa Aurora (Tutte le unità)')" style="padding:0 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;cursor:pointer;">
           <span class="footer-struttura">Casa Aurora, Suite 14</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 12 15 18 9"/>
@@ -392,9 +392,9 @@
 
       <!-- SCREEN 3: Dettagli ospite Mobile -->
       <div class="mob-screen" id="mobScreenAI">
-        <div class="intestazione-thread" style="height:54px;padding:0 14px;">
+        <div class="intestazione-thread mob-chat-header">
           <div class="titolo-left" style="gap:10px;">
-            <button class="btn-top icon-only" style="width:30px;height:30px;background:#F8FAFC;" onclick="setMobileTab('inbox')" title="Torna alla lista Messaggi">
+            <button class="btn-top icon-only mob-hdr-btn" onclick="setMobileTab('inbox')" title="Torna alla lista Messaggi">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
               </svg>
@@ -404,7 +404,7 @@
                 <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
                 <circle cx="12" cy="7" r="4"/>
               </svg>
-              <span style="font-size:14px;font-weight:600;color:#0F172A;">Dettagli ospite</span>
+              <span style="font-size:14.5px;font-weight:700;color:#0F172A;">Dettagli ospite</span>
             </div>
           </div>
         </div>
@@ -446,6 +446,6 @@
 
   <div class="toast" id="toastBox"></div>
 
-  <script src="app.js?v=20261103_52"></script>
+  <script src="app.js?v=20261103_53"></script>
 </body>
 </html>

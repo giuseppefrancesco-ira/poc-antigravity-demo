@@ -8223,6 +8223,327 @@ button, input, textarea {
   font-weight: 600;
 }
 
+/* =========================================================
+   MOBILE TOUCH TARGETS & USABILITY UPGRADE (40–44px HIG/WCAG)
+   ========================================================= */
+
+/* Desktop default for scheduled message links */
+.meta-sched-btn {
+  border: none;
+  background: transparent;
+  padding: 2px 4px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+
+.meta-sched-btn.edit {
+  color: #2E54E8;
+}
+
+.meta-sched-btn.edit:hover {
+  background: #EFF6FF;
+}
+
+.meta-sched-btn.cancel {
+  color: #DC2626;
+}
+
+.meta-sched-btn.cancel:hover {
+  background: #FEF2F2;
+}
+
+/* 1. Mobile Top Headers (Inbox, Chat, Dettagli Ospite) */
+.figma-mobile .mob-chat-header {
+  height: 60px;
+  padding: 0 12px;
+  gap: 8px;
+}
+
+.figma-mobile .mob-hdr-btn,
+#mobScreenInbox .btn-scarica-msg,
+#mobScreenInbox .btn-nuovo-msg,
+#mobScreenAI .btn-top.icon-only {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  border-radius: 10px;
+}
+
+.figma-mobile .mob-hdr-btn svg,
+#mobScreenInbox .btn-scarica-msg svg,
+#mobScreenInbox .btn-nuovo-msg svg {
+  width: 17px;
+  height: 17px;
+}
+
+.figma-mobile .mob-chat-controls {
+  gap: 6px;
+}
+
+/* 2. Mobile Inbox Controls (44px standard) */
+#mobScreenInbox .ricerca-box {
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 12px;
+}
+
+#mobScreenInbox .ricerca-box input {
+  font-size: 13.5px;
+}
+
+#mobScreenInbox .cartella-row {
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 12px;
+}
+
+#mobScreenInbox .cartella-lbl {
+  font-size: 13px;
+}
+
+#mobScreenInbox .footer-lista {
+  height: 44px !important;
+  min-height: 44px !important;
+}
+
+/* 3. Mobile Message Action Buttons & Bubble Touch Targets */
+.figma-mobile .msg-bottom-actions {
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.figma-mobile .btn-msg-action {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 10px;
+}
+
+.figma-mobile .btn-msg-action svg {
+  width: 16px;
+  height: 16px;
+}
+
+.figma-mobile .btn-msg-action.read-pill {
+  width: auto;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 6px;
+}
+
+.figma-mobile .bubble-trad-lang-btn,
+.figma-mobile .bubble-trad-toggle-btn {
+  min-height: 34px;
+  padding: 4px 6px;
+  margin: -4px -4px;
+  border-radius: 7px;
+  font-size: 11.5px;
+}
+
+.figma-mobile .meta-sched-btn {
+  min-height: 32px;
+  padding: 4px 9px;
+  font-size: 12px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.figma-mobile .meta-sched-btn.edit {
+  background: #EFF6FF;
+  border: 1px solid #DBEAFE;
+}
+
+.figma-mobile .meta-sched-btn.cancel {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+}
+
+.figma-mobile .card-allegato-host {
+  min-height: 44px;
+  height: 44px;
+}
+
+/* 4. Mobile Collapsed Composer (40px touch targets, zero horizontal overflow) */
+.bottom-composer-wrap.mobile .bc-collapsed {
+  padding: 9px 10px;
+  gap: 8px;
+  border-radius: 18px;
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed-input-row {
+  gap: 6px;
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed-input-row .bc-icon-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed-input-row .bc-icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed-input {
+  height: 40px;
+  font-size: 14px;
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed-controls-row {
+  padding-top: 8px;
+  gap: 6px;
+}
+
+.bottom-composer-wrap.mobile .bc-expand-btn {
+  height: 38px;
+  min-height: 38px;
+  padding: 0 11px;
+  font-size: 12.5px;
+  gap: 5px;
+}
+
+.bottom-composer-wrap.mobile .bc-channel-pill {
+  height: 38px;
+  min-height: 38px;
+  padding: 0 10px 0 6px;
+  gap: 6px;
+}
+
+.bottom-composer-wrap.mobile .bc-lang-pill {
+  height: 38px;
+  min-height: 38px;
+  padding: 0 10px;
+  gap: 6px;
+}
+
+.bottom-composer-wrap.mobile .bc-channel-name,
+.bottom-composer-wrap.mobile .bc-lang-name {
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.bottom-composer-wrap.mobile .bc-send-btn.collapsed {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.bottom-composer-wrap.mobile .bc-send-btn.collapsed svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* 5. Mobile Expanded Composer (Thumb-Friendly Controls) */
+.bottom-composer-wrap.mobile .bc-header {
+  padding: 6px 12px 10px 12px;
+  gap: 8px;
+}
+
+.bottom-composer-wrap.mobile .bc-collapse-mobile {
+  height: 36px;
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  align-items: center;
+  gap: 5px;
+}
+
+.bottom-composer-wrap.mobile .bc-top-pill {
+  height: 36px;
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 12.5px;
+  gap: 6px;
+}
+
+.bottom-composer-wrap.mobile .bc-generate-ai-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.bottom-composer-wrap.mobile .bc-rate-btn {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+}
+
+.bottom-composer-wrap.mobile .bc-kb-inline-btn {
+  min-height: 34px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.bottom-composer-wrap.mobile .bc-tools-left {
+  gap: 4px;
+}
+
+.bottom-composer-wrap.mobile .bc-tools-left .bc-icon-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.bottom-composer-wrap.mobile .bc-tools-left .bc-icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.bottom-composer-wrap.mobile .bc-tools-left .bc-pill-btn.ai-tone {
+  height: 38px;
+  min-height: 38px;
+  padding: 0 13px;
+  font-size: 12.5px;
+}
+
+.bottom-composer-wrap.mobile .bc-tools-right {
+  padding-top: 8px;
+  gap: 8px;
+}
+
+.bottom-composer-wrap.mobile .bc-send-btn.expanded {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.bottom-composer-wrap.mobile .bc-send-btn.expanded svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* 6. Mobile Bottom Navigation Bar */
+.figma-mobile .mob-tab {
+  min-height: 46px;
+  padding: 2px 0;
+}
+
+.figma-mobile .mob-tab-pill {
+  width: 48px;
+  height: 30px;
+  border-radius: 999px;
+}
+
+
 
 
 
