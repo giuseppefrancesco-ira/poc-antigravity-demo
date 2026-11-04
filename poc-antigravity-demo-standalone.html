@@ -8206,17 +8206,31 @@ button, input, textarea {
    4. Contenuto di Chat e Dettagli Ospite (sfondo, card, liste) chiaro
    ========================================================= */
 
-/* --- 1. HEADER IN BLU SCURO (#1E2C68) CON TITOLO BIANCO SULLA BARRA MESSAGGI / CHAT (DESKTOP & MOBILE) --- */
+/* --- 1. HEADER IN BLU SCURO (#1E2C68) CON TITOLO BIANCO SULLA BARRA MESSAGGI / CHAT / DETTAGLI OSPITE (DESKTOP & MOBILE) --- */
 .col-thread .intestazione-thread,
-#mobScreenChat .mob-chat-header {
+.gs-topbar,
+.figma-mobile .mob-chat-header,
+#mobScreenChat .mob-chat-header,
+#mobScreenAI .mob-chat-header {
   background: #1E2C68;
   border-bottom: 1px solid #2E3E7A;
   color: #FFFFFF;
 }
 
 .col-thread .intestazione-thread .titolo-messaggi,
-#mobScreenChat .mob-chat-header .titolo-messaggi {
+.gs-topbar .gs-topbar-title,
+.figma-mobile .mob-chat-header .titolo-messaggi,
+#mobScreenChat .mob-chat-header .titolo-messaggi,
+#mobScreenAI .mob-chat-header .titolo-messaggi,
+#mobScreenAI .mob-ai-hdr-title {
   color: #FFFFFF !important;
+}
+
+.gs-topbar .gs-header-plain-icon,
+.gs-topbar .gs-header-plain-icon svg,
+#mobScreenAI .mob-ai-hdr-title svg {
+  color: #E2E8F0 !important;
+  stroke: #E2E8F0 !important;
 }
 
 .col-thread .intestazione-thread .contatore-msg,
@@ -8241,7 +8255,9 @@ button, input, textarea {
 
 .col-thread .intestazione-thread .btn-top,
 .col-thread .intestazione-thread .btn-top.ocr-header-btn,
-#mobScreenChat .mob-hdr-btn {
+.figma-mobile .mob-hdr-btn,
+#mobScreenChat .mob-hdr-btn,
+#mobScreenAI .mob-hdr-btn {
   background: rgba(255, 255, 255, 0.1) !important;
   border: 1px solid rgba(255, 255, 255, 0.18) !important;
   color: #FFFFFF !important;
@@ -8250,15 +8266,21 @@ button, input, textarea {
 .col-thread .intestazione-thread .btn-top:hover,
 .col-thread .intestazione-thread .btn-top.active,
 .col-thread .intestazione-thread .btn-top.ocr-header-btn:hover,
+.figma-mobile .mob-hdr-btn:hover,
+.figma-mobile .mob-hdr-btn.active,
 #mobScreenChat .mob-hdr-btn:hover,
-#mobScreenChat .mob-hdr-btn.active {
+#mobScreenChat .mob-hdr-btn.active,
+#mobScreenAI .mob-hdr-btn:hover,
+#mobScreenAI .mob-hdr-btn.active {
   background: rgba(255, 255, 255, 0.2) !important;
   border-color: rgba(255, 255, 255, 0.3) !important;
   color: #FFFFFF !important;
 }
 
 .col-thread .intestazione-thread .btn-top svg,
-#mobScreenChat .mob-hdr-btn svg {
+.figma-mobile .mob-hdr-btn svg,
+#mobScreenChat .mob-hdr-btn svg,
+#mobScreenAI .mob-hdr-btn svg {
   stroke: #FFFFFF !important;
 }
 
