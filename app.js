@@ -64,7 +64,10 @@ const ICONS = {
   save14: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>`,
   bookingIcon: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>`,
   checkCircle15: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="9 12 11 14 15 10"/></svg>`,
-  check13: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+  check13: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+  check12: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+  sparkles12: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`,
+  refresh: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`
 };
 
 // State
@@ -1023,25 +1026,27 @@ function renderBottomComposer() {
   const transPopoverHtml = state.bcTransOpen ? renderTranslationPopoverHtml(conv, draftVal, hasText) : '';
   const isCustomTrans = Boolean(hasText && state.customTranslations && state.customTranslations[conv.id]);
   const langPillHtml = `
-    <button
-      type="button"
-      class="bc-lang-pill ${hasText ? 'has-text' : ''} ${state.bcTransOpen ? 'active' : ''} ${isCustomTrans ? 'is-edited' : ''}"
-      onclick="toggleTranslationPopover(event)"
-      title="${hasText ? `Clicca per vedere e modificare la traduzione in ${conv.langName}` : `Anteprima traduzione in ${conv.langName}`}"
-      aria-label="Traduzione in ${conv.langName}"
-    >
-      <span class="bc-lang-flag">${getLangFlagSvg(conv.langCode)}</span>
-      <span class="bc-lang-name">${conv.langName}</span>
-      ${hasText ? `<span class="bc-lang-status-dot ${isCustomTrans ? 'edited' : ''}" title="${isCustomTrans ? 'Traduzione modificata manualmente' : 'Traduzione pronta'}"></span>` : ''}
-      <span class="bc-chevron-blue ${state.bcTransOpen ? 'open' : ''}">${ICONS.chevronDown}</span>
-    </button>
+    <div class="bc-lang-anchor">
+      ${transPopoverHtml}
+      <button
+        type="button"
+        class="bc-lang-pill ${hasText ? 'has-text' : ''} ${state.bcTransOpen ? 'active' : ''} ${isCustomTrans ? 'is-edited' : ''}"
+        onclick="toggleTranslationPopover(event)"
+        title="${hasText ? `Clicca per vedere e modificare la traduzione in ${conv.langName}` : `Anteprima traduzione in ${conv.langName}`}"
+        aria-label="Traduzione in ${conv.langName}"
+      >
+        <span class="bc-lang-flag">${getLangFlagSvg(conv.langCode)}</span>
+        <span class="bc-lang-name">${conv.langName}</span>
+        ${hasText ? `<span class="bc-lang-status-dot ${isCustomTrans ? 'edited' : ''}" title="${isCustomTrans ? 'Traduzione modificata manualmente' : 'Traduzione pronta'}"></span>` : ''}
+        <span class="bc-chevron-blue ${state.bcTransOpen ? 'open' : ''}">${ICONS.chevronDown}</span>
+      </button>
+    </div>
   `;
 
   if (!state.composerExpanded) {
     // COLLAPSED MODE (selettore canale e lingua a sinistra di Invia; 2 righe mobile-first su schermi mobile)
     html = `
       <div class="bc-collapsed">
-        ${transPopoverHtml}
         <div class="bc-collapsed-input-row">
           <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
             ${ICONS.paperclip16}
@@ -1094,7 +1099,6 @@ function renderBottomComposer() {
     html = `
       <div class="bc-expanded">
         <!-- Popovers anchored above the composer -->
-        ${transPopoverHtml}
         ${state.bcMoreOpen ? `
           <div class="bc-floating-popover more-pop">
             <div class="bc-pop-header">
@@ -1513,7 +1517,7 @@ function renderTranslationPopoverHtml(conv, draftVal, hasText) {
           <textarea
             id="bcTransTextarea"
             class="bc-trans-textarea"
-            rows="3"
+            rows="4"
             placeholder="Scrivi o modifica la traduzione in ${conv.langName}..."
             oninput="updateCustomTranslation(this.value)"
           >${translatedText}</textarea>
