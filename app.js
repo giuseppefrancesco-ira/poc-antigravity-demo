@@ -962,19 +962,31 @@ function renderSiderAI() {
         </div>
 
         <div class="gs-kpi-mini-grid gs-hero-kpi-grid">
-          <div class="gs-kpi-mini-box">
+          <div class="gs-kpi-mini-box kpi-arrivo">
+            <span class="gs-kpi-mini-ico">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            </span>
             <span class="gs-kpi-mini-label">Arrivo</span>
             <span class="gs-kpi-mini-val">${m.arrShort}</span>
           </div>
-          <div class="gs-kpi-mini-box">
+          <div class="gs-kpi-mini-box kpi-partenza">
+            <span class="gs-kpi-mini-ico">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/></svg>
+            </span>
             <span class="gs-kpi-mini-label">Partenza</span>
             <span class="gs-kpi-mini-val">${m.depShort}</span>
           </div>
-          <div class="gs-kpi-mini-box">
+          <div class="gs-kpi-mini-box kpi-notti">
+            <span class="gs-kpi-mini-ico">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+            </span>
             <span class="gs-kpi-mini-label">Notti</span>
             <span class="gs-kpi-mini-val">${m.nights}</span>
           </div>
-          <div class="gs-kpi-mini-box">
+          <div class="gs-kpi-mini-box kpi-ospiti">
+            <span class="gs-kpi-mini-ico">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </span>
             <span class="gs-kpi-mini-label">Ospiti</span>
             <span class="gs-kpi-mini-val">${m.guestsShort}</span>
           </div>
@@ -982,9 +994,12 @@ function renderSiderAI() {
       </div>
 
       <!-- 2. ACCORDION: Contatti & Lingua (aperta di default) -->
-      <div class="gs-section gs-acc-section ${isContattiOpen ? 'is-open' : 'is-collapsed'}">
+      <div class="gs-section gs-acc-section sec-contatti ${isContattiOpen ? 'is-open' : 'is-collapsed'}">
         <div class="gs-acc-head" onclick="toggleGsAccordion('contatti')" role="button" tabindex="0" aria-expanded="${isContattiOpen}">
-          <span class="gs-section-title">Contatti & Lingua</span>
+          <div class="gs-sec-title-wrap">
+            <span class="gs-sec-accent-bar blue"></span>
+            <span class="gs-section-title">Contatti & Lingua</span>
+          </div>
           <div class="gs-acc-head-right">
             <span class="gs-acc-chevron">${ICONS.chevronDown}</span>
           </div>
@@ -994,8 +1009,8 @@ function renderSiderAI() {
           <div class="gs-acc-body">
             <div class="gs-contact-list">
               <div class="gs-contact-row" onclick="navigator.clipboard?.writeText('${conv.stay.phone}');showToast('Numero copiato negli appunti')" title="Clicca per copiare il telefono" style="cursor:pointer;">
-                <span class="gs-plain-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <span class="gs-colored-icon blue">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                   </svg>
                 </span>
@@ -1004,8 +1019,8 @@ function renderSiderAI() {
               </div>
 
               <div class="gs-contact-row" onclick="navigator.clipboard?.writeText('${conv.stay.email}');showToast('Email copiata negli appunti')" title="Clicca per copiare l'email" style="cursor:pointer;">
-                <span class="gs-plain-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <span class="gs-colored-icon indigo">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect width="20" height="16" x="2" y="4" rx="2"/>
                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                   </svg>
@@ -1015,7 +1030,7 @@ function renderSiderAI() {
               </div>
 
               <div class="gs-contact-row gs-lang-row">
-                <span class="gs-plain-icon">
+                <span class="gs-colored-icon violet">
                   ${ICONS.languages}
                 </span>
                 <span class="gs-contact-label">Lingua dei messaggi</span>
@@ -1030,9 +1045,12 @@ function renderSiderAI() {
       </div>
 
       <!-- 3. ACCORDION: Prenotazione & Alloggio (aperta di default) -->
-      <div class="gs-section gs-acc-section ${isPrenotazioneOpen ? 'is-open' : 'is-collapsed'}">
+      <div class="gs-section gs-acc-section sec-prenotazione ${isPrenotazioneOpen ? 'is-open' : 'is-collapsed'}">
         <div class="gs-acc-head" onclick="toggleGsAccordion('prenotazione')" role="button" tabindex="0" aria-expanded="${isPrenotazioneOpen}">
-          <span class="gs-section-title">Prenotazione & Alloggio</span>
+          <div class="gs-sec-title-wrap">
+            <span class="gs-sec-accent-bar emerald"></span>
+            <span class="gs-section-title">Prenotazione & Alloggio</span>
+          </div>
           <span class="gs-acc-chevron">${ICONS.chevronDown}</span>
         </div>
 
@@ -1040,15 +1058,33 @@ function renderSiderAI() {
           <div class="gs-acc-body">
             <div class="gs-info-rows">
               <div class="gs-info-row">
-                <span class="gs-info-label">Alloggio</span>
+                <span class="gs-info-label-wrap">
+                  <span class="gs-colored-icon rose">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
+                  </span>
+                  <span class="gs-info-label">Alloggio</span>
+                </span>
                 <span class="gs-info-val">${conv.stay.room} · ${conv.propertyLabel || 'Casa Aurora'}</span>
               </div>
               <div class="gs-info-row">
-                <span class="gs-info-label">Trattamento</span>
-                <span class="gs-info-val">${m.treatment}</span>
+                <span class="gs-info-label-wrap">
+                  <span class="gs-colored-icon emerald">
+                    ${ICONS.utensils14}
+                  </span>
+                  <span class="gs-info-label">Trattamento</span>
+                </span>
+                <span class="gs-info-val gs-treatment-val">
+                  <span class="gs-treatment-check">${ICONS.check}</span>
+                  <span>${m.treatment}</span>
+                </span>
               </div>
               <div class="gs-info-row gs-info-row-total">
-                <span class="gs-info-label">Totale soggiorno</span>
+                <span class="gs-info-label-wrap">
+                  <span class="gs-colored-icon amber">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12"/><path d="M4 14h9"/><path d="M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2"/></svg>
+                  </span>
+                  <span class="gs-info-label">Totale soggiorno</span>
+                </span>
                 <span class="gs-info-val gs-info-total-val">${m.price}</span>
               </div>
             </div>
@@ -1057,10 +1093,11 @@ function renderSiderAI() {
       </div>
 
       <!-- 4. ACCORDION: Note Ospite (più in basso, collassabile) -->
-      <div class="gs-section gs-acc-section gs-note-section ${isNoteOpen ? 'is-open' : 'is-collapsed'}" id="gsGuestNoteSection">
+      <div class="gs-section gs-acc-section sec-note gs-note-section ${isNoteOpen ? 'is-open' : 'is-collapsed'}" id="gsGuestNoteSection">
         <div class="gs-acc-head" onclick="toggleGsAccordion('note')" role="button" tabindex="0" aria-expanded="${isNoteOpen}">
           <div class="gs-note-title-row">
-            <span class="gs-plain-icon">${ICONS.stickyNote14}</span>
+            <span class="gs-sec-accent-bar amber"></span>
+            <span class="gs-colored-icon amber">${ICONS.stickyNote14}</span>
             <span class="gs-section-title">Note ospite</span>
           </div>
           <div class="gs-acc-head-right">
