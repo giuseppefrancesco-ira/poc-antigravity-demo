@@ -1300,12 +1300,21 @@ function renderBottomComposer() {
   `;
 
   if (!state.composerExpanded) {
-    // COLLAPSED MODE (selettore canale e lingua a sinistra di Invia; 2 righe mobile-first su schermi mobile)
+    // COLLAPSED MODE: [✦ AI] [Scrivi un messaggio...] [📎] [🎤] | [Canale] [Lingua] [Espandi] [Invia]
     html = `
       <div class="bc-collapsed">
         <div class="bc-collapsed-input-row">
-          <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
-            ${ICONS.paperclip16}
+          <button
+            type="button"
+            class="bc-generate-ai-btn collapsed"
+            onclick="openDraftEditor(false, true)"
+            title="Genera risposta con AI"
+            data-tooltip="Genera con AI"
+            aria-label="Genera risposta con AI"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+            </svg>
           </button>
 
           <input
@@ -1317,32 +1326,39 @@ function renderBottomComposer() {
             onkeydown="if(event.key==='Enter')sendReplyNow()"
           />
 
-          <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
-            ${ICONS.mic16}
-          </button>
+          <div class="bc-collapsed-quick-tools">
+            <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
+              ${ICONS.paperclip16}
+            </button>
+            <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
+              ${ICONS.mic16}
+            </button>
+          </div>
         </div>
 
-        <div class="bc-collapsed-controls-row">
-          <button type="button" class="bc-expand-btn" onclick="toggleComposerExpand(true)" title="Espandi composer">
-            ${ICONS.expandDiag}
-            <span>Espandi</span>
-          </button>
+        <span class="bc-collapsed-divider" aria-hidden="true"></span>
 
-          <!-- Channel Pill (left of Invia) -->
+        <div class="bc-collapsed-controls-row">
+          <!-- Channel Pill -->
           <div class="bc-channel-pill" title="Cambia canale di invio">
             ${channelBadge}
             <span class="bc-channel-name">${channelLabel}</span>
             <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
             <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
-              <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>Whatsapp</option>
+              <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>WhatsApp</option>
               <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
               <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
               <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
             </select>
           </div>
 
-          <!-- Language Pill (left of Invia) -->
+          <!-- Language Pill -->
           ${langPillHtml}
+
+          <button type="button" class="bc-expand-btn" onclick="toggleComposerExpand(true)" title="Espandi composer">
+            ${ICONS.expandDiag}
+            <span>Espandi</span>
+          </button>
 
           <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()" title="Invia" aria-label="Invia">
             ${ICONS.sendHoriz}

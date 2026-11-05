@@ -4477,14 +4477,14 @@ button, input, textarea {
 /* Language Pill: [DE Tedesco (ON) v] */
 .bc-lang-pill {
   position: relative;
-  height: 28px;
+  height: 34px;
   padding: 0 10px;
-  border-radius: 999px;
+  border-radius: 8px;
   background: #F0F6FF;
   border: 1px solid #BFDBFE;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 }
@@ -4536,9 +4536,9 @@ button, input, textarea {
 /* Channel Pill: [(green WA) Whatsapp v] */
 .bc-channel-pill {
   position: relative;
-  height: 28px;
-  padding: 0 10px 0 4px;
-  border-radius: 999px;
+  height: 34px;
+  padding: 0 10px 0 6px;
+  border-radius: 8px;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   display: inline-flex;
@@ -4865,8 +4865,8 @@ button, input, textarea {
 }
 
 .bc-generate-ai-btn.collapsed {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
 }
 
 .bc-generate-ai-btn:hover {
@@ -5093,18 +5093,18 @@ button, input, textarea {
   position: relative;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 999px;
-  height: 50px;
-  padding: 0 8px 0 12px;
+  border-radius: 12px;
+  height: 52px;
+  padding: 0 9px 0 9px;
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
 }
 
 .bc-collapsed-input {
   flex: 1;
-  min-width: 100px;
+  min-width: 120px;
   border: none;
   outline: none;
   background: transparent;
@@ -5118,30 +5118,47 @@ button, input, textarea {
   color: #94A3B8;
 }
 
+.bc-collapsed-quick-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.bc-collapsed-divider {
+  width: 1px;
+  height: 22px;
+  background: #E2E8F0;
+  flex-shrink: 0;
+  margin: 0 2px;
+}
+
 .bc-expand-btn {
-  border: none;
-  background: transparent;
-  color: #475569;
+  height: 34px;
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  color: #334155;
   font-size: 12px;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 6px 10px;
-  border-radius: 999px;
+  padding: 0 10px;
+  border-radius: 8px;
   cursor: pointer;
   flex-shrink: 0;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 
 .bc-expand-btn:hover {
   background: #F1F5F9;
+  border-color: #CBD5E1;
   color: #0F172A;
 }
 
 .bc-send-btn.collapsed {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   padding: 0;
   background: #93C5FD;
   color: #FFFFFF;
@@ -6575,6 +6592,10 @@ button, input, textarea {
   background: #FFFFFF;
   border: 1px solid #CBD5E1;
   box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed-divider {
+  display: none;
 }
 
 .bottom-composer-wrap.mobile .bc-collapsed-input-row {
@@ -8824,6 +8845,10 @@ button, input, textarea {
   padding: 9px 10px;
   gap: 8px;
   border-radius: 18px;
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed-divider {
+  display: none;
 }
 
 .bottom-composer-wrap.mobile .bc-collapsed-input-row {

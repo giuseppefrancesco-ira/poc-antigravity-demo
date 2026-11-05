@@ -4487,14 +4487,14 @@ button, input, textarea {
 /* Language Pill: [DE Tedesco (ON) v] */
 .bc-lang-pill {
   position: relative;
-  height: 28px;
+  height: 34px;
   padding: 0 10px;
-  border-radius: 999px;
+  border-radius: 8px;
   background: #F0F6FF;
   border: 1px solid #BFDBFE;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 }
@@ -4546,9 +4546,9 @@ button, input, textarea {
 /* Channel Pill: [(green WA) Whatsapp v] */
 .bc-channel-pill {
   position: relative;
-  height: 28px;
-  padding: 0 10px 0 4px;
-  border-radius: 999px;
+  height: 34px;
+  padding: 0 10px 0 6px;
+  border-radius: 8px;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   display: inline-flex;
@@ -4875,8 +4875,8 @@ button, input, textarea {
 }
 
 .bc-generate-ai-btn.collapsed {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
 }
 
 .bc-generate-ai-btn:hover {
@@ -5103,18 +5103,18 @@ button, input, textarea {
   position: relative;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 999px;
-  height: 50px;
-  padding: 0 8px 0 12px;
+  border-radius: 12px;
+  height: 52px;
+  padding: 0 9px 0 9px;
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
 }
 
 .bc-collapsed-input {
   flex: 1;
-  min-width: 100px;
+  min-width: 120px;
   border: none;
   outline: none;
   background: transparent;
@@ -5128,30 +5128,47 @@ button, input, textarea {
   color: #94A3B8;
 }
 
+.bc-collapsed-quick-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.bc-collapsed-divider {
+  width: 1px;
+  height: 22px;
+  background: #E2E8F0;
+  flex-shrink: 0;
+  margin: 0 2px;
+}
+
 .bc-expand-btn {
-  border: none;
-  background: transparent;
-  color: #475569;
+  height: 34px;
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  color: #334155;
   font-size: 12px;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 6px 10px;
-  border-radius: 999px;
+  padding: 0 10px;
+  border-radius: 8px;
   cursor: pointer;
   flex-shrink: 0;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 
 .bc-expand-btn:hover {
   background: #F1F5F9;
+  border-color: #CBD5E1;
   color: #0F172A;
 }
 
 .bc-send-btn.collapsed {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   padding: 0;
   background: #93C5FD;
   color: #FFFFFF;
@@ -6585,6 +6602,10 @@ button, input, textarea {
   background: #FFFFFF;
   border: 1px solid #CBD5E1;
   box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed-divider {
+  display: none;
 }
 
 .bottom-composer-wrap.mobile .bc-collapsed-input-row {
@@ -8836,6 +8857,10 @@ button, input, textarea {
   border-radius: 18px;
 }
 
+.bottom-composer-wrap.mobile .bc-collapsed-divider {
+  display: none;
+}
+
 .bottom-composer-wrap.mobile .bc-collapsed-input-row {
   gap: 6px;
 }
@@ -11077,12 +11102,21 @@ function renderBottomComposer() {
   `;
 
   if (!state.composerExpanded) {
-    // COLLAPSED MODE (selettore canale e lingua a sinistra di Invia; 2 righe mobile-first su schermi mobile)
+    // COLLAPSED MODE: [✦ AI] [Scrivi un messaggio...] [📎] [🎤] | [Canale] [Lingua] [Espandi] [Invia]
     html = `
       <div class="bc-collapsed">
         <div class="bc-collapsed-input-row">
-          <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
-            ${ICONS.paperclip16}
+          <button
+            type="button"
+            class="bc-generate-ai-btn collapsed"
+            onclick="openDraftEditor(false, true)"
+            title="Genera risposta con AI"
+            data-tooltip="Genera con AI"
+            aria-label="Genera risposta con AI"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+            </svg>
           </button>
 
           <input
@@ -11094,32 +11128,39 @@ function renderBottomComposer() {
             onkeydown="if(event.key==='Enter')sendReplyNow()"
           />
 
-          <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
-            ${ICONS.mic16}
-          </button>
+          <div class="bc-collapsed-quick-tools">
+            <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
+              ${ICONS.paperclip16}
+            </button>
+            <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
+              ${ICONS.mic16}
+            </button>
+          </div>
         </div>
 
-        <div class="bc-collapsed-controls-row">
-          <button type="button" class="bc-expand-btn" onclick="toggleComposerExpand(true)" title="Espandi composer">
-            ${ICONS.expandDiag}
-            <span>Espandi</span>
-          </button>
+        <span class="bc-collapsed-divider" aria-hidden="true"></span>
 
-          <!-- Channel Pill (left of Invia) -->
+        <div class="bc-collapsed-controls-row">
+          <!-- Channel Pill -->
           <div class="bc-channel-pill" title="Cambia canale di invio">
             ${channelBadge}
             <span class="bc-channel-name">${channelLabel}</span>
             <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
             <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
-              <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>Whatsapp</option>
+              <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>WhatsApp</option>
               <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
               <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
               <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
             </select>
           </div>
 
-          <!-- Language Pill (left of Invia) -->
+          <!-- Language Pill -->
           ${langPillHtml}
+
+          <button type="button" class="bc-expand-btn" onclick="toggleComposerExpand(true)" title="Espandi composer">
+            ${ICONS.expandDiag}
+            <span>Espandi</span>
+          </button>
 
           <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()" title="Invia" aria-label="Invia">
             ${ICONS.sendHoriz}
