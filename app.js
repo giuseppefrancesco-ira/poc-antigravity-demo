@@ -111,7 +111,7 @@ const state = {
   outboundChannel: 'WhatsApp',
   playingAudio: false,
   hostTradOpen: false,
-  guestTradOpen: false,
+  guestTradOpen: true,
   schedTradOpen: false,
   acc_consegne: true,
   acc_mp: false,
@@ -518,6 +518,23 @@ function renderThread() {
       </div>
 
       <div class="bolla-blu-host">
+        ${needsTranslation ? `
+          <div class="bubble-trad-bar host">
+            <div class="bubble-trad-bar-left">
+              <span class="bubble-trad-sparkle">${ICONS.sparkles}</span>
+              <span>Tradotto in ${conv.langName} con AI</span>
+            </div>
+            <div class="bubble-trad-bar-right">
+              <button type="button" class="bubble-trad-lang-btn host" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione automatica AI: Italiano → ${conv.langName}')">
+                ${ICONS.globe}
+              </button>
+              <button type="button" class="bubble-trad-toggle-btn host" onclick="toggleHostTrad()">
+                <span>${state.hostTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}</span>
+                ${state.hostTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
+              </button>
+            </div>
+          </div>
+        ` : ''}
         <div class="bubble-main-text">
           Ciao ${conv.name.replace('↳ ', '').split(' ')[0]}, benvenuto a Casa Aurora! Ecco le informazioni utili per il tuo appartamento (${conv.stay.room}): all'ingresso trovi il tastierino numerico, il tuo codice Nuki è 000000. Ti auguriamo un piacevole soggiorno!
         </div>
@@ -540,25 +557,13 @@ function renderThread() {
         </div>
       </div>
 
-      <div class="msg-sub-bar host">
-        ${needsTranslation ? `
-          <div class="msg-trad-meta" title="Traduzione automatica AI: Italiano → ${conv.langName}">
-            <span class="msg-trad-sparkle">${ICONS.sparkles}</span>
-            <span>Tradotto in ${conv.langName} con AI</span>
-            <span class="msg-trad-dot">·</span>
-            <button type="button" class="msg-trad-toggle-link" onclick="toggleHostTrad()">
-              ${state.hostTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}
-            </button>
-          </div>
-        ` : ''}
-        <div class="msg-bottom-actions">
-          <button class="btn-msg-action copy" onclick="copyThreadMessage('host')" title="Copia messaggio" aria-label="Copia messaggio">
-            ${ICONS.copy}
-          </button>
-          <button class="btn-msg-action delete" onclick="deleteThreadMessage('host')" title="Elimina messaggio" aria-label="Elimina messaggio">
-            ${ICONS.trash}
-          </button>
-        </div>
+      <div class="msg-bottom-actions">
+        <button class="btn-msg-action copy" onclick="copyThreadMessage('host')" title="Copia messaggio" aria-label="Copia messaggio">
+          ${ICONS.copy}
+        </button>
+        <button class="btn-msg-action delete" onclick="deleteThreadMessage('host')" title="Elimina messaggio" aria-label="Elimina messaggio">
+          ${ICONS.trash}
+        </button>
       </div>
     </div>
 
@@ -570,6 +575,23 @@ function renderThread() {
 
       <!-- Bolla Bianca Ospite (312:7451) -->
       <div class="bolla-bianca-ospite">
+        ${needsTranslation ? `
+          <div class="bubble-trad-bar guest">
+            <div class="bubble-trad-bar-left">
+              <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
+              <span>Tradotto dal ${conv.langName} con AI</span>
+            </div>
+            <div class="bubble-trad-bar-right">
+              <button type="button" class="bubble-trad-lang-btn guest" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione automatica AI: ${conv.langName} → Italiano')">
+                ${ICONS.globe}
+              </button>
+              <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleGuestTrad()">
+                <span>${state.guestTradOpen ? 'Nascondi originale' : 'Mostra originale'}</span>
+                ${state.guestTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
+              </button>
+            </div>
+          </div>
+        ` : ''}
         <div class="testo-ospite-orig">
           ${needsTranslation ? guestItText : guestOrigText}
         </div>
@@ -581,23 +603,11 @@ function renderThread() {
         ` : ''}
       </div>
 
-      <div class="msg-sub-bar guest">
-        ${needsTranslation ? `
-          <div class="msg-trad-meta" title="Traduzione automatica AI: ${conv.langName} → Italiano">
-            <span class="msg-trad-sparkle">${ICONS.sparkles}</span>
-            <span>Tradotto dal ${conv.langName} con AI</span>
-            <span class="msg-trad-dot">·</span>
-            <button type="button" class="msg-trad-toggle-link" onclick="toggleGuestTrad()">
-              ${state.guestTradOpen ? 'Nascondi originale' : 'Mostra originale'}
-            </button>
-          </div>
-        ` : ''}
-        <div class="msg-bottom-actions">
-          <button class="btn-msg-action copy" onclick="copyThreadMessage('guest')" title="Copia messaggio" aria-label="Copia messaggio">
-            ${ICONS.copy}
-          </button>
-          ${renderMsgReadAction(conv, 'guest')}
-        </div>
+      <div class="msg-bottom-actions">
+        <button class="btn-msg-action copy" onclick="copyThreadMessage('guest')" title="Copia messaggio" aria-label="Copia messaggio">
+          ${ICONS.copy}
+        </button>
+        ${renderMsgReadAction(conv, 'guest')}
       </div>
     </div>
 
@@ -612,6 +622,20 @@ function renderThread() {
         </div>
 
         <div class="bolla-bianca-ospite">
+          ${needsTranslation ? `
+            <div class="bubble-trad-bar guest">
+              <div class="bubble-trad-bar-left">
+                <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
+                <span>Estratto da screenshot e tradotto dal ${conv.langName} con AI</span>
+              </div>
+              <div class="bubble-trad-bar-right">
+                <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleOcrMsgOrig(${idx})">
+                  <span>${ocrMsg.showOrig ? 'Nascondi originale' : 'Mostra originale'}</span>
+                  ${ocrMsg.showOrig ? ICONS.chevronUp : ICONS.chevronDown}
+                </button>
+              </div>
+            </div>
+          ` : ''}
           <div class="testo-ospite-orig">
             ${ocrMsg.itText}
           </div>
@@ -623,26 +647,14 @@ function renderThread() {
           ` : ''}
         </div>
 
-        <div class="msg-sub-bar guest">
-          ${needsTranslation ? `
-            <div class="msg-trad-meta" title="Estratto da screenshot e tradotto dal ${conv.langName} con AI">
-              <span class="msg-trad-sparkle">${ICONS.sparkles}</span>
-              <span>Tradotto dal ${conv.langName} con AI</span>
-              <span class="msg-trad-dot">·</span>
-              <button type="button" class="msg-trad-toggle-link" onclick="toggleOcrMsgOrig(${idx})">
-                ${ocrMsg.showOrig ? 'Nascondi originale' : 'Mostra originale'}
-              </button>
-            </div>
-          ` : ''}
-          <div class="msg-bottom-actions">
-            <button class="btn-msg-action copy" onclick="navigator.clipboard?.writeText('${ocrMsg.itText.replace(/'/g, "\\'")}');showToast('Testo copiato negli appunti')" title="Copia messaggio">
-              ${ICONS.copy}
-            </button>
-            <span class="btn-msg-action read-pill" style="cursor:default;">
-              ${ICONS.check13}
-              <span>Importato</span>
-            </span>
-          </div>
+        <div class="msg-bottom-actions">
+          <button class="btn-msg-action copy" onclick="navigator.clipboard?.writeText('${ocrMsg.itText.replace(/'/g, "\\'")}');showToast('Testo copiato negli appunti')" title="Copia messaggio">
+            ${ICONS.copy}
+          </button>
+          <span class="btn-msg-action read-pill" style="cursor:default;">
+            ${ICONS.check13}
+            <span>Importato</span>
+          </span>
         </div>
       </div>
     `).join('')}
@@ -657,6 +669,23 @@ function renderThread() {
       </div>
 
       <div class="bolla-programmata">
+        ${needsTranslation ? `
+          <div class="bubble-trad-bar sched">
+            <div class="bubble-trad-bar-left">
+              <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
+              <span>Tradotto in ${conv.langName} con AI</span>
+            </div>
+            <div class="bubble-trad-bar-right">
+              <button type="button" class="bubble-trad-lang-btn guest" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione programmata AI: Italiano → ${conv.langName}')">
+                ${ICONS.globe}
+              </button>
+              <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleSchedTrad()">
+                <span>${state.schedTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}</span>
+                ${state.schedTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
+              </button>
+            </div>
+          </div>
+        ` : ''}
         <div class="bubble-main-text">
           Ciao ${conv.name.replace('↳ ', '').split(' ')[0]}, come sta andando il tuo soggiorno? Sul tavolo trovi una breve guida alla raccolta differenziata e alcuni consigli sul quartiere.
         </div>
@@ -670,25 +699,13 @@ function renderThread() {
         ` : ''}
       </div>
 
-      <div class="msg-sub-bar host">
-        ${needsTranslation ? `
-          <div class="msg-trad-meta" title="Traduzione programmata AI: Italiano → ${conv.langName}">
-            <span class="msg-trad-sparkle">${ICONS.sparkles}</span>
-            <span>Tradotto in ${conv.langName} con AI</span>
-            <span class="msg-trad-dot">·</span>
-            <button type="button" class="msg-trad-toggle-link" onclick="toggleSchedTrad()">
-              ${state.schedTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}
-            </button>
-          </div>
-        ` : ''}
-        <div class="msg-bottom-actions">
-          <button class="btn-msg-action copy" onclick="copyThreadMessage('sched')" title="Copia messaggio" aria-label="Copia messaggio">
-            ${ICONS.copy}
-          </button>
-          <button class="btn-msg-action delete" onclick="deleteThreadMessage('sched')" title="Elimina messaggio" aria-label="Elimina messaggio">
-            ${ICONS.trash}
-          </button>
-        </div>
+      <div class="msg-bottom-actions">
+        <button class="btn-msg-action copy" onclick="copyThreadMessage('sched')" title="Copia messaggio" aria-label="Copia messaggio">
+          ${ICONS.copy}
+        </button>
+        <button class="btn-msg-action delete" onclick="deleteThreadMessage('sched')" title="Elimina messaggio" aria-label="Elimina messaggio">
+          ${ICONS.trash}
+        </button>
       </div>
     </div>
   `;
