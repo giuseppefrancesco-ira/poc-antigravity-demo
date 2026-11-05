@@ -9559,40 +9559,75 @@ button, input, textarea {
    RISPOSTA DIRETTA A SINGOLO OSPITE / MESSAGGIO (HOVER BTN + QUOTE BANNER)
    ========================================================= */
 
-/* Bottoncino "Rispondi" sotto il messaggio ospite (appare all'hover su desktop) */
-.btn-msg-action.reply-hover-btn {
-  width: auto;
-  height: 26px;
-  padding: 0 9px;
-  border-radius: 7px;
+/* Riga bolla ospite + bottone icona Rispondi a destra della bubble */
+.guest-bubble-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-bubble-reply-side {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   background: #EEF4FF;
   border: 1px solid #DBEAFE;
   color: #2B62FF;
-  font-size: 11.5px;
-  font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  box-shadow: 0 2px 6px rgba(43, 98, 255, 0.08);
   opacity: 0;
   pointer-events: none;
-  transform: translateX(-3px);
-  transition: opacity 0.16s ease, transform 0.16s ease, background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transform: translateX(-4px);
+  transition: opacity 0.16s ease, transform 0.16s ease, background 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.blocco-msg.guest:hover .btn-msg-action.reply-hover-btn,
-.btn-msg-action.reply-hover-btn.active,
-.btn-msg-action.reply-hover-btn:focus-visible,
-.figma-mobile .btn-msg-action.reply-hover-btn {
+.blocco-msg.guest:hover .btn-bubble-reply-side,
+.guest-bubble-row:hover .btn-bubble-reply-side,
+.btn-bubble-reply-side.active,
+.btn-bubble-reply-side:focus-visible {
   opacity: 1;
   pointer-events: auto;
   transform: translateX(0);
 }
 
-.btn-msg-action.reply-hover-btn:hover,
-.btn-msg-action.reply-hover-btn.active {
+/* Da mobile sempre visibile */
+.figma-mobile .btn-bubble-reply-side {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translateX(0) !important;
+}
+
+.figma-mobile .guest-bubble-row .bolla-bianca-ospite {
+  flex: 1;
+  min-width: 0;
+  max-width: calc(100% - 48px);
+}
+
+@media (max-width: 960px) {
+  .btn-bubble-reply-side {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translateX(0) !important;
+  }
+  .guest-bubble-row .bolla-bianca-ospite {
+    flex: 1;
+    min-width: 0;
+    max-width: calc(100% - 48px);
+  }
+}
+
+.btn-bubble-reply-side:hover,
+.btn-bubble-reply-side.active {
   background: #2B62FF;
   border-color: #2B62FF;
   color: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(43, 98, 255, 0.24);
 }
 
 .blocco-msg.guest.is-reply-target .bolla-bianca-ospite {

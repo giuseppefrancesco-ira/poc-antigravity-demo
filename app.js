@@ -69,7 +69,8 @@ const ICONS = {
   check12: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
   sparkles12: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`,
   refresh: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`,
-  reply14: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>`
+  reply14: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>`,
+  reply18: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>`
 };
 
 // State
@@ -541,34 +542,46 @@ function renderThread() {
         <span class="meta-ch" title="${primaryChannel}">${getChannelBadgeHtml(primaryChannel)}</span>
       </div>
 
-      <!-- Bolla Bianca Ospite (312:7451) -->
-      <div class="bolla-bianca-ospite">
-        ${needsTranslation ? `
-          <div class="bubble-trad-bar guest">
-            <div class="bubble-trad-bar-left">
-              <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
-              <span>Tradotto dal ${conv.langName} con AI</span>
+      <!-- Bolla Bianca Ospite + Bottone Rispondi a destra -->
+      <div class="guest-bubble-row">
+        <div class="bolla-bianca-ospite">
+          ${needsTranslation ? `
+            <div class="bubble-trad-bar guest">
+              <div class="bubble-trad-bar-left">
+                <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
+                <span>Tradotto dal ${conv.langName} con AI</span>
+              </div>
+              <div class="bubble-trad-bar-right">
+                <button type="button" class="bubble-trad-lang-btn guest" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione automatica AI: ${conv.langName} → Italiano')">
+                  ${ICONS.globe}
+                </button>
+                <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleGuestTrad()">
+                  <span>${state.guestTradOpen ? 'Nascondi originale' : 'Mostra originale'}</span>
+                  ${state.guestTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
+                </button>
+              </div>
             </div>
-            <div class="bubble-trad-bar-right">
-              <button type="button" class="bubble-trad-lang-btn guest" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione automatica AI: ${conv.langName} → Italiano')">
-                ${ICONS.globe}
-              </button>
-              <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleGuestTrad()">
-                <span>${state.guestTradOpen ? 'Nascondi originale' : 'Mostra originale'}</span>
-                ${state.guestTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
-              </button>
-            </div>
+          ` : ''}
+          <div class="testo-ospite-orig">
+            ${needsTranslation ? guestItText : guestOrigText}
           </div>
-        ` : ''}
-        <div class="testo-ospite-orig">
-          ${needsTranslation ? guestItText : guestOrigText}
+          ${needsTranslation && state.guestTradOpen ? `
+            <div class="bubble-trad-box guest">
+              <div class="bubble-trad-box-lbl">TESTO ORIGINALE (${conv.langName.toUpperCase()})</div>
+              <div class="bubble-trad-box-txt">${guestOrigText}</div>
+            </div>
+          ` : ''}
         </div>
-        ${needsTranslation && state.guestTradOpen ? `
-          <div class="bubble-trad-box guest">
-            <div class="bubble-trad-box-lbl">TESTO ORIGINALE (${conv.langName.toUpperCase()})</div>
-            <div class="bubble-trad-box-txt">${guestOrigText}</div>
-          </div>
-        ` : ''}
+
+        <button
+          type="button"
+          class="btn-bubble-reply-side ${isReplyingPrimary ? 'active' : ''}"
+          onclick="setReplyToMessage('guest_primary')"
+          title="Rispondi a ${conv.id === 'adam' ? 'Adam Nowak su Airbnb' : conv.name}"
+          aria-label="Rispondi a ${conv.id === 'adam' ? 'Adam Nowak' : conv.name}"
+        >
+          ${ICONS.reply18}
+        </button>
       </div>
 
       <div class="msg-bottom-actions">
@@ -576,15 +589,6 @@ function renderThread() {
           ${ICONS.copy}
         </button>
         ${renderMsgReadAction(conv, 'guest')}
-        <button
-          type="button"
-          class="btn-msg-action reply-hover-btn ${isReplyingPrimary ? 'active' : ''}"
-          onclick="setReplyToMessage('guest_primary')"
-          title="Rispondi a ${conv.id === 'adam' ? 'Adam Nowak su Airbnb' : conv.name}"
-        >
-          ${ICONS.reply14}
-          <span>Rispondi${conv.id === 'adam' ? ' ad Adam' : ''}</span>
-        </button>
       </div>
     </div>
 
@@ -596,31 +600,43 @@ function renderThread() {
           <span class="meta-ch" title="WhatsApp">${getChannelBadgeHtml('WhatsApp')}</span>
         </div>
 
-        <div class="bolla-bianca-ospite">
-          <div class="bubble-trad-bar guest">
-            <div class="bubble-trad-bar-left">
-              <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
-              <span>Tradotto dal ${conv.langName} con AI</span>
+        <div class="guest-bubble-row">
+          <div class="bolla-bianca-ospite">
+            <div class="bubble-trad-bar guest">
+              <div class="bubble-trad-bar-left">
+                <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
+                <span>Tradotto dal ${conv.langName} con AI</span>
+              </div>
+              <div class="bubble-trad-bar-right">
+                <button type="button" class="bubble-trad-lang-btn guest" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione automatica AI: ${conv.langName} → Italiano')">
+                  ${ICONS.globe}
+                </button>
+                <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleOlgaTrad()">
+                  <span>${state.olgaTradOpen ? 'Nascondi originale' : 'Mostra originale'}</span>
+                  ${state.olgaTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
+                </button>
+              </div>
             </div>
-            <div class="bubble-trad-bar-right">
-              <button type="button" class="bubble-trad-lang-btn guest" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione automatica AI: ${conv.langName} → Italiano')">
-                ${ICONS.globe}
-              </button>
-              <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleOlgaTrad()">
-                <span>${state.olgaTradOpen ? 'Nascondi originale' : 'Mostra originale'}</span>
-                ${state.olgaTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
-              </button>
+            <div class="testo-ospite-orig">
+              ${olgaItText}
             </div>
+            ${state.olgaTradOpen ? `
+              <div class="bubble-trad-box guest">
+                <div class="bubble-trad-box-lbl">TESTO ORIGINALE (${conv.langName.toUpperCase()})</div>
+                <div class="bubble-trad-box-txt">${olgaOrigText}</div>
+              </div>
+            ` : ''}
           </div>
-          <div class="testo-ospite-orig">
-            ${olgaItText}
-          </div>
-          ${state.olgaTradOpen ? `
-            <div class="bubble-trad-box guest">
-              <div class="bubble-trad-box-lbl">TESTO ORIGINALE (${conv.langName.toUpperCase()})</div>
-              <div class="bubble-trad-box-txt">${olgaOrigText}</div>
-            </div>
-          ` : ''}
+
+          <button
+            type="button"
+            class="btn-bubble-reply-side ${isReplyingOlga ? 'active' : ''}"
+            onclick="setReplyToMessage('guest_olga')"
+            title="Rispondi a Olga Nowak su WhatsApp"
+            aria-label="Rispondi a Olga Nowak"
+          >
+            ${ICONS.reply18}
+          </button>
         </div>
 
         <div class="msg-bottom-actions">
@@ -628,15 +644,6 @@ function renderThread() {
             ${ICONS.copy}
           </button>
           ${renderMsgReadAction(conv, 'olga')}
-          <button
-            type="button"
-            class="btn-msg-action reply-hover-btn ${isReplyingOlga ? 'active' : ''}"
-            onclick="setReplyToMessage('guest_olga')"
-            title="Rispondi a Olga Nowak su WhatsApp"
-          >
-            ${ICONS.reply14}
-            <span>Rispondi a Olga</span>
-          </button>
         </div>
       </div>
     ` : ''}
