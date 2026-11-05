@@ -2586,8 +2586,8 @@ button, input, textarea {
   top: 0;
   bottom: 0;
   left: 0;
-  width: 85%;
-  max-width: 335px;
+  width: calc(100% - 44px);
+  max-width: calc(100% - 44px);
   height: 100%;
   background: #1E2C68;
   border-right: 1px solid #2E3E7A;
@@ -2620,20 +2620,20 @@ button, input, textarea {
 }
 
 .mob-drawer-bottom-bar {
-  padding: 6px 6px !important;
+  padding: 8px 8px !important;
   width: 100%;
   gap: 6px;
 }
 
 .mob-drawer-bottom-bar .mob-tab {
-  font-size: 9.5px;
-  min-height: 38px !important;
+  font-size: 10px;
+  min-height: 40px !important;
   gap: 2px;
 }
 
 .mob-drawer-bottom-bar .mob-tab-pill {
-  width: 36px;
-  height: 24px;
+  width: 40px;
+  height: 26px;
 }
 
 .mob-bottom-bar {
