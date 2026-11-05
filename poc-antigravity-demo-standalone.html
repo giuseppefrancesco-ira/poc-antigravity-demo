@@ -396,9 +396,11 @@ button, input, textarea {
 .riga-ordina {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 6px;
-  padding: 4px 2px 0 2px;
+  padding: 2px 2px 0 2px;
   color: #CBD5E1;
+  position: relative;
 }
 
 .lbl-ordina {
@@ -409,10 +411,95 @@ button, input, textarea {
   flex: 1;
 }
 
+.sort-dropdown-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.sort-trigger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  margin-right: -6px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: #CBD5E1;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sort-trigger-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+}
+
+.sort-trigger-btn.open {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+
+.sort-trigger-btn.open .val-ordina {
+  color: #FFFFFF;
+}
+
 .val-ordina {
   font-size: 12px;
   font-weight: 500;
-  color: #CBD5E1;
+  color: inherit;
+}
+
+.sort-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: -6px;
+  min-width: 196px;
+  background: #FFFFFF;
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25), 0 2px 6px rgba(15, 23, 42, 0.12);
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 80;
+}
+
+.sort-dropdown-menu.open {
+  display: flex;
+}
+
+.sort-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #1E293B;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.sort-dropdown-item:hover {
+  background: #F1F5F9;
+}
+
+.sort-dropdown-item.active {
+  background: #F8FAFC;
+  font-weight: 600;
+}
+
+.sort-item-icon {
+  flex-shrink: 0;
 }
 
 /* Elenco Conversazioni */
@@ -9219,12 +9306,36 @@ button, input, textarea {
             </button>
           </div>
 
-          <div class="riga-ordina" onclick="cycleSortOrder()" style="cursor:pointer;">
+          <div class="riga-ordina">
             <span class="lbl-ordina">ORDINA PER</span>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/>
-            </svg>
-            <span class="val-ordina" id="sortLabelDesktop">Ultimo messaggio</span>
+            <div class="sort-dropdown-wrap" id="sortDropdownWrapDesktop">
+              <button type="button" class="sort-trigger-btn" id="sortTriggerBtnDesktop" onclick="toggleSortDropdown(event)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m3 8 4-4 4 4"/><path d="M7 4v16"/><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/>
+                </svg>
+                <span class="val-ordina" id="sortLabelDesktop">Ultimo messaggio</span>
+              </button>
+              <div class="sort-dropdown-menu" id="sortDropdownMenuDesktop">
+                <button type="button" class="sort-dropdown-item active" data-sort="ultimo" onclick="selectSortOrder('ultimo', event)">
+                  <svg class="sort-item-icon grey" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  </svg>
+                  <span>Ultimo messaggio</span>
+                </button>
+                <button type="button" class="sort-dropdown-item" data-sort="darispondere" onclick="selectSortOrder('darispondere', event)">
+                  <svg class="sort-item-icon orange" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <span>Da rispondere</span>
+                </button>
+                <button type="button" class="sort-dropdown-item" data-sort="checkin" onclick="selectSortOrder('checkin', event)">
+                  <svg class="sort-item-icon grey" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <span>Data check-in</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -9943,9 +10054,31 @@ function setQuickFilter(filterId) {
 // Render Conversation List (1:1 with Figma 312:6805)
 function renderConversationLists() {
   const query = (document.getElementById('searchInputDesktop')?.value || '').toLowerCase().trim();
-  const filtered = CONVERSATIONS.filter(c => {
+  const baseFiltered = CONVERSATIONS.filter(c => {
     return !query || c.name.toLowerCase().includes(query) || c.preview.toLowerCase().includes(query) || (c.dateBadge && c.dateBadge.toLowerCase().includes(query));
   });
+
+  const sortMode = state.sortOrder || 'ultimo';
+  const mainConvs = baseFiltered.filter(c => !c.linked);
+  const linkedConvs = baseFiltered.filter(c => c.linked);
+
+  const checkinRank = { maria: 1, cliff: 2, florian: 3, adam: 4 };
+  if (sortMode === 'darispondere') {
+    mainConvs.sort((a, b) => (b.dagestire ? 1 : 0) - (a.dagestire ? 1 : 0));
+  } else if (sortMode === 'checkin') {
+    mainConvs.sort((a, b) => (checkinRank[a.id] || 99) - (checkinRank[b.id] || 99));
+  }
+
+  const filtered = [];
+  mainConvs.forEach(c => {
+    filtered.push(c);
+    if (c.id === 'adam') {
+      linkedConvs.forEach(lc => filtered.push(lc));
+    }
+  });
+  if (!mainConvs.some(c => c.id === 'adam')) {
+    linkedConvs.forEach(lc => filtered.push(lc));
+  }
 
   const formatPreviewArrow = (text) => {
     if (text.startsWith('↙')) {
@@ -12485,6 +12618,9 @@ document.addEventListener('click', (e) => {
   if (!e.target.closest('.hdr-more-wrap')) {
     closeHeaderMoreMenu();
   }
+  if (!e.target.closest('.sort-dropdown-wrap')) {
+    closeSortDropdown();
+  }
   if (state.bcTransOpen && !e.target.closest('.bc-trans-popover') && !e.target.closest('.bc-lang-pill')) {
     state.bcTransOpen = false;
     renderBottomComposer();
@@ -12963,11 +13099,48 @@ function setFolderFilter(folder) {
   showToast(folder === 'incorso' ? 'Filtro: Soggiorno in corso (3)' : 'Filtro: Archiviate (42)');
 }
 
-function cycleSortOrder() {
+const SORT_ORDER_LABELS = {
+  ultimo: 'Ultimo messaggio',
+  darispondere: 'Da rispondere',
+  checkin: 'Data check-in'
+};
+
+function toggleSortDropdown(event) {
+  if (event) event.stopPropagation();
+  const menu = document.getElementById('sortDropdownMenuDesktop');
+  const btn = document.getElementById('sortTriggerBtnDesktop');
+  if (!menu || !btn) return;
+  const isOpen = menu.classList.contains('open');
+  if (isOpen) {
+    closeSortDropdown();
+  } else {
+    menu.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+
+function closeSortDropdown() {
+  document.getElementById('sortDropdownMenuDesktop')?.classList.remove('open');
+  document.getElementById('sortTriggerBtnDesktop')?.classList.remove('open');
+}
+
+function selectSortOrder(mode, event) {
+  if (event) event.stopPropagation();
+  state.sortOrder = mode;
+  const label = SORT_ORDER_LABELS[mode] || 'Ultimo messaggio';
   const el = document.getElementById('sortLabelDesktop');
-  if (!el) return;
-  el.textContent = el.textContent === 'Ultimo messaggio' ? 'Data check-in' : 'Ultimo messaggio';
-  showToast(`Ordinamento: ${el.textContent}`);
+  if (el) el.textContent = label;
+
+  document.querySelectorAll('#sortDropdownMenuDesktop .sort-dropdown-item').forEach(item => {
+    item.classList.toggle('active', item.getAttribute('data-sort') === mode);
+  });
+
+  closeSortDropdown();
+  renderConversationLists();
+}
+
+function cycleSortOrder() {
+  toggleSortDropdown();
 }
 
 function sendReplyNow() {

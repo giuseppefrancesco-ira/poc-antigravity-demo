@@ -386,9 +386,11 @@ button, input, textarea {
 .riga-ordina {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 6px;
-  padding: 4px 2px 0 2px;
+  padding: 2px 2px 0 2px;
   color: #CBD5E1;
+  position: relative;
 }
 
 .lbl-ordina {
@@ -399,10 +401,95 @@ button, input, textarea {
   flex: 1;
 }
 
+.sort-dropdown-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.sort-trigger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  margin-right: -6px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: #CBD5E1;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sort-trigger-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+}
+
+.sort-trigger-btn.open {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+
+.sort-trigger-btn.open .val-ordina {
+  color: #FFFFFF;
+}
+
 .val-ordina {
   font-size: 12px;
   font-weight: 500;
-  color: #CBD5E1;
+  color: inherit;
+}
+
+.sort-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: -6px;
+  min-width: 196px;
+  background: #FFFFFF;
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25), 0 2px 6px rgba(15, 23, 42, 0.12);
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 80;
+}
+
+.sort-dropdown-menu.open {
+  display: flex;
+}
+
+.sort-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #1E293B;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.sort-dropdown-item:hover {
+  background: #F1F5F9;
+}
+
+.sort-dropdown-item.active {
+  background: #F8FAFC;
+  font-weight: 600;
+}
+
+.sort-item-icon {
+  flex-shrink: 0;
 }
 
 /* Elenco Conversazioni */

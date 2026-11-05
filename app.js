@@ -398,9 +398,31 @@ function setQuickFilter(filterId) {
 // Render Conversation List (1:1 with Figma 312:6805)
 function renderConversationLists() {
   const query = (document.getElementById('searchInputDesktop')?.value || '').toLowerCase().trim();
-  const filtered = CONVERSATIONS.filter(c => {
+  const baseFiltered = CONVERSATIONS.filter(c => {
     return !query || c.name.toLowerCase().includes(query) || c.preview.toLowerCase().includes(query) || (c.dateBadge && c.dateBadge.toLowerCase().includes(query));
   });
+
+  const sortMode = state.sortOrder || 'ultimo';
+  const mainConvs = baseFiltered.filter(c => !c.linked);
+  const linkedConvs = baseFiltered.filter(c => c.linked);
+
+  const checkinRank = { maria: 1, cliff: 2, florian: 3, adam: 4 };
+  if (sortMode === 'darispondere') {
+    mainConvs.sort((a, b) => (b.dagestire ? 1 : 0) - (a.dagestire ? 1 : 0));
+  } else if (sortMode === 'checkin') {
+    mainConvs.sort((a, b) => (checkinRank[a.id] || 99) - (checkinRank[b.id] || 99));
+  }
+
+  const filtered = [];
+  mainConvs.forEach(c => {
+    filtered.push(c);
+    if (c.id === 'adam') {
+      linkedConvs.forEach(lc => filtered.push(lc));
+    }
+  });
+  if (!mainConvs.some(c => c.id === 'adam')) {
+    linkedConvs.forEach(lc => filtered.push(lc));
+  }
 
   const formatPreviewArrow = (text) => {
     if (text.startsWith('↙')) {
@@ -2940,6 +2962,9 @@ document.addEventListener('click', (e) => {
   if (!e.target.closest('.hdr-more-wrap')) {
     closeHeaderMoreMenu();
   }
+  if (!e.target.closest('.sort-dropdown-wrap')) {
+    closeSortDropdown();
+  }
   if (state.bcTransOpen && !e.target.closest('.bc-trans-popover') && !e.target.closest('.bc-lang-pill')) {
     state.bcTransOpen = false;
     renderBottomComposer();
@@ -3418,11 +3443,48 @@ function setFolderFilter(folder) {
   showToast(folder === 'incorso' ? 'Filtro: Soggiorno in corso (3)' : 'Filtro: Archiviate (42)');
 }
 
-function cycleSortOrder() {
+const SORT_ORDER_LABELS = {
+  ultimo: 'Ultimo messaggio',
+  darispondere: 'Da rispondere',
+  checkin: 'Data check-in'
+};
+
+function toggleSortDropdown(event) {
+  if (event) event.stopPropagation();
+  const menu = document.getElementById('sortDropdownMenuDesktop');
+  const btn = document.getElementById('sortTriggerBtnDesktop');
+  if (!menu || !btn) return;
+  const isOpen = menu.classList.contains('open');
+  if (isOpen) {
+    closeSortDropdown();
+  } else {
+    menu.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+
+function closeSortDropdown() {
+  document.getElementById('sortDropdownMenuDesktop')?.classList.remove('open');
+  document.getElementById('sortTriggerBtnDesktop')?.classList.remove('open');
+}
+
+function selectSortOrder(mode, event) {
+  if (event) event.stopPropagation();
+  state.sortOrder = mode;
+  const label = SORT_ORDER_LABELS[mode] || 'Ultimo messaggio';
   const el = document.getElementById('sortLabelDesktop');
-  if (!el) return;
-  el.textContent = el.textContent === 'Ultimo messaggio' ? 'Data check-in' : 'Ultimo messaggio';
-  showToast(`Ordinamento: ${el.textContent}`);
+  if (el) el.textContent = label;
+
+  document.querySelectorAll('#sortDropdownMenuDesktop .sort-dropdown-item').forEach(item => {
+    item.classList.toggle('active', item.getAttribute('data-sort') === mode);
+  });
+
+  closeSortDropdown();
+  renderConversationLists();
+}
+
+function cycleSortOrder() {
+  toggleSortDropdown();
 }
 
 function sendReplyNow() {

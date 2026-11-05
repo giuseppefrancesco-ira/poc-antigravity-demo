@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261103_85" />
+  <link rel="stylesheet" href="styles.css?v=20261103_86" />
 </head>
 <body>
 
@@ -123,12 +123,36 @@
             </button>
           </div>
 
-          <div class="riga-ordina" onclick="cycleSortOrder()" style="cursor:pointer;">
+          <div class="riga-ordina">
             <span class="lbl-ordina">ORDINA PER</span>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/>
-            </svg>
-            <span class="val-ordina" id="sortLabelDesktop">Ultimo messaggio</span>
+            <div class="sort-dropdown-wrap" id="sortDropdownWrapDesktop">
+              <button type="button" class="sort-trigger-btn" id="sortTriggerBtnDesktop" onclick="toggleSortDropdown(event)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m3 8 4-4 4 4"/><path d="M7 4v16"/><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/>
+                </svg>
+                <span class="val-ordina" id="sortLabelDesktop">Ultimo messaggio</span>
+              </button>
+              <div class="sort-dropdown-menu" id="sortDropdownMenuDesktop">
+                <button type="button" class="sort-dropdown-item active" data-sort="ultimo" onclick="selectSortOrder('ultimo', event)">
+                  <svg class="sort-item-icon grey" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  </svg>
+                  <span>Ultimo messaggio</span>
+                </button>
+                <button type="button" class="sort-dropdown-item" data-sort="darispondere" onclick="selectSortOrder('darispondere', event)">
+                  <svg class="sort-item-icon orange" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <span>Da rispondere</span>
+                </button>
+                <button type="button" class="sort-dropdown-item" data-sort="checkin" onclick="selectSortOrder('checkin', event)">
+                  <svg class="sort-item-icon grey" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <span>Data check-in</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -446,6 +470,6 @@
 
   <div class="toast" id="toastBox"></div>
 
-  <script src="app.js?v=20261103_85"></script>
+  <script src="app.js?v=20261103_86"></script>
 </body>
 </html>
