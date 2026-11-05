@@ -10778,13 +10778,14 @@ function renderThread() {
   const olgaOrigText = 'Cześć! Jestem już przed bramą z walizkami, czy mogę już wejść do Suite 14, czy muszę poczekać do 15:00?';
   const olgaItText = 'Ciao! Io sono già arrivata davanti al portone con le valigie, posso già salire nella Suite 14 o devo aspettare le 15:00?';
 
-  const primarySenderLabel = conv.id === 'adam'
+  const isMultiGuestChat = conv.id === 'adam';
+  const primarySenderLabel = isMultiGuestChat
     ? 'ADAM NOWAK · 11:20 ·'
     : `${conv.name.toUpperCase()} · 11:20 ·`;
-  const primaryChannel = conv.id === 'adam' ? 'Airbnb' : conv.channel;
+  const primaryChannel = isMultiGuestChat ? 'Airbnb' : conv.channel;
 
-  const isReplyingPrimary = state.replyingTo && state.replyingTo.convId === conv.id && state.replyingTo.id === 'guest_primary';
-  const isReplyingOlga = state.replyingTo && state.replyingTo.convId === conv.id && state.replyingTo.id === 'guest_olga';
+  const isReplyingPrimary = isMultiGuestChat && state.replyingTo && state.replyingTo.convId === conv.id && state.replyingTo.id === 'guest_primary';
+  const isReplyingOlga = isMultiGuestChat && state.replyingTo && state.replyingTo.convId === conv.id && state.replyingTo.id === 'guest_olga';
 
   const messagesHtml = `
     <!-- Blocco Msg 1 Host (312:7429) -->
@@ -10883,15 +10884,17 @@ function renderThread() {
           ` : ''}
         </div>
 
-        <button
-          type="button"
-          class="btn-bubble-reply-side ${isReplyingPrimary ? 'active' : ''}"
-          onclick="setReplyToMessage('guest_primary')"
-          title="Rispondi a ${conv.id === 'adam' ? 'Adam Nowak su Airbnb' : conv.name}"
-          aria-label="Rispondi a ${conv.id === 'adam' ? 'Adam Nowak' : conv.name}"
-        >
-          ${ICONS.reply18}
-        </button>
+        ${isMultiGuestChat ? `
+          <button
+            type="button"
+            class="btn-bubble-reply-side"
+            onclick="setReplyToMessage('guest_primary')"
+            title="Rispondi a Adam Nowak su Airbnb"
+            aria-label="Rispondi a Adam Nowak"
+          >
+            ${ICONS.reply18}
+          </button>
+        ` : ''}
       </div>
 
       <div class="msg-bottom-actions">
