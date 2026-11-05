@@ -5770,15 +5770,17 @@ button, input, textarea {
 }
 
 .gs-lang-pill-wrap.is-static {
-  background: #F8FAFC;
-  border-color: #E2E8F0;
+  background: transparent;
+  border: none;
+  padding: 0;
+  height: auto;
   cursor: default;
   user-select: none;
 }
 
 .gs-lang-pill-wrap.is-static:hover {
-  background: #F8FAFC;
-  border-color: #E2E8F0;
+  background: transparent;
+  border: none;
 }
 
 .gs-lang-static-name {
