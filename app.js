@@ -44,6 +44,7 @@ const ICONS = {
   spinner16: `<svg class="spin-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`,
   sendHoriz: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 3 3 9-3 9 19-9Z"/><path d="M6 12h16"/></svg>`,
   expandDiag: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`,
+  collapseDiag: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`,
   moreHoriz: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>`,
   smile16: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`,
   paperclip16: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>`,
@@ -1373,11 +1374,6 @@ function renderBottomComposer() {
               <span class="bc-WaitSparkle">${ICONS.sparkles16}</span>
               <span class="bc-title-text">Componi risposta</span>
             </span>
-
-            <button type="button" class="bc-collapse-btn bc-collapse-mobile" onclick="toggleComposerExpand(false)" title="Riduci a barra compatta">
-              ${ICONS.chevronDown}
-              <span>Riduci</span>
-            </button>
           </div>
 
           <div class="bc-header-pills">
@@ -1392,13 +1388,6 @@ function renderBottomComposer() {
               ${AT_SIGN_SVG}
               <span>Tag disponibili</span>
               <span class="bc-chevron-muted ${state.bcTagsOpen ? 'open' : ''}">${ICONS.chevronDown}</span>
-            </button>
-          </div>
-
-          <div class="bc-header-right bc-collapse-desktop">
-            <button type="button" class="bc-collapse-btn" onclick="toggleComposerExpand(false)" title="Riduci a barra compatta">
-              ${ICONS.chevronDown}
-              <span>Riduci</span>
             </button>
           </div>
         </div>
@@ -1506,6 +1495,10 @@ function renderBottomComposer() {
           </div>
 
           <div class="bc-tools-right">
+            <button type="button" class="bc-expand-btn bc-collapse-bottom-btn" onclick="toggleComposerExpand(false)" title="Riduci composer">
+              ${ICONS.collapseDiag}
+              <span>Riduci</span>
+            </button>
             ${isNoteMode ? `
               <button type="button" class="bc-send-btn expanded ready" onclick="saveManualNoteFromComposer()">
                 ${ICONS.sendHoriz}

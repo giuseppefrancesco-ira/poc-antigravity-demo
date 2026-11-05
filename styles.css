@@ -4256,10 +4256,10 @@ button, input, textarea {
 .bc-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 10px 16px;
   border-bottom: 1px solid #F1F5F9;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
