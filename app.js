@@ -2294,15 +2294,27 @@ function closeDraftEditor() {
   renderSiderAI();
 }
 
+function closeMobileDrawer() {
+  document.getElementById('mobScreenInbox')?.classList.remove('open');
+  document.getElementById('mobDrawerScrim')?.classList.remove('open');
+}
+
 function setMobileTab(tab) {
+  if (tab === 'inbox') {
+    document.getElementById('mobScreenInbox')?.classList.add('open');
+    document.getElementById('mobDrawerScrim')?.classList.add('open');
+    return;
+  }
+
   state.mobileTab = tab;
-  document.getElementById('mobScreenInbox')?.classList.toggle('active', tab === 'inbox');
+  closeMobileDrawer();
+
   document.getElementById('mobScreenChat')?.classList.toggle('active', tab === 'chat');
   document.getElementById('mobScreenAI')?.classList.toggle('active', tab === 'ai');
 
   const convBottomBar = document.getElementById('mobConvBottomBar');
   if (convBottomBar) {
-    convBottomBar.style.display = tab === 'inbox' ? 'none' : 'flex';
+    convBottomBar.style.display = 'flex';
   }
 
   document.getElementById('mobNavChat')?.classList.toggle('active', tab === 'chat');
@@ -3541,7 +3553,13 @@ function addManualTagPrompt() {
 }
 
 function setFolderFilter(folder) {
-  showToast(folder === 'incorso' ? 'Filtro: Soggiorno in corso (3)' : 'Filtro: Archiviate (42)');
+  if (folder === 'darispondere') {
+    showToast('Filtro: Da rispondere (2)');
+  } else if (folder === 'incorso') {
+    showToast('Filtro: Soggiorno in corso (3)');
+  } else {
+    showToast('Filtro: Archiviate (42)');
+  }
 }
 
 const SORT_ORDER_LABELS = {
@@ -3550,15 +3568,15 @@ const SORT_ORDER_LABELS = {
   checkin: 'Data check-in'
 };
 
-function toggleSortDropdown(event) {
+function toggleSortDropdown(event, which) {
   if (event) event.stopPropagation();
-  const menu = document.getElementById('sortDropdownMenuDesktop');
-  const btn = document.getElementById('sortTriggerBtnDesktop');
+  const isMob = which === 'mob';
+  const menu = document.getElementById(isMob ? 'sortDropdownMenuMobile' : 'sortDropdownMenuDesktop');
+  const btn = document.getElementById(isMob ? 'sortTriggerBtnMobile' : 'sortTriggerBtnDesktop');
   if (!menu || !btn) return;
   const isOpen = menu.classList.contains('open');
-  if (isOpen) {
-    closeSortDropdown();
-  } else {
+  closeSortDropdown();
+  if (!isOpen) {
     menu.classList.add('open');
     btn.classList.add('open');
   }
@@ -3567,16 +3585,20 @@ function toggleSortDropdown(event) {
 function closeSortDropdown() {
   document.getElementById('sortDropdownMenuDesktop')?.classList.remove('open');
   document.getElementById('sortTriggerBtnDesktop')?.classList.remove('open');
+  document.getElementById('sortDropdownMenuMobile')?.classList.remove('open');
+  document.getElementById('sortTriggerBtnMobile')?.classList.remove('open');
 }
 
 function selectSortOrder(mode, event) {
   if (event) event.stopPropagation();
   state.sortOrder = mode;
   const label = SORT_ORDER_LABELS[mode] || 'Ultimo messaggio';
-  const el = document.getElementById('sortLabelDesktop');
-  if (el) el.textContent = label;
+  const elDesk = document.getElementById('sortLabelDesktop');
+  const elMob = document.getElementById('sortLabelMobile');
+  if (elDesk) elDesk.textContent = label;
+  if (elMob) elMob.textContent = label;
 
-  document.querySelectorAll('#sortDropdownMenuDesktop .sort-dropdown-item').forEach(item => {
+  document.querySelectorAll('#sortDropdownMenuDesktop .sort-dropdown-item, #sortDropdownMenuMobile .sort-dropdown-item').forEach(item => {
     item.classList.toggle('active', item.getAttribute('data-sort') === mode);
   });
 

@@ -134,6 +134,7 @@ button, input, textarea {
   overflow: hidden;
   flex-direction: column;
   border: 6px solid #1E293B;
+  position: relative;
 }
 
 .stage.mobile-mode .figma-mobile {
@@ -377,6 +378,18 @@ button, input, textarea {
   font-weight: 500;
   color: #E2E8F0;
   flex: 1;
+}
+
+.cartella-pill-amber {
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: #F97316;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
 }
 
 .cartella-pill-white {
@@ -2542,13 +2555,85 @@ button, input, textarea {
   display: none;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
   position: relative;
 }
 
 .mob-screen.active {
   display: flex;
+}
+
+/* Mobile Slide-over Left Drawer & Scrim (1:27 Chat · Drawer navigazione aperto) */
+.mob-drawer-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.mob-drawer-scrim.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mob-drawer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 85%;
+  max-width: 335px;
+  height: 100%;
+  background: #1E2C68;
+  border-right: 1px solid #2E3E7A;
+  box-shadow: 12px 0 32px rgba(15, 23, 42, 0.38);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateX(-100%);
+  pointer-events: none;
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mob-drawer.open {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.mob-drawer-logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.mob-drawer .cartella-row,
+.mob-drawer .ricerca-box {
+  min-height: 38px !important;
+  height: 38px;
+}
+
+.mob-drawer-bottom-bar {
+  padding: 6px 6px !important;
+  width: 100%;
+  gap: 6px;
+}
+
+.mob-drawer-bottom-bar .mob-tab {
+  font-size: 9.5px;
+  min-height: 38px !important;
+  gap: 2px;
+}
+
+.mob-drawer-bottom-bar .mob-tab-pill {
+  width: 36px;
+  height: 24px;
 }
 
 .mob-bottom-bar {
