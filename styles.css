@@ -7322,6 +7322,23 @@ button, input, textarea {
   color: #0F172A;
 }
 
+.pms-ref-lang-select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.pms-ref-lang-flag {
+  position: absolute;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
 .pms-ref-lang-select {
   width: 100%;
   height: 38px;
@@ -7335,6 +7352,10 @@ button, input, textarea {
   font-weight: 500;
   outline: none;
   cursor: pointer;
+}
+
+.pms-ref-lang-select.with-flag {
+  padding-left: 36px;
 }
 
 .pms-ref-lang-select:focus {

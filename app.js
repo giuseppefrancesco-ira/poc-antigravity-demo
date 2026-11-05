@@ -990,12 +990,12 @@ function renderSiderAI() {
 
               <div class="gs-contact-row gs-lang-row">
                 <span class="gs-plain-icon">
-                  ${ICONS.globe}
+                  ${ICONS.languages}
                 </span>
-                <span class="gs-contact-label">Lingua</span>
+                <span class="gs-contact-label">Lingua dei messaggi</span>
                 <div class="gs-lang-pill-wrap">
                   <span class="gs-lang-flag-icon">${getLangFlagSvg(conv.langCode)}</span>
-                  <select class="gs-lang-quick-select" onchange="setOutboundLanguage(this.value)" title="Cambia lingua dell'ospite">
+                  <select class="gs-lang-quick-select" onchange="setOutboundLanguage(this.value)" title="Cambia lingua dei messaggi">
                     <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
                     <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
                     <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
@@ -3036,15 +3036,17 @@ function openEditGuestPmsModal() {
           <span class="pms-ref-lang-icon">${ICONS.languages}</span>
           <span class="pms-ref-lang-title">Lingua dei messaggi</span>
         </div>
-        <select id="stayLangSelect" class="pms-ref-lang-select" onchange="setOutboundLanguage(this.value)">
-          <option value="${conv.langCode}" selected>Come scrive l'ospite — ${conv.langName}</option>
-          <option value="IT">Italiano (IT)</option>
-          <option value="PL">Polacco (PL)</option>
-          <option value="EN">Inglese (EN)</option>
-          <option value="ES">Spagnolo (ES)</option>
-          <option value="DE">Tedesco (DE)</option>
-          <option value="FR">Francese (FR)</option>
-        </select>
+        <div class="pms-ref-lang-select-wrap">
+          <span class="pms-ref-lang-flag" id="stayLangFlagBox">${getLangFlagSvg(conv.langCode)}</span>
+          <select id="stayLangSelect" class="pms-ref-lang-select with-flag" onchange="setOutboundLanguage(this.value); const fb=document.getElementById('stayLangFlagBox'); if(fb) fb.innerHTML=getLangFlagSvg(this.value);">
+            <option value="PL" ${conv.langCode === 'PL' ? 'selected' : ''}>Polacco</option>
+            <option value="IT" ${conv.langCode === 'IT' ? 'selected' : ''}>Italiano</option>
+            <option value="EN" ${conv.langCode === 'EN' ? 'selected' : ''}>Inglese</option>
+            <option value="ES" ${conv.langCode === 'ES' ? 'selected' : ''}>Spagnolo</option>
+            <option value="DE" ${conv.langCode === 'DE' ? 'selected' : ''}>Tedesco</option>
+            <option value="FR" ${conv.langCode === 'FR' ? 'selected' : ''}>Francese</option>
+          </select>
+        </div>
         <p class="pms-ref-lang-hint">
           Larry riconosce la lingua dai messaggi dell'ospite. Prima di inviare puoi comunque cambiarla per quel singolo messaggio.
         </p>
