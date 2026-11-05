@@ -5769,6 +5769,25 @@ button, input, textarea {
   border-color: #CBD5E1;
 }
 
+.gs-lang-pill-wrap.is-static {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+  cursor: default;
+  user-select: none;
+}
+
+.gs-lang-pill-wrap.is-static:hover {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+}
+
+.gs-lang-static-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #0F172A;
+  line-height: 1;
+}
+
 .gs-lang-flag-icon {
   display: inline-flex;
   align-items: center;
