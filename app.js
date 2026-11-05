@@ -1379,13 +1379,17 @@ function renderBottomComposer() {
           <span class="bc-mobile-sheet-bar"></span>
         </div>
 
-        <!-- 1. Top Header Bar (with Template, Tag disponibili & OCR in the upper part) -->
+        <!-- 1. Top Header Bar (with Template, Tag disponibili & top-right minimize button) -->
         <div class="bc-header">
           <div class="bc-header-top-row">
             <span class="bc-title-wrap">
               <span class="bc-WaitSparkle">${ICONS.sparkles16}</span>
               <span class="bc-title-text">Componi risposta</span>
             </span>
+
+            <button type="button" class="bc-top-minimize-btn bc-collapse-mobile" onclick="toggleComposerExpand(false)" title="Riduci finestra" aria-label="Riduci finestra">
+              ${ICONS.chevronDown16}
+            </button>
           </div>
 
           <div class="bc-header-pills">
@@ -1400,6 +1404,12 @@ function renderBottomComposer() {
               ${AT_SIGN_SVG}
               <span>Tag disponibili</span>
               <span class="bc-chevron-muted ${state.bcTagsOpen ? 'open' : ''}">${ICONS.chevronDown}</span>
+            </button>
+          </div>
+
+          <div class="bc-header-right bc-collapse-desktop">
+            <button type="button" class="bc-top-minimize-btn" onclick="toggleComposerExpand(false)" title="Riduci finestra" aria-label="Riduci finestra">
+              ${ICONS.chevronDown16}
             </button>
           </div>
         </div>

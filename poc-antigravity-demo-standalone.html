@@ -4644,6 +4644,27 @@ button, input, textarea {
   color: #0F172A;
 }
 
+.bc-top-minimize-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #64748B;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.bc-top-minimize-btn:hover {
+  background: #F1F5F9;
+  border-color: #E2E8F0;
+  color: #0F172A;
+}
+
 /* --- MIDDLE BODY --- */
 .bc-body {
   padding: 14px 18px;
@@ -11134,13 +11155,17 @@ function renderBottomComposer() {
           <span class="bc-mobile-sheet-bar"></span>
         </div>
 
-        <!-- 1. Top Header Bar (with Template, Tag disponibili & OCR in the upper part) -->
+        <!-- 1. Top Header Bar (with Template, Tag disponibili & top-right minimize button) -->
         <div class="bc-header">
           <div class="bc-header-top-row">
             <span class="bc-title-wrap">
               <span class="bc-WaitSparkle">${ICONS.sparkles16}</span>
               <span class="bc-title-text">Componi risposta</span>
             </span>
+
+            <button type="button" class="bc-top-minimize-btn bc-collapse-mobile" onclick="toggleComposerExpand(false)" title="Riduci finestra" aria-label="Riduci finestra">
+              ${ICONS.chevronDown16}
+            </button>
           </div>
 
           <div class="bc-header-pills">
@@ -11155,6 +11180,12 @@ function renderBottomComposer() {
               ${AT_SIGN_SVG}
               <span>Tag disponibili</span>
               <span class="bc-chevron-muted ${state.bcTagsOpen ? 'open' : ''}">${ICONS.chevronDown}</span>
+            </button>
+          </div>
+
+          <div class="bc-header-right bc-collapse-desktop">
+            <button type="button" class="bc-top-minimize-btn" onclick="toggleComposerExpand(false)" title="Riduci finestra" aria-label="Riduci finestra">
+              ${ICONS.chevronDown16}
             </button>
           </div>
         </div>
