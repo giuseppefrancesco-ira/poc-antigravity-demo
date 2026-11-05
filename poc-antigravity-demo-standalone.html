@@ -1032,6 +1032,85 @@ button, input, textarea {
   color: #FFFFFF;
 }
 
+.bubble-trad-icon-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  outline: none;
+}
+
+.bubble-trad-icon-trigger.guest {
+  color: #2E54E8;
+  background: #EEF2FF;
+}
+
+.bubble-trad-icon-trigger.guest:hover {
+  background: #E0E7FF;
+}
+
+.bubble-trad-icon-trigger.host {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.bubble-trad-icon-trigger.host:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.bubble-trad-lang-ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bubble-trad-lang-ico svg {
+  width: 13px;
+  height: 13px;
+}
+
+.bubble-trad-tooltip {
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 0;
+  white-space: nowrap;
+  padding: 5px 10px;
+  border-radius: 7px;
+  background: #0F172A;
+  color: #FFFFFF;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.2;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.22);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(3px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.bubble-trad-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 12px;
+  border-width: 4px;
+  border-style: solid;
+  border-color: #0F172A transparent transparent transparent;
+}
+
+.bubble-trad-icon-trigger:hover .bubble-trad-tooltip,
+.bubble-trad-icon-trigger:focus .bubble-trad-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
 .bubble-trad-bar-right {
   display: inline-flex;
   align-items: center;
@@ -10200,13 +10279,13 @@ function renderThread() {
         ${needsTranslation ? `
           <div class="bubble-trad-bar host">
             <div class="bubble-trad-bar-left">
-              <span class="bubble-trad-sparkle">${ICONS.sparkles}</span>
-              <span>Tradotto in ${conv.langName} con AI</span>
+              <span class="bubble-trad-icon-trigger host" tabindex="0" aria-label="Tradotto in ${conv.langName} con AI">
+                <span class="bubble-trad-sparkle">${ICONS.sparkles12}</span>
+                <span class="bubble-trad-lang-ico">${ICONS.languages}</span>
+                <span class="bubble-trad-tooltip">Tradotto in ${conv.langName} con AI</span>
+              </span>
             </div>
             <div class="bubble-trad-bar-right">
-              <button type="button" class="bubble-trad-lang-btn host" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione automatica AI: Italiano → ${conv.langName}')">
-                ${ICONS.globe}
-              </button>
               <button type="button" class="bubble-trad-toggle-btn host" onclick="toggleHostTrad()">
                 <span>${state.hostTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}</span>
                 ${state.hostTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
@@ -10257,13 +10336,13 @@ function renderThread() {
         ${needsTranslation ? `
           <div class="bubble-trad-bar guest">
             <div class="bubble-trad-bar-left">
-              <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
-              <span>Tradotto dal ${conv.langName} con AI</span>
+              <span class="bubble-trad-icon-trigger guest" tabindex="0" aria-label="Tradotto dal ${conv.langName} con AI">
+                <span class="bubble-trad-sparkle guest">${ICONS.sparkles12}</span>
+                <span class="bubble-trad-lang-ico">${ICONS.languages}</span>
+                <span class="bubble-trad-tooltip">Tradotto dal ${conv.langName} con AI</span>
+              </span>
             </div>
             <div class="bubble-trad-bar-right">
-              <button type="button" class="bubble-trad-lang-btn guest" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione automatica AI: ${conv.langName} → Italiano')">
-                ${ICONS.globe}
-              </button>
               <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleGuestTrad()">
                 <span>${state.guestTradOpen ? 'Nascondi originale' : 'Mostra originale'}</span>
                 ${state.guestTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
@@ -10304,8 +10383,11 @@ function renderThread() {
           ${needsTranslation ? `
             <div class="bubble-trad-bar guest">
               <div class="bubble-trad-bar-left">
-                <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
-                <span>Estratto da screenshot e tradotto dal ${conv.langName} con AI</span>
+                <span class="bubble-trad-icon-trigger guest" tabindex="0" aria-label="Estratto da screenshot e tradotto dal ${conv.langName} con AI">
+                  <span class="bubble-trad-sparkle guest">${ICONS.sparkles12}</span>
+                  <span class="bubble-trad-lang-ico">${ICONS.languages}</span>
+                  <span class="bubble-trad-tooltip">Estratto da screenshot e tradotto dal ${conv.langName} con AI</span>
+                </span>
               </div>
               <div class="bubble-trad-bar-right">
                 <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleOcrMsgOrig(${idx})">
@@ -10351,13 +10433,13 @@ function renderThread() {
         ${needsTranslation ? `
           <div class="bubble-trad-bar sched">
             <div class="bubble-trad-bar-left">
-              <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
-              <span>Tradotto in ${conv.langName} con AI</span>
+              <span class="bubble-trad-icon-trigger guest" tabindex="0" aria-label="Tradotto in ${conv.langName} con AI">
+                <span class="bubble-trad-sparkle guest">${ICONS.sparkles12}</span>
+                <span class="bubble-trad-lang-ico">${ICONS.languages}</span>
+                <span class="bubble-trad-tooltip">Tradotto in ${conv.langName} con AI</span>
+              </span>
             </div>
             <div class="bubble-trad-bar-right">
-              <button type="button" class="bubble-trad-lang-btn guest" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione programmata AI: Italiano → ${conv.langName}')">
-                ${ICONS.globe}
-              </button>
               <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleSchedTrad()">
                 <span>${state.schedTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}</span>
                 ${state.schedTradOpen ? ICONS.chevronUp : ICONS.chevronDown}

@@ -544,13 +544,13 @@ function renderThread() {
         ${needsTranslation ? `
           <div class="bubble-trad-bar host">
             <div class="bubble-trad-bar-left">
-              <span class="bubble-trad-sparkle">${ICONS.sparkles}</span>
-              <span>Tradotto in ${conv.langName} con AI</span>
+              <span class="bubble-trad-icon-trigger host" tabindex="0" aria-label="Tradotto in ${conv.langName} con AI">
+                <span class="bubble-trad-sparkle">${ICONS.sparkles12}</span>
+                <span class="bubble-trad-lang-ico">${ICONS.languages}</span>
+                <span class="bubble-trad-tooltip">Tradotto in ${conv.langName} con AI</span>
+              </span>
             </div>
             <div class="bubble-trad-bar-right">
-              <button type="button" class="bubble-trad-lang-btn host" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione automatica AI: Italiano → ${conv.langName}')">
-                ${ICONS.globe}
-              </button>
               <button type="button" class="bubble-trad-toggle-btn host" onclick="toggleHostTrad()">
                 <span>${state.hostTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}</span>
                 ${state.hostTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
@@ -601,13 +601,13 @@ function renderThread() {
         ${needsTranslation ? `
           <div class="bubble-trad-bar guest">
             <div class="bubble-trad-bar-left">
-              <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
-              <span>Tradotto dal ${conv.langName} con AI</span>
+              <span class="bubble-trad-icon-trigger guest" tabindex="0" aria-label="Tradotto dal ${conv.langName} con AI">
+                <span class="bubble-trad-sparkle guest">${ICONS.sparkles12}</span>
+                <span class="bubble-trad-lang-ico">${ICONS.languages}</span>
+                <span class="bubble-trad-tooltip">Tradotto dal ${conv.langName} con AI</span>
+              </span>
             </div>
             <div class="bubble-trad-bar-right">
-              <button type="button" class="bubble-trad-lang-btn guest" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione automatica AI: ${conv.langName} → Italiano')">
-                ${ICONS.globe}
-              </button>
               <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleGuestTrad()">
                 <span>${state.guestTradOpen ? 'Nascondi originale' : 'Mostra originale'}</span>
                 ${state.guestTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
@@ -648,8 +648,11 @@ function renderThread() {
           ${needsTranslation ? `
             <div class="bubble-trad-bar guest">
               <div class="bubble-trad-bar-left">
-                <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
-                <span>Estratto da screenshot e tradotto dal ${conv.langName} con AI</span>
+                <span class="bubble-trad-icon-trigger guest" tabindex="0" aria-label="Estratto da screenshot e tradotto dal ${conv.langName} con AI">
+                  <span class="bubble-trad-sparkle guest">${ICONS.sparkles12}</span>
+                  <span class="bubble-trad-lang-ico">${ICONS.languages}</span>
+                  <span class="bubble-trad-tooltip">Estratto da screenshot e tradotto dal ${conv.langName} con AI</span>
+                </span>
               </div>
               <div class="bubble-trad-bar-right">
                 <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleOcrMsgOrig(${idx})">
@@ -695,13 +698,13 @@ function renderThread() {
         ${needsTranslation ? `
           <div class="bubble-trad-bar sched">
             <div class="bubble-trad-bar-left">
-              <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
-              <span>Tradotto in ${conv.langName} con AI</span>
+              <span class="bubble-trad-icon-trigger guest" tabindex="0" aria-label="Tradotto in ${conv.langName} con AI">
+                <span class="bubble-trad-sparkle guest">${ICONS.sparkles12}</span>
+                <span class="bubble-trad-lang-ico">${ICONS.languages}</span>
+                <span class="bubble-trad-tooltip">Tradotto in ${conv.langName} con AI</span>
+              </span>
             </div>
             <div class="bubble-trad-bar-right">
-              <button type="button" class="bubble-trad-lang-btn guest" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione programmata AI: Italiano → ${conv.langName}')">
-                ${ICONS.globe}
-              </button>
               <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleSchedTrad()">
                 <span>${state.schedTradOpen ? 'Nascondi traduzione' : 'Mostra traduzione'}</span>
                 ${state.schedTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
