@@ -6316,13 +6316,13 @@ button, input, textarea {
 }
 
 .gs-note-display {
-  background: #FFFBEB;
-  border: 1px solid #FDE68A;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
   border-radius: 10px;
   padding: 9px 11px;
   font-size: 12px;
   line-height: 1.45;
-  color: #78350F;
+  color: #334155;
 }
 
 .gs-note-display.empty {
@@ -7388,8 +7388,8 @@ button, input, textarea {
 }
 
 .gs-kpi-mini-box {
-  background: #F4F5F7;
-  border: 1px solid transparent;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
   border-radius: 10px;
   padding: 8px 6px;
   display: flex;
@@ -7404,42 +7404,22 @@ button, input, textarea {
   align-items: center;
   justify-content: center;
   margin-bottom: 1px;
+  color: #2E54E8;
 }
 
-.gs-kpi-mini-box.kpi-arrivo {
-  background: #ECFDF5;
-  border-color: #D1FAE5;
-}
-
-.gs-kpi-mini-box.kpi-arrivo .gs-kpi-mini-ico {
-  color: #10B981;
-}
-
-.gs-kpi-mini-box.kpi-partenza {
-  background: #EEF2FF;
-  border-color: #E0E7FF;
-}
-
-.gs-kpi-mini-box.kpi-partenza .gs-kpi-mini-ico {
-  color: #4F46E5;
-}
-
-.gs-kpi-mini-box.kpi-notti {
-  background: #FFFBEB;
-  border-color: #FEF3C7;
-}
-
-.gs-kpi-mini-box.kpi-notti .gs-kpi-mini-ico {
-  color: #D97706;
-}
-
+.gs-kpi-mini-box.kpi-arrivo,
+.gs-kpi-mini-box.kpi-partenza,
+.gs-kpi-mini-box.kpi-notti,
 .gs-kpi-mini-box.kpi-ospiti {
-  background: #FFF1F2;
-  border-color: #FFE4E6;
+  background: #F8FAFC;
+  border-color: #E2E8F0;
 }
 
+.gs-kpi-mini-box.kpi-arrivo .gs-kpi-mini-ico,
+.gs-kpi-mini-box.kpi-partenza .gs-kpi-mini-ico,
+.gs-kpi-mini-box.kpi-notti .gs-kpi-mini-ico,
 .gs-kpi-mini-box.kpi-ospiti .gs-kpi-mini-ico {
-  color: #E11D48;
+  color: #2E54E8;
 }
 
 .gs-kpi-mini-label {
@@ -7464,19 +7444,19 @@ button, input, textarea {
 }
 
 .gs-sec-accent-bar {
-  width: 3px;
-  height: 13px;
-  border-radius: 99px;
-  flex-shrink: 0;
-  background: #2E54E8;
+  display: none;
+}
+
+.gs-note-title-row .gs-colored-icon {
+  display: none;
 }
 
 .gs-colored-icon {
   width: 22px;
   height: 22px;
   border-radius: 6px;
-  background: #F1F5F9;
-  color: #475569;
+  background: #F8FAFC;
+  color: #64748B;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -7490,16 +7470,12 @@ button, input, textarea {
 
 .gs-colored-icon.blue,
 .gs-colored-icon.indigo,
-.gs-colored-icon.violet {
-  background: #EEF2FF;
-  color: #2E54E8;
-}
-
+.gs-colored-icon.violet,
 .gs-colored-icon.rose,
 .gs-colored-icon.emerald,
 .gs-colored-icon.amber {
-  background: #F1F5F9;
-  color: #475569;
+  background: #F8FAFC;
+  color: #64748B;
 }
 
 .gs-info-label-wrap {
