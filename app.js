@@ -1015,13 +1015,7 @@ function renderSiderAI() {
       <div class="gs-section gs-acc-section ${isPrenotazioneOpen ? 'is-open' : 'is-collapsed'}">
         <div class="gs-acc-head" onclick="toggleGsAccordion('prenotazione')" role="button" tabindex="0" aria-expanded="${isPrenotazioneOpen}">
           <span class="gs-section-title">Prenotazione & Alloggio</span>
-          <div class="gs-acc-head-right">
-            <button type="button" class="gs-pms-open-pill" onclick="event.stopPropagation();openEditGuestPmsModal()" title="Modifica dati ospite & PMS">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-              <span>Dati & PMS</span>
-            </button>
-            <span class="gs-acc-chevron">${ICONS.chevronDown}</span>
-          </div>
+          <span class="gs-acc-chevron">${ICONS.chevronDown}</span>
         </div>
 
         ${isPrenotazioneOpen ? `
