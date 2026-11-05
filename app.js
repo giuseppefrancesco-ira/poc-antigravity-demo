@@ -888,6 +888,10 @@ function renderSiderAI() {
   const initials = ((firstName[0] || '') + (lastName[0] || firstName[1] || '')).toUpperCase();
 
   const m = getConvPmsMeta(conv);
+  if (conv.stay && conv.stay.guestsNum) {
+    const g = String(conv.stay.guestsNum).trim();
+    m.guestsShort = /^\d+$/.test(g) ? (g === '1' ? '1 adulto' : `${g} adulti`) : g;
+  }
 
   const currentNoteObj = (conv.internalNotes && conv.internalNotes[0]) || {
     author: 'Sara M. (Reception)',
@@ -950,7 +954,7 @@ function renderSiderAI() {
           </div>
           <div class="gs-kpi-mini-box">
             <span class="gs-kpi-mini-label">Ospiti</span>
-            <span class="gs-kpi-mini-val">${m.guestsNum}</span>
+            <span class="gs-kpi-mini-val">${m.guestsShort}</span>
           </div>
         </div>
       </div>
@@ -2969,6 +2973,10 @@ function openEditGuestPmsModal() {
   const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
   const initials = ((firstName[0] || '') + (lastName[0] || firstName[1] || '')).toUpperCase();
   const m = getConvPmsMeta(conv);
+  if (conv.stay && conv.stay.guestsNum) {
+    const g = String(conv.stay.guestsNum).trim();
+    m.guestsShort = /^\d+$/.test(g) ? (g === '1' ? '1 adulto' : `${g} adulti`) : g;
+  }
 
   const syncIconSm = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`;
   const syncIconBtn = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`;
@@ -3428,6 +3436,10 @@ function sendReplyNow() {
 function toggleGuestNoteEdit(forceState) {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
   const m = getConvPmsMeta(conv);
+  if (conv.stay && conv.stay.guestsNum) {
+    const g = String(conv.stay.guestsNum).trim();
+    m.guestsShort = /^\d+$/.test(g) ? (g === '1' ? '1 adulto' : `${g} adulti`) : g;
+  }
   const currentNoteObj = (conv.internalNotes && conv.internalNotes[0]) || {
     author: 'Sara M. (Reception)',
     time: '11:15',
@@ -3462,6 +3474,10 @@ function updateGuestDetailNoteDraft(val) {
 function saveGuestDetailNote() {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
   const m = getConvPmsMeta(conv);
+  if (conv.stay && conv.stay.guestsNum) {
+    const g = String(conv.stay.guestsNum).trim();
+    m.guestsShort = /^\d+$/.test(g) ? (g === '1' ? '1 adulto' : `${g} adulti`) : g;
+  }
   state.guestNoteDrafts = state.guestNoteDrafts || {};
   const fallbackNote = (conv.internalNotes && conv.internalNotes.length > 0)
     ? conv.internalNotes[conv.internalNotes.length - 1].text
