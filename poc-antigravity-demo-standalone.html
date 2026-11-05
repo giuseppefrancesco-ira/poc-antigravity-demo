@@ -5202,7 +5202,7 @@ button, input, textarea {
 .bc-collapsed-top-strip {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 8px;
   padding-bottom: 7px;
   border-bottom: 1px solid #F1F5F9;
@@ -5211,8 +5211,14 @@ button, input, textarea {
 .bc-collapsed-top-strip .bc-header-pills {
   display: inline-flex;
   align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.bc-header > .bc-header-pills {
+  margin-left: auto;
 }
 
 .bc-upper-drawer.collapsed-drawer {
