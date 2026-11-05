@@ -73,9 +73,9 @@ const ICONS = {
 // State
 const state = {
   msgRead: {},
-  composerExpanded: true, // true = modalità espansa, false = modalità ridotta a pillola
+  composerExpanded: false, // true = modalità espansa, false = modalità ridotta a pillola
   siderCopilotOpen: false, // toggle pannello AI Copilot nel sider destro
-  siderCollapsed: false,   // eventuale chiusura/riapertura sider destro
+  siderCollapsed: true,    // eventuale chiusura/riapertura sider destro
   bcTemplateOpen: false,
   bcTagsOpen: false,
   bcToneOpen: false,
