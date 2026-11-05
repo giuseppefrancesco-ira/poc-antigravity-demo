@@ -9549,4 +9549,201 @@ button, input, textarea {
   box-shadow: 0 4px 12px rgba(43, 98, 255, 0.38);
 }
 
+/* =========================================================
+   RISPOSTA DIRETTA A SINGOLO OSPITE / MESSAGGIO (HOVER BTN + QUOTE BANNER)
+   ========================================================= */
+
+/* Bottoncino "Rispondi" sotto il messaggio ospite (appare all'hover su desktop) */
+.btn-msg-action.reply-hover-btn {
+  width: auto;
+  height: 26px;
+  padding: 0 9px;
+  border-radius: 7px;
+  background: #EEF4FF;
+  border: 1px solid #DBEAFE;
+  color: #2B62FF;
+  font-size: 11.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-3px);
+  transition: opacity 0.16s ease, transform 0.16s ease, background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.blocco-msg.guest:hover .btn-msg-action.reply-hover-btn,
+.btn-msg-action.reply-hover-btn.active,
+.btn-msg-action.reply-hover-btn:focus-visible,
+.figma-mobile .btn-msg-action.reply-hover-btn {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.btn-msg-action.reply-hover-btn:hover,
+.btn-msg-action.reply-hover-btn.active {
+  background: #2B62FF;
+  border-color: #2B62FF;
+  color: #FFFFFF;
+}
+
+.blocco-msg.guest.is-reply-target .bolla-bianca-ospite {
+  border-color: #93C5FD;
+  box-shadow: 0 0 0 3px rgba(43, 98, 255, 0.08);
+}
+
+/* Quote Banner sopra il Composer (stile WhatsApp/Telegram integrato nel tema UI/UX) */
+.bc-reply-quote-banner {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 9px;
+  padding: 7px 9px 7px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.bc-reply-quote-banner:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+}
+
+.bc-reply-quote-accent {
+  width: 3.5px;
+  align-self: stretch;
+  border-radius: 999px;
+  background: #2B62FF;
+  flex-shrink: 0;
+}
+
+.bc-reply-quote-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+}
+
+.bc-reply-quote-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  line-height: 1.2;
+  flex-wrap: wrap;
+}
+
+.bc-reply-quote-ico {
+  color: #2B62FF;
+  display: inline-flex;
+  align-items: center;
+}
+
+.bc-reply-quote-sender {
+  font-weight: 700;
+  color: #2B62FF;
+}
+
+.bc-reply-quote-ch {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748B;
+}
+
+.bc-reply-quote-ch .bc-ch-circle {
+  width: 15px;
+  height: 15px;
+}
+
+.bc-reply-quote-text {
+  font-size: 12px;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.35;
+}
+
+.bc-reply-quote-close {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: #64748B;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.bc-reply-quote-close:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+/* Quoted Bubble dentro il messaggio inviato dall'Host nel Thread */
+.host-quoted-bubble {
+  background: rgba(15, 23, 42, 0.2);
+  border-left: 3.5px solid #93C5FD;
+  border-radius: 8px;
+  padding: 7px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.host-quoted-bubble:hover {
+  background: rgba(15, 23, 42, 0.28);
+}
+
+.host-quoted-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.host-quoted-sender {
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.host-quoted-channel {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 10.5px;
+  font-weight: 500;
+}
+
+.host-quoted-channel .bc-ch-circle {
+  width: 14px;
+  height: 14px;
+}
+
+.host-quoted-text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 

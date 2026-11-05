@@ -68,7 +68,8 @@ const ICONS = {
   check13: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
   check12: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
   sparkles12: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`,
-  refresh: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`
+  refresh: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`,
+  reply14: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>`
 };
 
 // State
@@ -113,7 +114,9 @@ const state = {
   playingAudio: false,
   hostTradOpen: false,
   guestTradOpen: true,
+  olgaTradOpen: false,
   schedTradOpen: false,
+  replyingTo: null,
   acc_consegne: true,
   acc_mp: false,
   acc_tags: false,
@@ -191,46 +194,6 @@ const CONVERSATIONS = [
       fatto: 'Inviato codice Nuki · Promesso: Verifica posto #14',
       azione: 'Conferma posto #14 (15€/notte)',
       fonte: 'Regolamento Parcheggio (15€)'
-    }
-  },
-  {
-    id: 'olga',
-    name: '↳ Olga Nowak (Stessa pren.)',
-    date: '11:18',
-    channel: 'WhatsApp',
-    channelClass: 'ch-whatsapp',
-    linked: true,
-    linkedCode: 'Collegata a DEMO-1048',
-    preview: "↗ Grazie, abbiamo ricevuto le istruzioni per l'accesso.",
-    langCode: 'IT',
-    langName: 'Italiano',
-    msgCount: 4,
-    headerSentiment: 'Positivo',
-    headerPriority: 'Priorità Bassa',
-    stay: {
-      room: 'Suite 14',
-      bookingCode: '#DEMO-1048 (Co-ospite)',
-      dates: '06/10–11/10 (5 notti)',
-      guests: '2 Ospiti · Collegata ad Adam Nowak',
-      mealPlan: 'BB (Colazione inclusa)',
-      phone: '+48 602 918 990',
-      email: 'olga.nowak@example.pl',
-      pmsVerified: true
-    },
-    systemEvent: 'Contatto co-ospite associato automaticamente alla prenotazione #DEMO-1048 · 11:10',
-    internalNotes: [
-      {
-        author: 'Marco T. (Reception)',
-        time: '11:16',
-        text: 'Ospite passata in reception per ritirare mappa cartacea del centro storico.'
-      }
-    ],
-    handover: {
-      motivo: 'Conferma ricezione codice di accesso Nuki da parte del co-ospite.',
-      situazione: 'Suite 14 (Co-ospite) · Gestita · Positivo',
-      fatto: 'Inviata guida check-in PDF · Confermato ingresso',
-      azione: 'Invia saluto di cortesia',
-      fonte: 'Accoglienza Co-ospiti'
     }
   },
   {
@@ -403,25 +366,13 @@ function renderConversationLists() {
   });
 
   const sortMode = state.sortOrder || 'ultimo';
-  const mainConvs = baseFiltered.filter(c => !c.linked);
-  const linkedConvs = baseFiltered.filter(c => c.linked);
+  const filtered = [...baseFiltered];
 
   const checkinRank = { maria: 1, cliff: 2, florian: 3, adam: 4 };
   if (sortMode === 'darispondere') {
-    mainConvs.sort((a, b) => (b.dagestire ? 1 : 0) - (a.dagestire ? 1 : 0));
+    filtered.sort((a, b) => (b.dagestire ? 1 : 0) - (a.dagestire ? 1 : 0));
   } else if (sortMode === 'checkin') {
-    mainConvs.sort((a, b) => (checkinRank[a.id] || 99) - (checkinRank[b.id] || 99));
-  }
-
-  const filtered = [];
-  mainConvs.forEach(c => {
-    filtered.push(c);
-    if (c.id === 'adam') {
-      linkedConvs.forEach(lc => filtered.push(lc));
-    }
-  });
-  if (!mainConvs.some(c => c.id === 'adam')) {
-    linkedConvs.forEach(lc => filtered.push(lc));
+    filtered.sort((a, b) => (checkinRank[a.id] || 99) - (checkinRank[b.id] || 99));
   }
 
   const formatPreviewArrow = (text) => {
@@ -441,24 +392,6 @@ function renderConversationLists() {
     const prevHtml = showBozzaBadge
       ? `<span class="bozza-prefix">Bozza:</span> <span class="bozza-preview-text">${rawDraftText}</span>`
       : formatPreviewArrow(c.preview);
-
-    if (c.linked) {
-      return `
-        <div class="conv-item linked ${isSel ? 'selected' : ''}" onclick="selectConversation('${c.id}')">
-          ${isSel ? '<div class="barra-accento"></div>' : ''}
-          <div class="conv-body" style="padding:10px 14px 10px 26px;gap:4px;">
-            <div class="conv-top">
-              <span class="conv-nome" style="display:inline-flex;align-items:center;gap:4px;">${ICONS.cornerDownRight} <span>${c.name.replace(/^↳\s*/, '')}</span></span>
-              <span class="conv-data">${c.date}</span>
-            </div>
-            <div class="conv-badges">
-              <span class="pill date">${ICONS.users} ${c.linkedCode}</span>
-            </div>
-            <div class="conv-prev">${prevHtml}</div>
-          </div>
-        </div>
-      `;
-    }
 
     return `
       <div class="conv-item ${isSel ? 'selected' : ''} ${c.dagestire ? 'da-gestire' : ''}" onclick="selectConversation('${c.id}')">
@@ -531,6 +464,17 @@ function renderThread() {
     ? "Ciao! Grazie per il benvenuto. Il codice funziona correttamente. Ho ancora una domanda sul parcheggio: c'è un posto riservato agli ospiti e qual è il prezzo a notte?"
     : "Ciao! Grazie mille per le informazioni, il soggiorno procede benissimo!";
 
+  const olgaOrigText = 'Cześć! Jestem już przed bramą z walizkami, czy mogę już wejść do Suite 14, czy muszę poczekać do 15:00?';
+  const olgaItText = 'Ciao! Io sono già arrivata davanti al portone con le valigie, posso già salire nella Suite 14 o devo aspettare le 15:00?';
+
+  const primarySenderLabel = conv.id === 'adam'
+    ? 'ADAM NOWAK · 11:20 ·'
+    : `${conv.name.toUpperCase()} · 11:20 ·`;
+  const primaryChannel = conv.id === 'adam' ? 'Airbnb' : conv.channel;
+
+  const isReplyingPrimary = state.replyingTo && state.replyingTo.convId === conv.id && state.replyingTo.id === 'guest_primary';
+  const isReplyingOlga = state.replyingTo && state.replyingTo.convId === conv.id && state.replyingTo.id === 'guest_olga';
+
   const messagesHtml = `
     <!-- Blocco Msg 1 Host (312:7429) -->
     <div class="blocco-msg host">
@@ -590,10 +534,11 @@ function renderThread() {
       </div>
     </div>
 
-    <!-- Blocco Msg 2 Ospite (312:7447) -->
-    <div class="blocco-msg guest">
+    <!-- Blocco Msg 2 Ospite Principale (Adam Nowak · Airbnb) -->
+    <div class="blocco-msg guest ${isReplyingPrimary ? 'is-reply-target' : ''}" id="msgBlock_guest_primary">
       <div class="meta-row">
-        <span class="meta-ospite">OSPITE · 11:20</span>
+        <span class="meta-ospite">${primarySenderLabel}</span>
+        <span class="meta-ch" title="${primaryChannel}">${getChannelBadgeHtml(primaryChannel)}</span>
       </div>
 
       <!-- Bolla Bianca Ospite (312:7451) -->
@@ -631,8 +576,101 @@ function renderThread() {
           ${ICONS.copy}
         </button>
         ${renderMsgReadAction(conv, 'guest')}
+        <button
+          type="button"
+          class="btn-msg-action reply-hover-btn ${isReplyingPrimary ? 'active' : ''}"
+          onclick="setReplyToMessage('guest_primary')"
+          title="Rispondi a ${conv.id === 'adam' ? 'Adam Nowak su Airbnb' : conv.name}"
+        >
+          ${ICONS.reply14}
+          <span>Rispondi${conv.id === 'adam' ? ' ad Adam' : ''}</span>
+        </button>
       </div>
     </div>
+
+    ${conv.id === 'adam' ? `
+      <!-- Blocco Msg 2B Secondo Ospite stessa prenotazione (Olga Nowak · WhatsApp) -->
+      <div class="blocco-msg guest ${isReplyingOlga ? 'is-reply-target' : ''}" id="msgBlock_guest_olga">
+        <div class="meta-row">
+          <span class="meta-ospite">OLGA NOWAK · 11:24 ·</span>
+          <span class="meta-ch" title="WhatsApp">${getChannelBadgeHtml('WhatsApp')}</span>
+        </div>
+
+        <div class="bolla-bianca-ospite">
+          <div class="bubble-trad-bar guest">
+            <div class="bubble-trad-bar-left">
+              <span class="bubble-trad-sparkle guest">${ICONS.sparkles}</span>
+              <span>Tradotto dal ${conv.langName} con AI</span>
+            </div>
+            <div class="bubble-trad-bar-right">
+              <button type="button" class="bubble-trad-lang-btn guest" title="Lingue" aria-label="Lingue" onclick="showToast('Traduzione automatica AI: ${conv.langName} → Italiano')">
+                ${ICONS.globe}
+              </button>
+              <button type="button" class="bubble-trad-toggle-btn guest" onclick="toggleOlgaTrad()">
+                <span>${state.olgaTradOpen ? 'Nascondi originale' : 'Mostra originale'}</span>
+                ${state.olgaTradOpen ? ICONS.chevronUp : ICONS.chevronDown}
+              </button>
+            </div>
+          </div>
+          <div class="testo-ospite-orig">
+            ${olgaItText}
+          </div>
+          ${state.olgaTradOpen ? `
+            <div class="bubble-trad-box guest">
+              <div class="bubble-trad-box-lbl">TESTO ORIGINALE (${conv.langName.toUpperCase()})</div>
+              <div class="bubble-trad-box-txt">${olgaOrigText}</div>
+            </div>
+          ` : ''}
+        </div>
+
+        <div class="msg-bottom-actions">
+          <button class="btn-msg-action copy" onclick="copyThreadMessage('olga')" title="Copia messaggio" aria-label="Copia messaggio">
+            ${ICONS.copy}
+          </button>
+          ${renderMsgReadAction(conv, 'olga')}
+          <button
+            type="button"
+            class="btn-msg-action reply-hover-btn ${isReplyingOlga ? 'active' : ''}"
+            onclick="setReplyToMessage('guest_olga')"
+            title="Rispondi a Olga Nowak su WhatsApp"
+          >
+            ${ICONS.reply14}
+            <span>Rispondi a Olga</span>
+          </button>
+        </div>
+      </div>
+    ` : ''}
+
+    ${(conv.sentReplies || []).map((rep) => `
+      <div class="blocco-msg host">
+        <div class="meta-row">
+          <span class="meta-tu">TU</span>
+          <span class="meta-ora">· ${rep.time} ·</span>
+          <span class="meta-ch" title="${rep.channel}">${getChannelBadgeHtml(rep.channel)}</span>
+        </div>
+
+        <div class="bolla-blu-host">
+          ${rep.replyTo ? `
+            <div class="host-quoted-bubble" onclick="scrollToQuotedMessage('${rep.replyTo.id}')" title="Vai al messaggio citato">
+              <div class="host-quoted-top">
+                <span class="host-quoted-sender">${rep.replyTo.senderName}</span>
+                <span class="host-quoted-channel">${getChannelBadgeHtml(rep.replyTo.channel)} <span>${getChannelDisplayLabel(rep.replyTo.channel)} · ${rep.replyTo.time}</span></span>
+              </div>
+              <div class="host-quoted-text">${rep.replyTo.text}</div>
+            </div>
+          ` : ''}
+          ${needsTranslation ? `
+            <div class="bubble-trad-bar host">
+              <div class="bubble-trad-bar-left">
+                <span class="bubble-trad-sparkle">${ICONS.sparkles}</span>
+                <span>Tradotto in ${conv.langName} con AI</span>
+              </div>
+            </div>
+          ` : ''}
+          <div class="bubble-main-text">${rep.text}</div>
+        </div>
+      </div>
+    `).join('')}
 
     ${(conv.importedOcrMessages || []).map((ocrMsg, idx) => `
       <div class="blocco-msg guest ocr-imported-msg">
@@ -1336,10 +1374,29 @@ function renderBottomComposer() {
     </div>
   `;
 
+  const activeReplyQuote = (state.replyingTo && state.replyingTo.convId === conv.id) ? state.replyingTo : null;
+  const replyQuoteBannerHtml = activeReplyQuote ? `
+    <div class="bc-reply-quote-banner">
+      <div class="bc-reply-quote-accent"></div>
+      <div class="bc-reply-quote-content" onclick="scrollToQuotedMessage('${activeReplyQuote.id}')" title="Vai al messaggio citato">
+        <div class="bc-reply-quote-header">
+          <span class="bc-reply-quote-ico">${ICONS.reply14}</span>
+          <span class="bc-reply-quote-sender">${activeReplyQuote.senderName}</span>
+          <span class="bc-reply-quote-ch">${getChannelBadgeHtml(activeReplyQuote.channel)} <span>${getChannelDisplayLabel(activeReplyQuote.channel)} · ${activeReplyQuote.time}</span></span>
+        </div>
+        <div class="bc-reply-quote-text">${activeReplyQuote.text}</div>
+      </div>
+      <button type="button" class="bc-reply-quote-close" onclick="clearReplyToMessage()" title="Annulla risposta diretta" aria-label="Annulla risposta diretta">
+        ${ICONS.close14}
+      </button>
+    </div>
+  ` : '';
+
   if (!state.composerExpanded) {
     // COLLAPSED MODE (2-tier bar with Messaggi pronti & Tag disponibili always visible)
     html = `
-      <div class="bc-collapsed">
+      <div class="bc-collapsed ${activeReplyQuote ? 'has-reply-quote' : ''}">
+        ${replyQuoteBannerHtml}
         <div class="bc-collapsed-top-strip">
           <div class="bc-header-pills">
             <button type="button" class="bc-top-pill template" onclick="openCannedRepliesModal()" title="Apri Messaggi Pronti">
@@ -1527,6 +1584,7 @@ function renderBottomComposer() {
 
         <!-- 2. Middle Body Area -->
         <div class="bc-body">
+          ${replyQuoteBannerHtml}
           ${isNoteMode ? `
             <textarea
               class="bc-textarea"
@@ -2328,6 +2386,9 @@ function selectConversation(id) {
   state.selectedConvId = id;
   state.bcTransOpen = false;
   state.editingGuestNote = false;
+  if (state.replyingTo && state.replyingTo.convId !== id) {
+    state.replyingTo = null;
+  }
   const conv = CONVERSATIONS.find(c => c.id === id);
   if (conv) {
     state.outboundChannel = conv.channel;
@@ -2686,6 +2747,76 @@ function toggleGuestTrad() {
   renderThread();
 }
 
+function toggleOlgaTrad() {
+  state.olgaTradOpen = !state.olgaTradOpen;
+  renderThread();
+}
+
+function setReplyToMessage(msgKey) {
+  const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  let quote = null;
+
+  if (msgKey === 'guest_olga' && conv.id === 'adam') {
+    quote = {
+      id: 'guest_olga',
+      convId: conv.id,
+      senderName: 'Olga Nowak',
+      channel: 'WhatsApp',
+      time: '11:24',
+      text: 'Ciao! Io sono già arrivata davanti al portone con le valigie, posso già salire nella Suite 14 o devo aspettare le 15:00?',
+      suggestedDraft: `Ciao Olga! La Suite 14 è già pronta per voi: puoi entrare subito inserendo il codice Nuki 000000 sul tastierino al portone e alla porta della camera!`
+    };
+  } else {
+    const isAdam = conv.id === 'adam';
+    const text = isAdam
+      ? "Ciao! Grazie per il benvenuto. Il codice funziona correttamente. Ho ancora una domanda sul parcheggio: c'è un posto riservato agli ospiti e qual è il prezzo a notte?"
+      : "Ciao! Grazie mille per le informazioni, il soggiorno procede benissimo!";
+    quote = {
+      id: 'guest_primary',
+      convId: conv.id,
+      senderName: conv.name.replace('↳ ', ''),
+      channel: isAdam ? 'Airbnb' : conv.channel,
+      time: '11:20',
+      text,
+      suggestedDraft: isAdam
+        ? `Ciao Adam! Ti confermo che il posto auto coperto n. 14 per la tua Suite 14 è disponibile nel garage interno (15€/notte). Puoi accedere con il codice Nuki 000000. Fammi sapere se desideri riservarlo!`
+        : state.drafts[conv.id]
+    };
+  }
+
+  state.replyingTo = quote;
+  state.outboundChannel = quote.channel;
+  if (quote.suggestedDraft && (!state.draftOpen || conv.id === 'adam')) {
+    state.drafts[conv.id] = quote.suggestedDraft;
+    if (state.customTranslations) delete state.customTranslations[conv.id];
+  }
+
+  renderThread();
+  renderBottomComposer();
+
+  setTimeout(() => {
+    const visibleInput = Array.from(document.querySelectorAll('#draftTextarea, .bc-collapsed-input')).find(el => el.offsetParent !== null);
+    if (visibleInput) {
+      visibleInput.focus();
+    }
+  }, 30);
+
+  showToast(`Risposta diretta a ${quote.senderName} (${getChannelDisplayLabel(quote.channel)})`);
+}
+
+function clearReplyToMessage() {
+  state.replyingTo = null;
+  renderThread();
+  renderBottomComposer();
+}
+
+function scrollToQuotedMessage(msgId) {
+  const el = document.getElementById(`msgBlock_${msgId}`);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
 function toggleSchedTrad() {
   state.schedTradOpen = !state.schedTradOpen;
   renderThread();
@@ -2739,6 +2870,8 @@ function copyThreadMessage(type) {
     txt = conv.id === 'adam'
       ? "Ciao! Grazie per il benvenuto. Il codice funziona correttamente. Ho ancora una domanda sul parcheggio: c'è un posto riservato agli ospiti e qual è il prezzo a notte?"
       : conv.preview.replace('↗ ', '');
+  } else if (type === 'olga') {
+    txt = "Ciao! Io sono già arrivata davanti al portone con le valigie, posso già salire nella Suite 14 o devo aspettare le 15:00?";
   } else {
     txt = `Ciao ${firstName}, come sta andando il tuo soggiorno? Sul tavolo trovi una breve guida alla raccolta differenziata e alcuni consigli sul quartiere.`;
   }
@@ -3612,10 +3745,36 @@ function cycleSortOrder() {
 
 function sendReplyNow() {
   const conv = CONVERSATIONS.find(c => c.id === state.selectedConvId) || CONVERSATIONS[0];
+  const rawText = (state.drafts[conv.id] || '').trim();
+  const compiledText = resolvePmsTagsInText(rawText, conv);
+  if (compiledText) {
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    conv.sentReplies = conv.sentReplies || [];
+    conv.sentReplies.push({
+      time: timeStr,
+      channel: state.outboundChannel,
+      text: compiledText,
+      replyTo: (state.replyingTo && state.replyingTo.convId === conv.id) ? { ...state.replyingTo } : null
+    });
+    conv.preview = `↗ ${compiledText}`;
+    conv.msgCount = (Number(conv.msgCount) || 12) + 1;
+  }
   conv.dagestire = false;
+  const replyRecipient = (state.replyingTo && state.replyingTo.convId === conv.id)
+    ? ` a ${state.replyingTo.senderName}`
+    : '';
+  state.replyingTo = null;
+  state.drafts[conv.id] = '';
   renderThread();
-  showToast(`Risposta inviata in ${conv.langName} su ${state.outboundChannel}!`);
+  showToast(`Risposta inviata${replyRecipient} in ${conv.langName} su ${getChannelDisplayLabel(state.outboundChannel)}!`);
   closeDraftEditor();
+  setTimeout(() => {
+    const deskArea = document.getElementById('desktopMessagesArea');
+    const mobArea = document.getElementById('mobileMessagesArea');
+    if (deskArea) deskArea.scrollTop = deskArea.scrollHeight;
+    if (mobArea) mobArea.scrollTop = mobArea.scrollHeight;
+  }, 40);
 }
 
 function toggleGuestNoteEdit(forceState) {
