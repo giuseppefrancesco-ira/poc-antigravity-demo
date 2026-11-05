@@ -1337,69 +1337,106 @@ function renderBottomComposer() {
   `;
 
   if (!state.composerExpanded) {
-    // COLLAPSED MODE: [✦ AI] [Scrivi un messaggio...] [📎] [🎤] | [Canale] [Lingua] [Espandi] [Invia]
+    // COLLAPSED MODE (2-tier bar with Messaggi pronti & Tag disponibili always visible)
     html = `
       <div class="bc-collapsed">
-        <div class="bc-collapsed-input-row">
-          <button
-            type="button"
-            class="bc-generate-ai-btn collapsed"
-            onclick="openDraftEditor(false, true)"
-            title="Genera risposta con AI"
-            data-tooltip="Genera con AI"
-            aria-label="Genera risposta con AI"
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-            </svg>
-          </button>
-
-          <input
-            type="text"
-            class="bc-collapsed-input"
-            placeholder="Scrivi un messaggio..."
-            value="${draftVal.replace(/"/g, '&quot;').replace(/\n/g, ' ')}"
-            oninput="handleComposerInput(this.value)"
-            onkeydown="if(event.key==='Enter')sendReplyNow()"
-          />
-
-          <div class="bc-collapsed-quick-tools">
-            <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
-              ${ICONS.paperclip16}
+        <div class="bc-collapsed-top-strip">
+          <div class="bc-header-pills">
+            <button type="button" class="bc-top-pill template" onclick="openCannedRepliesModal()" title="Apri Messaggi Pronti">
+              ${ICONS.docTemplate14}
+              <span>Messaggi pronti</span>
             </button>
-            <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
-              ${ICONS.mic16}
+
+            <button type="button" class="bc-top-pill tags ${state.bcTagsOpen ? 'active' : ''}" onclick="toggleBcPopover('tags')" title="Variabili dinamiche soggiorno (@Tag)">
+              ${AT_SIGN_SVG}
+              <span>Tag disponibili</span>
+              <span class="bc-chevron-muted ${state.bcTagsOpen ? 'open' : ''}">${ICONS.chevronDown}</span>
             </button>
           </div>
         </div>
 
-        <span class="bc-collapsed-divider" aria-hidden="true"></span>
+        ${state.bcTagsOpen ? `
+          <div class="bc-upper-drawer collapsed-drawer">
+            <div class="bc-upper-drawer-head">
+              <div class="bc-upper-drawer-title-group">
+                <span class="bc-upper-drawer-title">Variabili dinamiche soggiorno</span>
+                <span class="bc-upper-drawer-sub">Clicca per inserire o digita <strong>@</strong> nel testo</span>
+              </div>
+              <button type="button" class="bc-pop-close" onclick="toggleBcPopover(null)" title="Chiudi">${ICONS.close12}</button>
+            </div>
+            <div class="bc-tags-grid">
+              ${getAvailablePmsTags(conv).map(t => `
+                <button type="button" class="bc-tag-chip" onclick="insertTagPMS('${t.token}')" title="Inserisci ${t.token} (${t.value})">
+                  <span class="bc-tag-chip-key">${t.token}</span>
+                  <span class="bc-tag-chip-val">${t.value}</span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
 
-        <div class="bc-collapsed-controls-row">
-          <!-- Channel Pill -->
-          <div class="bc-channel-pill" title="Cambia canale di invio">
-            ${channelBadge}
-            <span class="bc-channel-name">${channelLabel}</span>
-            <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
-            <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
-              <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>WhatsApp</option>
-              <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
-              <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
-              <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
-            </select>
+        <div class="bc-collapsed-main-row">
+          <div class="bc-collapsed-input-row">
+            <button
+              type="button"
+              class="bc-generate-ai-btn collapsed"
+              onclick="openDraftEditor(false, true)"
+              title="Genera risposta con AI"
+              data-tooltip="Genera con AI"
+              aria-label="Genera risposta con AI"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+              </svg>
+            </button>
+
+            <input
+              type="text"
+              class="bc-collapsed-input"
+              placeholder="Scrivi un messaggio..."
+              value="${draftVal.replace(/"/g, '&quot;').replace(/\n/g, ' ')}"
+              oninput="handleComposerInput(this.value)"
+              onkeydown="if(event.key==='Enter')sendReplyNow()"
+            />
+
+            <div class="bc-collapsed-quick-tools">
+              <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
+                ${ICONS.paperclip16}
+              </button>
+              <button type="button" class="bc-icon-btn" onclick="triggerVoiceDictation()" title="Dettatura vocale">
+                ${ICONS.mic16}
+              </button>
+            </div>
           </div>
 
-          <!-- Language Pill -->
-          ${langPillHtml}
+          <span class="bc-collapsed-divider" aria-hidden="true"></span>
 
-          <button type="button" class="bc-expand-btn" onclick="toggleComposerExpand(true)" title="Espandi composer">
-            ${ICONS.expandDiag}
-            <span>Espandi</span>
-          </button>
+          <div class="bc-collapsed-controls-row">
+            <!-- Channel Pill -->
+            <div class="bc-channel-pill" title="Cambia canale di invio">
+              ${channelBadge}
+              <span class="bc-channel-name">${channelLabel}</span>
+              <span class="bc-chevron-muted">${ICONS.chevronDown}</span>
+              <select class="bc-select-overlay" onchange="setOutboundChannel(this.value)" aria-label="Canale di invio">
+                <option value="WhatsApp" ${state.outboundChannel === 'WhatsApp' ? 'selected' : ''}>WhatsApp</option>
+                <option value="Airbnb" ${state.outboundChannel === 'Airbnb' ? 'selected' : ''}>Airbnb</option>
+                <option value="Booking" ${state.outboundChannel === 'Booking' ? 'selected' : ''}>Booking.com</option>
+                <option value="Email" ${state.outboundChannel === 'Email' ? 'selected' : ''}>Email</option>
+              </select>
+            </div>
 
-          <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()" title="Invia" aria-label="Invia">
-            ${ICONS.sendHoriz}
-          </button>
+            <!-- Language Pill -->
+            ${langPillHtml}
+
+            <button type="button" class="bc-expand-btn" onclick="toggleComposerExpand(true)" title="Espandi composer">
+              ${ICONS.expandDiag}
+              <span>Espandi</span>
+            </button>
+
+            <button type="button" class="bc-send-btn collapsed ${hasText ? 'ready' : ''}" onclick="sendReplyNow()" title="Invia" aria-label="Invia">
+              ${ICONS.sendHoriz}
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -2586,10 +2623,9 @@ function insertCannedReply(title) {
 
 function insertTagPMS(val) {
   const token = String(val || '').startsWith('@') ? val : `@${val}`;
-  const visibleTa = Array.from(document.querySelectorAll('#draftTextarea')).find(el => el.offsetParent !== null);
+  const visibleTa = Array.from(document.querySelectorAll('#draftTextarea, .bc-collapsed-input')).find(el => el.offsetParent !== null);
   const cur = state.draftOpen ? (state.drafts[state.selectedConvId] || '') : '';
 
-  state.composerExpanded = true;
   state.draftOpen = true;
   state.replyTab = 'risposta';
 
@@ -2617,11 +2653,13 @@ function insertTagPMS(val) {
   syncLiveTranslationUI(nextVal);
 
   setTimeout(() => {
-    const ta = Array.from(document.querySelectorAll('#draftTextarea')).find(el => el.offsetParent !== null);
+    const ta = Array.from(document.querySelectorAll('#draftTextarea, .bc-collapsed-input')).find(el => el.offsetParent !== null);
     if (ta) {
       ta.focus();
       ta.setSelectionRange(nextCaret, nextCaret);
-      syncComposerBackdropScroll(ta);
+      if (ta.id === 'draftTextarea') {
+        syncComposerBackdropScroll(ta);
+      }
     }
   }, 20);
 }

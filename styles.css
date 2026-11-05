@@ -5088,23 +5088,55 @@ button, input, textarea {
   color: #FFFFFF;
 }
 
-/* --- COLLAPSED PILL BAR (1:1 WITH SCREENSHOT 2) --- */
+/* --- COLLAPSED PILL BAR (2-TIER BAR WITH MESSAGGI PRONTI & TAG DISPONIBILI) --- */
 .bc-collapsed {
   position: relative;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  height: 52px;
-  padding: 0 9px 0 9px;
+  border-radius: 14px;
+  height: auto;
+  min-height: 88px;
+  padding: 8px 12px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+.bc-collapsed-top-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.bc-collapsed-top-strip .bc-header-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bc-upper-drawer.collapsed-drawer {
+  margin: -2px -12px 0 -12px;
+  padding: 9px 12px 11px 12px;
+}
+
+.bc-collapsed-main-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  width: 100%;
+  min-height: 36px;
 }
 
 .bc-collapsed-input {
   flex: 1;
   min-width: 120px;
+  height: 34px;
   border: none;
   outline: none;
   background: transparent;
@@ -6592,6 +6624,14 @@ button, input, textarea {
   background: #FFFFFF;
   border: 1px solid #CBD5E1;
   box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed-main-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+  width: 100%;
 }
 
 .bottom-composer-wrap.mobile .bc-collapsed-divider {
@@ -8957,6 +8997,14 @@ button, input, textarea {
   padding: 9px 10px;
   gap: 8px;
   border-radius: 18px;
+}
+
+.bottom-composer-wrap.mobile .bc-collapsed-main-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+  width: 100%;
 }
 
 .bottom-composer-wrap.mobile .bc-collapsed-divider {
