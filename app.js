@@ -1510,6 +1510,10 @@ function renderBottomComposer() {
     // EXPANDED MODE (1:1 with screenshot 1 + Template & Tag disponibili in the upper part)
     html = `
       <div class="bc-expanded">
+        <!-- Maniglia per ridimensionare in altezza (desktop) -->
+        <div class="bc-resize-handle" onpointerdown="startComposerResize(event)" ondblclick="resetComposerHeight()" title="Trascina per ridimensionare in altezza (doppio clic per reimpostare)">
+          <span class="bc-resize-grip"></span>
+        </div>
         <!-- Popovers anchored above the composer -->
         ${state.bcMoreOpen ? `
           <div class="bc-floating-popover more-pop">
@@ -1712,6 +1716,7 @@ function renderBottomComposer() {
 
   if (deskComp) {
     deskComp.classList.toggle('is-expanded', !!state.composerExpanded);
+    deskComp.style.height = (state.composerExpanded && state.composerHeight) ? state.composerHeight + 'px' : '';
     deskComp.innerHTML = html;
   }
   if (mobComp) {
@@ -1724,6 +1729,41 @@ function renderBottomComposer() {
   requestAnimationFrame(() => {
     document.querySelectorAll('.bc-collapsed-input').forEach(autoGrowCollapsedInput);
   });
+}
+
+// Ridimensionamento in altezza del composer espanso (desktop): trascina la maniglia in alto
+function startComposerResize(e) {
+  const wrap = document.getElementById('desktopBottomComposer');
+  if (!wrap || !wrap.parentElement) return;
+  e.preventDefault();
+  const startY = e.clientY;
+  const startH = wrap.getBoundingClientRect().height;
+  const maxH = wrap.parentElement.clientHeight - 24;
+  const minH = 240;
+  const prevTransition = wrap.style.transition;
+  wrap.style.transition = 'none';
+  document.body.style.userSelect = 'none';
+  document.body.style.cursor = 'ns-resize';
+  const onMove = ev => {
+    const h = Math.max(minH, Math.min(maxH, startH + (startY - ev.clientY)));
+    state.composerHeight = Math.round(h);
+    wrap.style.height = state.composerHeight + 'px';
+  };
+  const onUp = () => {
+    document.removeEventListener('pointermove', onMove);
+    document.removeEventListener('pointerup', onUp);
+    wrap.style.transition = prevTransition;
+    document.body.style.userSelect = '';
+    document.body.style.cursor = '';
+  };
+  document.addEventListener('pointermove', onMove);
+  document.addEventListener('pointerup', onUp);
+}
+
+function resetComposerHeight() {
+  state.composerHeight = null;
+  const wrap = document.getElementById('desktopBottomComposer');
+  if (wrap) wrap.style.height = '';
 }
 
 // Il composer ridotto cresce in altezza quando il testo supera la larghezza (max ~6 righe)

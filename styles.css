@@ -4506,6 +4506,39 @@ button, input, textarea {
   padding: 8px 12px 12px 12px;
 }
 
+/* Maniglia di ridimensionamento in altezza (solo desktop) */
+.bc-resize-handle {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ns-resize;
+  touch-action: none;
+  z-index: 5;
+}
+
+.bc-resize-grip {
+  width: 44px;
+  height: 5px;
+  border-radius: 999px;
+  background: #CBD5E1;
+  transition: background 0.15s, width 0.15s;
+}
+
+.bc-resize-handle:hover .bc-resize-grip {
+  background: #2B62FF;
+  width: 56px;
+}
+
+.bottom-composer-wrap.mobile .bc-resize-handle {
+  display: none;
+}
+
 .bottom-composer-wrap.mobile.is-expanded {
   height: calc(100% - 96px);
 }

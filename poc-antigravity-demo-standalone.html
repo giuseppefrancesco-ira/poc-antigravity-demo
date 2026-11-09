@@ -4516,6 +4516,39 @@ button, input, textarea {
   padding: 8px 12px 12px 12px;
 }
 
+/* Maniglia di ridimensionamento in altezza (solo desktop) */
+.bc-resize-handle {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ns-resize;
+  touch-action: none;
+  z-index: 5;
+}
+
+.bc-resize-grip {
+  width: 44px;
+  height: 5px;
+  border-radius: 999px;
+  background: #CBD5E1;
+  transition: background 0.15s, width 0.15s;
+}
+
+.bc-resize-handle:hover .bc-resize-grip {
+  background: #2B62FF;
+  width: 56px;
+}
+
+.bottom-composer-wrap.mobile .bc-resize-handle {
+  display: none;
+}
+
 .bottom-composer-wrap.mobile.is-expanded {
   height: calc(100% - 96px);
 }
@@ -11827,6 +11860,10 @@ function renderBottomComposer() {
     // EXPANDED MODE (1:1 with screenshot 1 + Template & Tag disponibili in the upper part)
     html = `
       <div class="bc-expanded">
+        <!-- Maniglia per ridimensionare in altezza (desktop) -->
+        <div class="bc-resize-handle" onpointerdown="startComposerResize(event)" ondblclick="resetComposerHeight()" title="Trascina per ridimensionare in altezza (doppio clic per reimpostare)">
+          <span class="bc-resize-grip"></span>
+        </div>
         <!-- Popovers anchored above the composer -->
         ${state.bcMoreOpen ? `
           <div class="bc-floating-popover more-pop">
@@ -12029,6 +12066,7 @@ function renderBottomComposer() {
 
   if (deskComp) {
     deskComp.classList.toggle('is-expanded', !!state.composerExpanded);
+    deskComp.style.height = (state.composerExpanded && state.composerHeight) ? state.composerHeight + 'px' : '';
     deskComp.innerHTML = html;
   }
   if (mobComp) {
@@ -12041,6 +12079,41 @@ function renderBottomComposer() {
   requestAnimationFrame(() => {
     document.querySelectorAll('.bc-collapsed-input').forEach(autoGrowCollapsedInput);
   });
+}
+
+// Ridimensionamento in altezza del composer espanso (desktop): trascina la maniglia in alto
+function startComposerResize(e) {
+  const wrap = document.getElementById('desktopBottomComposer');
+  if (!wrap || !wrap.parentElement) return;
+  e.preventDefault();
+  const startY = e.clientY;
+  const startH = wrap.getBoundingClientRect().height;
+  const maxH = wrap.parentElement.clientHeight - 24;
+  const minH = 240;
+  const prevTransition = wrap.style.transition;
+  wrap.style.transition = 'none';
+  document.body.style.userSelect = 'none';
+  document.body.style.cursor = 'ns-resize';
+  const onMove = ev => {
+    const h = Math.max(minH, Math.min(maxH, startH + (startY - ev.clientY)));
+    state.composerHeight = Math.round(h);
+    wrap.style.height = state.composerHeight + 'px';
+  };
+  const onUp = () => {
+    document.removeEventListener('pointermove', onMove);
+    document.removeEventListener('pointerup', onUp);
+    wrap.style.transition = prevTransition;
+    document.body.style.userSelect = '';
+    document.body.style.cursor = '';
+  };
+  document.addEventListener('pointermove', onMove);
+  document.addEventListener('pointerup', onUp);
+}
+
+function resetComposerHeight() {
+  state.composerHeight = null;
+  const wrap = document.getElementById('desktopBottomComposer');
+  if (wrap) wrap.style.height = '';
 }
 
 // Il composer ridotto cresce in altezza quando il testo supera la larghezza (max ~6 righe)
