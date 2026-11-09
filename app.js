@@ -1457,14 +1457,13 @@ function renderBottomComposer() {
               </svg>
             </button>
 
-            <input
-              type="text"
+            <textarea
+              rows="1"
               class="bc-collapsed-input"
               placeholder="Scrivi un messaggio..."
-              value="${draftVal.replace(/"/g, '&quot;').replace(/\n/g, ' ')}"
-              oninput="handleComposerInput(this.value)"
-              onkeydown="if(event.key==='Enter')sendReplyNow()"
-            />
+              oninput="autoGrowCollapsedInput(this);handleComposerInput(this.value)"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendReplyNow();}"
+            >${draftVal.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</textarea>
 
             <div class="bc-collapsed-quick-tools">
               <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
@@ -1722,6 +1721,16 @@ function renderBottomComposer() {
   if (state.bcTransOpen) {
     requestAnimationFrame(autoResizeTransTextarea);
   }
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.bc-collapsed-input').forEach(autoGrowCollapsedInput);
+  });
+}
+
+// Il composer ridotto cresce in altezza quando il testo supera la larghezza (max ~6 righe)
+function autoGrowCollapsedInput(el) {
+  if (!el || el.offsetParent === null) return;
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
 }
 
 function autoResizeTransTextarea() {

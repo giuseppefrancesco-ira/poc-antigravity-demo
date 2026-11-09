@@ -5237,14 +5237,20 @@ button, input, textarea {
 .bc-collapsed-input {
   flex: 1;
   min-width: 120px;
-  height: 34px;
+  min-height: 34px;
+  max-height: 140px;
   border: none;
   outline: none;
   background: transparent;
   font-family: 'Inter', sans-serif;
   font-size: 13.5px;
+  line-height: 20px;
   color: #0F172A;
-  padding: 0 4px;
+  padding: 7px 4px;
+  box-sizing: border-box;
+  resize: none;
+  overflow-y: auto;
+  align-self: center;
 }
 
 .bc-collapsed-input::placeholder {
@@ -9109,7 +9115,8 @@ button, input, textarea {
 }
 
 .bottom-composer-wrap.mobile .bc-collapsed-input {
-  height: 40px;
+  min-height: 40px;
+  padding: 10px 4px;
   font-size: 14px;
 }
 
@@ -11767,14 +11774,13 @@ function renderBottomComposer() {
               </svg>
             </button>
 
-            <input
-              type="text"
+            <textarea
+              rows="1"
               class="bc-collapsed-input"
               placeholder="Scrivi un messaggio..."
-              value="${draftVal.replace(/"/g, '&quot;').replace(/\n/g, ' ')}"
-              oninput="handleComposerInput(this.value)"
-              onkeydown="if(event.key==='Enter')sendReplyNow()"
-            />
+              oninput="autoGrowCollapsedInput(this);handleComposerInput(this.value)"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendReplyNow();}"
+            >${draftVal.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</textarea>
 
             <div class="bc-collapsed-quick-tools">
               <button type="button" class="bc-icon-btn" onclick="toggleAttachFile()" title="Allega file">
@@ -12032,6 +12038,16 @@ function renderBottomComposer() {
   if (state.bcTransOpen) {
     requestAnimationFrame(autoResizeTransTextarea);
   }
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.bc-collapsed-input').forEach(autoGrowCollapsedInput);
+  });
+}
+
+// Il composer ridotto cresce in altezza quando il testo supera la larghezza (max ~6 righe)
+function autoGrowCollapsedInput(el) {
+  if (!el || el.offsetParent === null) return;
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
 }
 
 function autoResizeTransTextarea() {
